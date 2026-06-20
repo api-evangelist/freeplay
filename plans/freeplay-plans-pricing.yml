@@ -1,0 +1,102 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Freeplay
+providerId: freeplay
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- AI
+- LLM
+- Evaluation
+- Observability
+- Prompt Management
+- Experimentation
+- Plans
+description: >-
+  Freeplay uses a sales-led, packaged pricing model. Plans are tailored to a
+  team's volume, support, and deployment needs (cloud vs. self-hosting) rather
+  than published per-unit list rates. Freeplay markets tiered packages
+  (commonly framed as Free/Starter, Growth, and Enterprise), with Growth and
+  Enterprise quoted by sales. Specific dollar amounts are not publicly listed
+  and are not reconciled in this artifact.
+notes: >-
+  Pricing is sales-led; reconciled is false. Tier names and any promotional
+  discounts (e.g. discounts on Growth and Enterprise) are paraphrased from the
+  Freeplay pricing page and may change. Confirm current packaging, seats, and
+  usage limits with Freeplay sales during reconciliation.
+sources:
+- https://freeplay.ai/pricing
+- https://docs.freeplay.ai/
+plans:
+- id: freeplay-free
+  name: Free / Starter
+  type: free
+  description: >-
+    Entry tier for individuals and small teams to evaluate the platform,
+    manage prompts, record completions, and run basic evaluations. Limits and
+    inclusions are not publicly itemized.
+  entries:
+  - label: Platform Access
+    name: platform_access
+    type: flat
+    metric: seats
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (limited)
+    userMultiplied: false
+  elements:
+  - name: Prompt Management
+  - name: Recordings & Observability
+  - name: Test Cases & Datasets
+  - name: Evaluations
+- id: freeplay-growth
+  name: Growth
+  type: subscription
+  description: >-
+    Team tier for growing AI products needing higher volume, more collaborators,
+    and additional evaluation and monitoring capacity. Quoted by sales.
+  entries:
+  - label: Growth Package
+    name: growth_package
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Higher Volume
+  - name: Team Collaboration
+  - name: Batch Evaluations & Experiments
+  - name: Production Monitoring
+- id: freeplay-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Enterprise tier for high volume, premium support, security/compliance
+    requirements, and self-hosting / private deployment. Custom-quoted by sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: High Volume
+  - name: Premium Support
+  - name: Self-Hosting / Private Deployment
+  - name: Security & Compliance
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

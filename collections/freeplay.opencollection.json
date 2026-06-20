@@ -1,0 +1,434 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prompt Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List prompt templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates"
+          },
+          "docs": "List prompt templates"
+        },
+        {
+          "info": {
+            "name": "Create a prompt template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a prompt template"
+        },
+        {
+          "info": {
+            "name": "Retrieve all prompt templates in an environment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/all/{{environmentName}}"
+          },
+          "docs": "Retrieve all prompt templates in an environment"
+        },
+        {
+          "info": {
+            "name": "Retrieve a prompt template by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/name/{{templateName}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve a prompt template by name"
+        },
+        {
+          "info": {
+            "name": "Create a version by template name",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/name/{{templateName}}/versions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a version by template name"
+        },
+        {
+          "info": {
+            "name": "Create a version by template ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/id/{{templateId}}/versions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a version by template ID"
+        },
+        {
+          "info": {
+            "name": "Retrieve a specific version by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/id/{{templateId}}/versions/{{versionId}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve a specific version by ID"
+        },
+        {
+          "info": {
+            "name": "Assign a version to environments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/prompt-templates/id/{{templateId}}/versions/{{versionId}}/environments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a version to environments"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Recordings & Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/sessions"
+          },
+          "docs": "List sessions"
+        },
+        {
+          "info": {
+            "name": "Delete a session",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/sessions/{{sessionId}}"
+          },
+          "docs": "Delete a session"
+        },
+        {
+          "info": {
+            "name": "Record a completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/sessions/{{sessionId}}/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Record a completion"
+        },
+        {
+          "info": {
+            "name": "Record a trace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/sessions/{{sessionId}}/traces/id/{{traceId}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Record a trace"
+        },
+        {
+          "info": {
+            "name": "Aggregate completion statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/completions/statistics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Aggregate completion statistics"
+        },
+        {
+          "info": {
+            "name": "Completion statistics by prompt template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/completions/statistics/{{promptTemplateId}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Completion statistics by prompt template"
+        },
+        {
+          "info": {
+            "name": "Search sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/search/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search sessions"
+        },
+        {
+          "info": {
+            "name": "Search traces",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/search/traces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search traces"
+        },
+        {
+          "info": {
+            "name": "Search completions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/search/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search completions"
+        },
+        {
+          "info": {
+            "name": "List all projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/all"
+          },
+          "docs": "List all projects"
+        },
+        {
+          "info": {
+            "name": "List agents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/agents"
+          },
+          "docs": "List agents"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Test Cases & Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve dataset metadata by name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/datasets/name/{{datasetName}}"
+          },
+          "docs": "Retrieve dataset metadata by name"
+        },
+        {
+          "info": {
+            "name": "Retrieve dataset metadata by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/datasets/id/{{datasetId}}"
+          },
+          "docs": "Retrieve dataset metadata by ID"
+        },
+        {
+          "info": {
+            "name": "Retrieve test cases by dataset name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/datasets/name/{{datasetName}}/test-cases"
+          },
+          "docs": "Retrieve test cases by dataset name"
+        },
+        {
+          "info": {
+            "name": "Retrieve test cases by dataset ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/datasets/id/{{datasetId}}/test-cases"
+          },
+          "docs": "Retrieve test cases by dataset ID"
+        },
+        {
+          "info": {
+            "name": "Upload test cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/datasets/id/{{datasetId}}/test-cases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload test cases"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Test Runs & Evaluations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List test runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/test-runs"
+          },
+          "docs": "List test runs"
+        },
+        {
+          "info": {
+            "name": "Create a test run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/test-runs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a test run"
+        },
+        {
+          "info": {
+            "name": "Retrieve test run results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/test-runs/id/{{testRunId}}"
+          },
+          "docs": "Retrieve test run results"
+        },
+        {
+          "info": {
+            "name": "Record completion feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/completion-feedback/id/{{completionId}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Record completion feedback"
+        },
+        {
+          "info": {
+            "name": "Record trace feedback",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/{{projectId}}/trace-feedback/id/{{traceId}}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Record trace feedback"
+        }
+      ]
+    }
+  ]
+}

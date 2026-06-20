@@ -1,0 +1,100 @@
+aid: freeplay
+name: Freeplay
+review:
+  question: Does Freeplay expose a documented public WebSocket or streaming (SSE) API?
+  answer: false
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. Freeplay's HTTP API is a synchronous
+    REST recording/evaluation/observability API: applications fetch prompt
+    templates, make their own LLM calls (against their chosen model provider),
+    and record completions, sessions, and traces back to Freeplay over plain
+    HTTPS request/response. No WebSocket (ws://, wss://) and no Server-Sent
+    Events (SSE) streaming surface is documented in the Freeplay API reference,
+    so there is no event-driven transport to model in AsyncAPI.
+findings:
+  summary: |
+    Freeplay does not publish a documented public WebSocket or SSE API. The
+    platform's HTTP API is rooted at the instance URL plus /api/v2 (cloud:
+    https://app.freeplay.ai/api/v2; private/self-hosted:
+    https://{subdomain}.freeplay.ai/api/v2) and is authenticated with a
+    Bearer API key. All documented endpoints are synchronous HTTPS REST for
+    prompt templates, completions/sessions/traces recording, datasets/test
+    cases, test runs, feedback, search, projects, and agents. Freeplay does
+    not proxy LLM inference, so there is no token-streaming transport on its
+    side; any streaming happens between the customer's app and the model
+    provider, outside Freeplay's API.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://app.freeplay.ai/api/v2
+      documented: true
+    - protocol: REST
+      scheme: https
+      baseURL: https://{subdomain}.freeplay.ai/api/v2
+      note: Per-account subdomain for private / self-hosted instances.
+      documented: true
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming endpoint is documented.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in the Freeplay API reference.
+  endpointsConfirmedRest:
+    - GET  https://app.freeplay.ai/api/v2/projects/all
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/all/{environment_name}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/name/{template_name}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/name/{template_name}/versions
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}/environments
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/sessions
+    - DELETE https://app.freeplay.ai/api/v2/projects/{project_id}/sessions/{session_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/sessions/{session_id}/completions
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/sessions/{session_id}/traces/id/{trace_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/completions/statistics
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/completions/statistics/{prompt_template_id}
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/datasets/name/{dataset_name}
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/datasets/id/{dataset_id}
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/datasets/name/{dataset_name}/test-cases
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/datasets/id/{dataset_id}/test-cases
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/datasets/id/{dataset_id}/test-cases
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/test-runs
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/test-runs
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/test-runs/id/{test_run_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/completion-feedback/id/{completion_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/trace-feedback/id/{trace_id}
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/search/sessions
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/search/traces
+    - POST https://app.freeplay.ai/api/v2/projects/{project_id}/search/completions
+    - GET  https://app.freeplay.ai/api/v2/projects/{project_id}/agents
+sources:
+  - url: https://docs.freeplay.ai/developer-resources/api-reference
+    type: APIReference
+    note: Full HTTP API reference; all endpoints are HTTPS REST under /api/v2. No WebSocket or SSE mentioned.
+  - url: https://docs.freeplay.ai/docs/api-reference
+    type: APIReference
+    note: Mirror of the API reference confirming the same REST endpoints, Bearer auth, and v2 version.
+  - url: https://docs.freeplay.ai/getting-started/integrate
+    type: Documentation
+    note: Integration guide; apps fetch prompts, call the LLM themselves, and record results back to Freeplay over REST.
+  - url: https://docs.freeplay.ai/docs/freeplay-sdk
+    type: Documentation
+    note: SDK reference (Python, Node.js, JVM) wrapping the same REST API; no streaming transport exposed by Freeplay.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or SSE protocol surface exists in Freeplay's documented API,
+    so no AsyncAPI document was authored. The apis.yml catalogs the four REST
+    sub-API groupings (Prompt Templates; Recordings & Sessions; Test Cases &
+    Datasets; Test Runs & Evaluations) with an OpenAPI 3.0.1 definition.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

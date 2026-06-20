@@ -1,0 +1,1082 @@
+openapi: 3.0.1
+info:
+  title: Freeplay HTTP API
+  description: >-
+    The Freeplay HTTP API provides programmatic access to the Freeplay LLM
+    experimentation, evaluation, and observability platform. It covers prompt
+    template management, recording completions and sessions/traces, curating
+    test cases and datasets, running batch test runs and evaluations, and
+    recording customer and human feedback. The API root is your Freeplay
+    instance URL plus /api/v2. For the standard cloud instance this is
+    https://app.freeplay.ai/api/v2; private/self-hosted instances use a
+    per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  termsOfService: https://freeplay.ai/terms
+  contact:
+    name: Freeplay Support
+    url: https://docs.freeplay.ai/
+  version: v2
+servers:
+  - url: https://app.freeplay.ai/api/v2
+    description: Freeplay Cloud (standard instance)
+  - url: https://{subdomain}.freeplay.ai/api/v2
+    description: Private / self-hosted instance (per-account subdomain)
+    variables:
+      subdomain:
+        default: app
+        description: Your Freeplay account subdomain.
+security:
+  - bearerAuth: []
+tags:
+  - name: Prompt Templates
+    description: Create, version, retrieve, and deploy prompt templates.
+  - name: Sessions
+    description: List, search, and delete sessions.
+  - name: Completions
+    description: Record completions and aggregate completion statistics.
+  - name: Traces
+    description: Record traces that group related completions.
+  - name: Datasets
+    description: Curate datasets and their test cases.
+  - name: Test Runs
+    description: Create, list, and retrieve batch test runs.
+  - name: Feedback
+    description: Record completion-level and trace-level feedback.
+  - name: Search
+    description: API-only search over sessions, traces, and completions.
+  - name: Projects
+    description: List workspace projects.
+  - name: Agents
+    description: List agents within a project.
+paths:
+  /projects/all:
+    get:
+      operationId: listProjects
+      tags:
+        - Projects
+      summary: List all projects in the workspace.
+      responses:
+        '200':
+          description: A list of projects.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+  /projects/{project_id}/prompt-templates:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listPromptTemplates
+      tags:
+        - Prompt Templates
+      summary: List prompt templates for a project.
+      responses:
+        '200':
+          description: A list of prompt templates.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prompt_templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PromptTemplate'
+    post:
+      operationId: createPromptTemplate
+      tags:
+        - Prompt Templates
+      summary: Create a prompt template.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePromptTemplateRequest'
+      responses:
+        '200':
+          description: The created prompt template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplate'
+  /projects/{project_id}/prompt-templates/all/{environment_name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: environment_name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Environment name (e.g. latest, production).
+    get:
+      operationId: getAllPromptTemplatesInEnvironment
+      tags:
+        - Prompt Templates
+      summary: Retrieve all prompt templates deployed in an environment.
+      responses:
+        '200':
+          description: All prompt templates in the environment.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prompt_templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/prompt-templates/name/{template_name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TemplateName'
+    post:
+      operationId: getPromptTemplateByName
+      tags:
+        - Prompt Templates
+      summary: Retrieve a prompt template by name (formatted or raw).
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPromptTemplateRequest'
+      responses:
+        '200':
+          description: The requested prompt template version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/prompt-templates/name/{template_name}/versions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TemplateName'
+    post:
+      operationId: createPromptTemplateVersionByName
+      tags:
+        - Prompt Templates
+      summary: Create a new version of a prompt template by name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePromptTemplateVersionRequest'
+      responses:
+        '200':
+          description: The created prompt template version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/prompt-templates/id/{template_id}/versions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TemplateId'
+    post:
+      operationId: createPromptTemplateVersionById
+      tags:
+        - Prompt Templates
+      summary: Create a new version of a prompt template by template ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePromptTemplateVersionRequest'
+      responses:
+        '200':
+          description: The created prompt template version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/VersionId'
+    post:
+      operationId: getPromptTemplateVersionById
+      tags:
+        - Prompt Templates
+      summary: Retrieve a specific prompt template version by ID.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPromptTemplateRequest'
+      responses:
+        '200':
+          description: The requested prompt template version.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}/environments:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TemplateId'
+      - $ref: '#/components/parameters/VersionId'
+    post:
+      operationId: assignPromptTemplateVersionToEnvironments
+      tags:
+        - Prompt Templates
+      summary: Deploy / assign a prompt template version to one or more environments.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                environments:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - environments
+      responses:
+        '200':
+          description: The updated prompt template version with environment assignments.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptTemplateVersion'
+  /projects/{project_id}/sessions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listSessions
+      tags:
+        - Sessions
+      summary: Retrieve sessions with pagination and filtering.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Page number for pagination.
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+          description: Number of sessions per page.
+      responses:
+        '200':
+          description: A paginated list of sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+                  next_page:
+                    type: integer
+                    nullable: true
+  /projects/{project_id}/sessions/{session_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/SessionId'
+    delete:
+      operationId: deleteSession
+      tags:
+        - Sessions
+      summary: Permanently delete a session.
+      responses:
+        '204':
+          description: Session deleted.
+  /projects/{project_id}/sessions/{session_id}/completions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/SessionId'
+    post:
+      operationId: recordCompletion
+      tags:
+        - Completions
+      summary: Record an LLM completion to a session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCompletionRequest'
+      responses:
+        '200':
+          description: The recorded completion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Completion'
+  /projects/{project_id}/sessions/{session_id}/traces/id/{trace_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/TraceId'
+    post:
+      operationId: recordTrace
+      tags:
+        - Traces
+      summary: Record a trace that groups related completions within a session.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordTraceRequest'
+      responses:
+        '200':
+          description: The recorded trace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trace'
+  /projects/{project_id}/completions/statistics:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: getCompletionStatistics
+      tags:
+        - Completions
+      summary: Aggregate evaluation statistics across completions.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatisticsRequest'
+      responses:
+        '200':
+          description: Aggregated completion statistics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+  /projects/{project_id}/completions/statistics/{prompt_template_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: prompt_template_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      operationId: getCompletionStatisticsByTemplate
+      tags:
+        - Completions
+      summary: Aggregate evaluation statistics for a specific prompt template.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatisticsRequest'
+      responses:
+        '200':
+          description: Aggregated completion statistics for the prompt template.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+  /projects/{project_id}/datasets/name/{dataset_name}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: dataset_name
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getDatasetByName
+      tags:
+        - Datasets
+      summary: Retrieve dataset metadata by name.
+      responses:
+        '200':
+          description: Dataset metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+  /projects/{project_id}/datasets/id/{dataset_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/DatasetId'
+    get:
+      operationId: getDatasetById
+      tags:
+        - Datasets
+      summary: Retrieve dataset metadata by ID.
+      responses:
+        '200':
+          description: Dataset metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+  /projects/{project_id}/datasets/name/{dataset_name}/test-cases:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: dataset_name
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getTestCasesByDatasetName
+      tags:
+        - Datasets
+      summary: Retrieve test cases for a dataset by name.
+      responses:
+        '200':
+          description: A list of test cases.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  test_cases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TestCase'
+  /projects/{project_id}/datasets/id/{dataset_id}/test-cases:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/DatasetId'
+    get:
+      operationId: getTestCasesByDatasetId
+      tags:
+        - Datasets
+      summary: Retrieve test cases for a dataset by ID.
+      responses:
+        '200':
+          description: A list of test cases.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  test_cases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TestCase'
+    post:
+      operationId: uploadTestCases
+      tags:
+        - Datasets
+      summary: Upload test cases to a dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadTestCasesRequest'
+      responses:
+        '200':
+          description: The uploaded test cases.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  test_cases:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TestCase'
+  /projects/{project_id}/test-runs:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listTestRuns
+      tags:
+        - Test Runs
+      summary: List test runs for a project.
+      responses:
+        '200':
+          description: A list of test runs.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  test_runs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TestRun'
+    post:
+      operationId: createTestRun
+      tags:
+        - Test Runs
+      summary: Create a test run from a dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTestRunRequest'
+      responses:
+        '200':
+          description: The created test run.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRun'
+  /projects/{project_id}/test-runs/id/{test_run_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: test_run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      operationId: getTestRun
+      tags:
+        - Test Runs
+      summary: Retrieve test run results by ID.
+      responses:
+        '200':
+          description: The test run and its results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestRun'
+  /projects/{project_id}/completion-feedback/id/{completion_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - name: completion_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      operationId: recordCompletionFeedback
+      tags:
+        - Feedback
+      summary: Record feedback on a completion.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Feedback recorded.
+  /projects/{project_id}/trace-feedback/id/{trace_id}:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/TraceId'
+    post:
+      operationId: recordTraceFeedback
+      tags:
+        - Feedback
+      summary: Record feedback on a trace.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Feedback recorded.
+  /projects/{project_id}/search/sessions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchSessions
+      tags:
+        - Search
+      summary: Search sessions with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+  /projects/{project_id}/search/traces:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchTraces
+      tags:
+        - Search
+      summary: Search traces with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching traces.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  traces:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trace'
+  /projects/{project_id}/search/completions:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchCompletions
+      tags:
+        - Search
+      summary: Search completions with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching completions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Completion'
+  /projects/{project_id}/agents:
+    parameters:
+      - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listAgents
+      tags:
+        - Agents
+      summary: List agents within a project with pagination.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of agents.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Agent'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Authenticate requests using your Freeplay API key as a Bearer token in
+        the Authorization header. API keys are managed at
+        https://app.freeplay.ai/settings/api-access.
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TraceId:
+      name: trace_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TemplateId:
+      name: template_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TemplateName:
+      name: template_name
+      in: path
+      required: true
+      schema:
+        type: string
+    VersionId:
+      name: version_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    PromptTemplate:
+      type: object
+      properties:
+        prompt_template_id:
+          type: string
+          format: uuid
+        prompt_template_name:
+          type: string
+        project_id:
+          type: string
+          format: uuid
+    CreatePromptTemplateRequest:
+      type: object
+      required:
+        - prompt_template_name
+      properties:
+        prompt_template_name:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model_parameters:
+          type: object
+          additionalProperties: true
+    GetPromptTemplateRequest:
+      type: object
+      properties:
+        environment:
+          type: string
+          description: Environment to resolve the deployed version from (e.g. latest, production).
+        variables:
+          type: object
+          additionalProperties: true
+          description: Variables used to format the template when requesting a formatted result.
+    CreatePromptTemplateVersionRequest:
+      type: object
+      required:
+        - messages
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        model_parameters:
+          type: object
+          additionalProperties: true
+    PromptTemplateVersion:
+      type: object
+      properties:
+        prompt_template_id:
+          type: string
+          format: uuid
+        prompt_template_version_id:
+          type: string
+          format: uuid
+        prompt_template_name:
+          type: string
+        environments:
+          type: array
+          items:
+            type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        model_parameters:
+          type: object
+          additionalProperties: true
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+            - system
+            - user
+            - assistant
+            - tool
+        content:
+          type: string
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        custom_metadata:
+          type: object
+          additionalProperties: true
+    RecordCompletionRequest:
+      type: object
+      required:
+        - messages
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        inputs:
+          type: object
+          additionalProperties: true
+        prompt_template_version_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        model:
+          type: string
+        provider:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+        custom_metadata:
+          type: object
+          additionalProperties: true
+    Completion:
+      type: object
+      properties:
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+    RecordTraceRequest:
+      type: object
+      properties:
+        input:
+          type: string
+        output:
+          type: string
+        custom_metadata:
+          type: object
+          additionalProperties: true
+    Trace:
+      type: object
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        input:
+          type: string
+        output:
+          type: string
+    Dataset:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        test_case_count:
+          type: integer
+    TestCase:
+      type: object
+      properties:
+        test_case_id:
+          type: string
+          format: uuid
+        values:
+          type: object
+          additionalProperties: true
+          description: Input variable values for the test case.
+        output:
+          type: string
+          description: Expected or reference output.
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        metadata:
+          type: object
+          additionalProperties: true
+    UploadTestCasesRequest:
+      type: object
+      required:
+        - test_cases
+      properties:
+        test_cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCase'
+    CreateTestRunRequest:
+      type: object
+      required:
+        - dataset_id
+      properties:
+        dataset_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        prompt_template_version_id:
+          type: string
+          format: uuid
+        flavor_name:
+          type: string
+        include_outputs:
+          type: boolean
+    TestRun:
+      type: object
+      properties:
+        test_run_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        dataset_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    FeedbackRequest:
+      type: object
+      properties:
+        feedback:
+          type: object
+          additionalProperties: true
+          description: Map of feedback key to value (scores, labels, or free text).
+        source:
+          type: string
+          description: Origin of the feedback (e.g. customer, human-review).
+    StatisticsRequest:
+      type: object
+      properties:
+        environment:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    Statistics:
+      type: object
+      properties:
+        completion_count:
+          type: integer
+        evaluations:
+          type: object
+          additionalProperties: true
+    SearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        filters:
+          type: object
+          additionalProperties: true
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        page:
+          type: integer
+        page_size:
+          type: integer
+    Agent:
+      type: object
+      properties:
+        agent_id:
+          type: string
+          format: uuid
+        name:
+          type: string

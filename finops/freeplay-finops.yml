@@ -1,0 +1,98 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Freeplay
+providerId: freeplay
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- AI
+- LLM
+- Evaluation
+- Observability
+- Prompt Management
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Freeplay spend. Freeplay is sold as sales-led, packaged
+  subscriptions (Free/Starter, Growth, Enterprise) rather than published
+  per-unit usage rates, so spend is primarily a fixed/contracted platform cost
+  scaled by seats, volume, support, and deployment (cloud vs. self-hosted).
+  Underlying LLM inference costs are incurred separately at the model
+  providers, since Freeplay records completions rather than proxying inference.
+notes: >-
+  Per-plan dollar amounts are not publicly listed; reconciled is false. Confirm
+  contracted package, seat counts, and volume bands with Freeplay sales. Track
+  model-provider inference spend separately from the Freeplay platform fee.
+sources:
+- https://freeplay.ai/pricing
+- https://docs.freeplay.ai/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Freeplay
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Subscription-Based
+  billingFrequency: Annual
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: Freeplay
+  ServiceCategory: AI and Machine Learning
+  ProviderName: Freeplay
+  PublisherName: Freeplay
+  InvoiceIssuerName: Freeplay
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Subscription-Based
+meters:
+- name: platform_subscription
+  description: Contracted platform subscription fee for the selected plan/package.
+  unit: contract
+  aggregation: sum
+  dimensions:
+  - account
+  - plan
+- name: seats
+  description: Number of collaborator seats / users on the account.
+  unit: seats
+  aggregation: max
+  dimensions:
+  - account
+  - plan
+- name: recorded_completions
+  description: Volume of completions/sessions/traces recorded into Freeplay, which may inform plan volume bands.
+  unit: completions
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+- name: test_runs
+  description: Batch test runs / evaluation jobs executed, which may inform plan volume bands.
+  unit: runs
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+principles:
+- name: Visibility
+  description: Track the Freeplay platform fee separately from model-provider inference spend; tag projects and API keys per team.
+- name: Allocation
+  description: Map projects and seats to internal cost centers; attribute recording and evaluation volume per product.
+- name: Optimization
+  description: Right-size the plan to actual recording and evaluation volume; consolidate projects; use search and statistics endpoints instead of bulk exports where possible.
+- name: Accountability
+  description: Assign owners per project; review contracted volume bands and seat usage against the agreement at renewal.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

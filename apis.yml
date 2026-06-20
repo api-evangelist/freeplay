@@ -1,0 +1,133 @@
+aid: freeplay
+url: https://raw.githubusercontent.com/api-evangelist/freeplay/refs/heads/main/apis.yml
+name: Freeplay
+kind: company
+description: Freeplay is an LLM product experimentation, evaluation, and observability
+  platform for cross-functional teams. Its HTTP API and SDKs make Freeplay the source
+  of truth for prompt templates, record completions and sessions/traces from production,
+  curate test datasets, run batch test runs and LLM-judge evaluations, and capture
+  human and customer feedback.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- AI
+- LLM
+- Evaluation
+- Observability
+- Prompt Management
+- Experimentation
+created: '2026-06-20'
+modified: '2026-06-20'
+specificationVersion: '0.19'
+apis:
+- aid: freeplay:prompt-templates
+  name: Freeplay Prompt Templates API
+  tags:
+  - Prompt Management
+  - Templates
+  - Versioning
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  properties:
+  - url: https://docs.freeplay.ai/docs/freeplay-sdk
+    type: Documentation
+  - url: https://docs.freeplay.ai/developer-resources/api-reference
+    type: APIReference
+  - url: openapi/freeplay-openapi.yml
+    type: OpenAPI
+  - url: collections/freeplay.postman_collection.json
+    type: PostmanCollection
+  - url: collections/freeplay.opencollection.json
+    type: OpenCollection
+  description: Manage versioned prompt templates as the source of truth for an application,
+    including creating templates and versions, retrieving formatted or raw templates
+    by name or ID, deploying versions to environments, and listing all templates in
+    an environment.
+- aid: freeplay:recordings-sessions
+  name: Freeplay Recordings & Sessions API
+  tags:
+  - Recordings
+  - Sessions
+  - Traces
+  - Observability
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  properties:
+  - url: https://docs.freeplay.ai/getting-started/integrate
+    type: Documentation
+  - url: https://docs.freeplay.ai/developer-resources/api-reference
+    type: APIReference
+  - url: openapi/freeplay-openapi.yml
+    type: OpenAPI
+  - url: collections/freeplay.postman_collection.json
+    type: PostmanCollection
+  - url: collections/freeplay.opencollection.json
+    type: OpenCollection
+  description: Record LLM completions back to Freeplay along with the sessions and
+    traces that group related calls for agent workflows, then list, search, and delete
+    sessions and aggregate completion statistics for production observability.
+- aid: freeplay:test-cases-datasets
+  name: Freeplay Test Cases & Datasets API
+  tags:
+  - Datasets
+  - Test Cases
+  - Curation
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  properties:
+  - url: https://docs.freeplay.ai/docs/quick-start
+    type: Documentation
+  - url: https://docs.freeplay.ai/developer-resources/api-reference
+    type: APIReference
+  - url: openapi/freeplay-openapi.yml
+    type: OpenAPI
+  - url: collections/freeplay.postman_collection.json
+    type: PostmanCollection
+  - url: collections/freeplay.opencollection.json
+    type: OpenCollection
+  description: Curate evaluation datasets and their test cases, retrieving dataset
+    metadata and test cases by name or ID and uploading new test cases for use in
+    batch test runs and experiments.
+- aid: freeplay:test-runs-evaluations
+  name: Freeplay Test Runs & Evaluations API
+  tags:
+  - Evaluations
+  - Test Runs
+  - Feedback
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  properties:
+  - url: https://freeplay.ai/blog/llm-evaluation
+    type: Documentation
+  - url: https://docs.freeplay.ai/developer-resources/api-reference
+    type: APIReference
+  - url: openapi/freeplay-openapi.yml
+    type: OpenAPI
+  - url: collections/freeplay.postman_collection.json
+    type: PostmanCollection
+  - url: collections/freeplay.opencollection.json
+    type: OpenCollection
+  description: Run batch evaluations against datasets, create and list test runs and
+    retrieve their results, and record completion-level and trace-level customer and
+    human feedback to close the evaluation feedback loop.
+common:
+- type: GitHubOrganization
+  url: https://github.com/freeplayai
+- type: LinkedIn
+  url: https://www.linkedin.com/company/freeplay-ai
+- type: Website
+  url: https://freeplay.ai/
+- type: Documentation
+  url: https://docs.freeplay.ai/
+- type: Plans
+  url: plans/freeplay-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/freeplay-rate-limits.yml
+- type: FinOps
+  url: finops/freeplay-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,56 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Freeplay
+providerId: freeplay
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- AI
+- LLM
+- Evaluation
+- Observability
+- Prompt Management
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Freeplay's HTTP API is authenticated per-account with a Bearer API key and
+  scoped to projects. Freeplay does not publish specific numeric rate-limit
+  values (RPM/TPM/quotas) in its public API reference; limits are governed by
+  account plan and deployment. Clients should expect standard HTTP 429
+  throttling and apply backoff. Specific limits are not reconciled here.
+notes: >-
+  No public numeric rate limits are documented. Verify per-plan quotas (request
+  rate, ingestion/recording volume, search, and bulk operations) with Freeplay
+  during reconciliation, especially for high-volume production recording.
+sources:
+- https://docs.freeplay.ai/developer-resources/api-reference
+- https://docs.freeplay.ai/
+responseCodes:
+  throttled: 429
+limits:
+- name: Requests Per Minute (RPM)
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Not publicly published; governed by plan and instance.
+- name: Recording / Ingestion Volume
+  scope: account
+  metric: completions
+  limit: see provider documentation
+  notes: Completion/session/trace recording volume may be plan-bounded.
+- name: Search & Bulk Operations
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: API-only search and bulk endpoints may carry separate limits.
+policies:
+- name: Tiered Limits
+  description: Limits scale with plan (Free/Starter, Growth, Enterprise) and deployment (cloud vs. self-hosted).
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on HTTP 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
