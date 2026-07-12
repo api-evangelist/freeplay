@@ -114,6 +114,12 @@ apis:
     retrieve their results, and record completion-level and trace-level customer and
     human feedback to close the evaluation feedback loop.
 common:
+- type: TrustCenter
+  url: security/freeplay-trust-center.yml
+- type: DomainSecurity
+  url: security/freeplay-domain-security.yml
+- type: Authentication
+  url: authentication/freeplay-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/freeplayai
 - type: LinkedIn

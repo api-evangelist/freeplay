@@ -1,0 +1,14 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/freeplay-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization
+    header. API keys are managed at https://app.freeplay.ai/settings/api-access.
+  sources:
+  - openapi/freeplay-openapi.yml
