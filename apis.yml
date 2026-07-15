@@ -114,6 +114,8 @@ apis:
     retrieve their results, and record completion-level and trace-level customer and
     human feedback to close the evaluation feedback loop.
 common:
+- type: AgenticAccess
+  url: agentic-access/freeplay-agentic-access.yml
 - type: TrustCenter
   url: security/freeplay-trust-center.yml
 - type: DomainSecurity
