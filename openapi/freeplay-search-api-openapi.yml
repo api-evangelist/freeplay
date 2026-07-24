@@ -1,0 +1,205 @@
+openapi: 3.0.1
+info:
+  title: Freeplay HTTP Agents Search API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  termsOfService: https://freeplay.ai/terms
+  contact:
+    name: Freeplay Support
+    url: https://docs.freeplay.ai/
+  version: v2
+servers:
+- url: https://app.freeplay.ai/api/v2
+  description: Freeplay Cloud (standard instance)
+- url: https://{subdomain}.freeplay.ai/api/v2
+  description: Private / self-hosted instance (per-account subdomain)
+  variables:
+    subdomain:
+      default: app
+      description: Your Freeplay account subdomain.
+security:
+- bearerAuth: []
+tags:
+- name: Search
+  description: API-only search over sessions, traces, and completions.
+paths:
+  /projects/{project_id}/search/sessions:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchSessions
+      tags:
+      - Search
+      summary: Search sessions with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+  /projects/{project_id}/search/traces:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchTraces
+      tags:
+      - Search
+      summary: Search traces with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching traces.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  traces:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Trace'
+  /projects/{project_id}/search/completions:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    post:
+      operationId: searchCompletions
+      tags:
+      - Search
+      summary: Search completions with advanced filters.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Matching completions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  completions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Completion'
+components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+  schemas:
+    Trace:
+      type: object
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        input:
+          type: string
+        output:
+          type: string
+    SearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+        filters:
+          type: object
+          additionalProperties: true
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        page:
+          type: integer
+        page_size:
+          type: integer
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        custom_metadata:
+          type: object
+          additionalProperties: true
+    Completion:
+      type: object
+      properties:
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

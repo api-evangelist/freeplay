@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Freeplay HTTP Agents Feedback API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  termsOfService: https://freeplay.ai/terms
+  contact:
+    name: Freeplay Support
+    url: https://docs.freeplay.ai/
+  version: v2
+servers:
+- url: https://app.freeplay.ai/api/v2
+  description: Freeplay Cloud (standard instance)
+- url: https://{subdomain}.freeplay.ai/api/v2
+  description: Private / self-hosted instance (per-account subdomain)
+  variables:
+    subdomain:
+      default: app
+      description: Your Freeplay account subdomain.
+security:
+- bearerAuth: []
+tags:
+- name: Feedback
+  description: Record completion-level and trace-level feedback.
+paths:
+  /projects/{project_id}/completion-feedback/id/{completion_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - name: completion_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    post:
+      operationId: recordCompletionFeedback
+      tags:
+      - Feedback
+      summary: Record feedback on a completion.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Feedback recorded.
+  /projects/{project_id}/trace-feedback/id/{trace_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/TraceId'
+    post:
+      operationId: recordTraceFeedback
+      tags:
+      - Feedback
+      summary: Record feedback on a trace.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Feedback recorded.
+components:
+  parameters:
+    TraceId:
+      name: trace_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+  schemas:
+    FeedbackRequest:
+      type: object
+      properties:
+        feedback:
+          type: object
+          additionalProperties: true
+          description: Map of feedback key to value (scores, labels, or free text).
+        source:
+          type: string
+          description: Origin of the feedback (e.g. customer, human-review).
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

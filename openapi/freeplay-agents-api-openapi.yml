@@ -1,0 +1,73 @@
+openapi: 3.0.1
+info:
+  title: Freeplay HTTP Agents API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  termsOfService: https://freeplay.ai/terms
+  contact:
+    name: Freeplay Support
+    url: https://docs.freeplay.ai/
+  version: v2
+servers:
+- url: https://app.freeplay.ai/api/v2
+  description: Freeplay Cloud (standard instance)
+- url: https://{subdomain}.freeplay.ai/api/v2
+  description: Private / self-hosted instance (per-account subdomain)
+  variables:
+    subdomain:
+      default: app
+      description: Your Freeplay account subdomain.
+security:
+- bearerAuth: []
+tags:
+- name: Agents
+  description: List agents within a project.
+paths:
+  /projects/{project_id}/agents:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listAgents
+      tags:
+      - Agents
+      summary: List agents within a project with pagination.
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of agents.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Agent'
+components:
+  schemas:
+    Agent:
+      type: object
+      properties:
+        agent_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

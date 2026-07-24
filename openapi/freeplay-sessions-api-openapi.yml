@@ -1,0 +1,108 @@
+openapi: 3.0.1
+info:
+  title: Freeplay HTTP Agents Sessions API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  termsOfService: https://freeplay.ai/terms
+  contact:
+    name: Freeplay Support
+    url: https://docs.freeplay.ai/
+  version: v2
+servers:
+- url: https://app.freeplay.ai/api/v2
+  description: Freeplay Cloud (standard instance)
+- url: https://{subdomain}.freeplay.ai/api/v2
+  description: Private / self-hosted instance (per-account subdomain)
+  variables:
+    subdomain:
+      default: app
+      description: Your Freeplay account subdomain.
+security:
+- bearerAuth: []
+tags:
+- name: Sessions
+  description: List, search, and delete sessions.
+paths:
+  /projects/{project_id}/sessions:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    get:
+      operationId: listSessions
+      tags:
+      - Sessions
+      summary: Retrieve sessions with pagination and filtering.
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: integer
+        description: Page number for pagination.
+      - name: page_size
+        in: query
+        schema:
+          type: integer
+        description: Number of sessions per page.
+      responses:
+        '200':
+          description: A paginated list of sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+                  next_page:
+                    type: integer
+                    nullable: true
+  /projects/{project_id}/sessions/{session_id}:
+    parameters:
+    - $ref: '#/components/parameters/ProjectId'
+    - $ref: '#/components/parameters/SessionId'
+    delete:
+      operationId: deleteSession
+      tags:
+      - Sessions
+      summary: Permanently delete a session.
+      responses:
+        '204':
+          description: Session deleted.
+components:
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+  schemas:
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        custom_metadata:
+          type: object
+          additionalProperties: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.
