@@ -7,7 +7,20 @@ description: Freeplay is an LLM product experimentation, evaluation, and observa
   of truth for prompt templates, record completions and sessions/traces from production,
   curate test datasets, run batch test runs and LLM-judge evaluations, and capture
   human and customer feedback.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/freeplay.png
 tags:
 - AI
 - LLM
@@ -19,100 +32,246 @@ created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.19'
 apis:
-- aid: freeplay:prompt-templates
-  name: Freeplay Prompt Templates API
-  tags:
-  - Prompt Management
-  - Templates
-  - Versioning
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: freeplay:freeplay-agents-api
+  name: Freeplay Agents API
+  description: List agents within a project.
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
-  properties:
-  - url: https://docs.freeplay.ai/docs/freeplay-sdk
-    type: Documentation
-  - url: https://docs.freeplay.ai/developer-resources/api-reference
-    type: APIReference
-  - url: openapi/freeplay-openapi.yml
-    type: OpenAPI
-  - url: collections/freeplay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/freeplay.opencollection.json
-    type: OpenCollection
-  description: Manage versioned prompt templates as the source of truth for an application,
-    including creating templates and versions, retrieving formatted or raw templates
-    by name or ID, deploying versions to environments, and listing all templates in
-    an environment.
-- aid: freeplay:recordings-sessions
-  name: Freeplay Recordings & Sessions API
   tags:
-  - Recordings
-  - Sessions
-  - Traces
-  - Observability
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-agents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-completions-api
+  name: Freeplay Completions API
+  description: Record completions and aggregate completion statistics.
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Completions
   properties:
-  - url: https://docs.freeplay.ai/getting-started/integrate
-    type: Documentation
-  - url: https://docs.freeplay.ai/developer-resources/api-reference
-    type: APIReference
-  - url: openapi/freeplay-openapi.yml
-    type: OpenAPI
-  - url: collections/freeplay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/freeplay.opencollection.json
-    type: OpenCollection
-  description: Record LLM completions back to Freeplay along with the sessions and
-    traces that group related calls for agent workflows, then list, search, and delete
-    sessions and aggregate completion statistics for production observability.
-- aid: freeplay:test-cases-datasets
-  name: Freeplay Test Cases & Datasets API
+  - type: OpenAPI
+    url: openapi/freeplay-completions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-datasets-api
+  name: Freeplay Datasets API
+  description: Curate datasets and their test cases.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
   tags:
   - Datasets
-  - Test Cases
-  - Curation
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-datasets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-feedback-api
+  name: Freeplay Feedback API
+  description: Record completion-level and trace-level feedback.
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
-  properties:
-  - url: https://docs.freeplay.ai/docs/quick-start
-    type: Documentation
-  - url: https://docs.freeplay.ai/developer-resources/api-reference
-    type: APIReference
-  - url: openapi/freeplay-openapi.yml
-    type: OpenAPI
-  - url: collections/freeplay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/freeplay.opencollection.json
-    type: OpenCollection
-  description: Curate evaluation datasets and their test cases, retrieving dataset
-    metadata and test cases by name or ID and uploading new test cases for use in
-    batch test runs and experiments.
-- aid: freeplay:test-runs-evaluations
-  name: Freeplay Test Runs & Evaluations API
   tags:
-  - Evaluations
-  - Test Runs
   - Feedback
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-feedback-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-projects-api
+  name: Freeplay Projects API
+  description: List workspace projects.
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Projects
   properties:
-  - url: https://freeplay.ai/blog/llm-evaluation
-    type: Documentation
-  - url: https://docs.freeplay.ai/developer-resources/api-reference
-    type: APIReference
-  - url: openapi/freeplay-openapi.yml
-    type: OpenAPI
-  - url: collections/freeplay.postman_collection.json
-    type: PostmanCollection
-  - url: collections/freeplay.opencollection.json
-    type: OpenCollection
-  description: Run batch evaluations against datasets, create and list test runs and
-    retrieve their results, and record completion-level and trace-level customer and
-    human feedback to close the evaluation feedback loop.
+  - type: OpenAPI
+    url: openapi/freeplay-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-prompt-templates-api
+  name: Freeplay Prompt Templates API
+  description: Create, version, retrieve, and deploy prompt templates.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Prompt Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-prompt-templates-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-search-api
+  name: Freeplay Search API
+  description: API-only search over sessions, traces, and completions.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-sessions-api
+  name: Freeplay Sessions API
+  description: List, search, and delete sessions.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-test-runs-api
+  name: Freeplay Test Runs API
+  description: Create, list, and retrieve batch test runs.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Test Runs
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-test-runs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-traces-api
+  name: Freeplay Traces API
+  description: Record traces that group related completions.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Traces
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-traces-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
 common:
 - type: AgenticAccess
   url: agentic-access/freeplay-agentic-access.yml
