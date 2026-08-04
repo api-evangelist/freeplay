@@ -1,0 +1,32 @@
+{
+  "provider": "freeplay",
+  "sources": [
+    "freeplay-agents-api-openapi.yml",
+    "freeplay-completions-api-openapi.yml",
+    "freeplay-datasets-api-openapi.yml",
+    "freeplay-feedback-api-openapi.yml",
+    "freeplay-projects-api-openapi.yml",
+    "freeplay-prompt-templates-api-openapi.yml",
+    "freeplay-search-api-openapi.yml",
+    "freeplay-sessions-api-openapi.yml",
+    "freeplay-test-runs-api-openapi.yml",
+    "freeplay-traces-api-openapi.yml"
+  ],
+  "outputs": [
+    "freeplay-agents-api-openapi.yml",
+    "freeplay-completions-api-openapi.yml",
+    "freeplay-datasets-api-openapi.yml",
+    "freeplay-feedback-api-openapi.yml",
+    "freeplay-projects-api-openapi.yml",
+    "freeplay-prompt-templates-api-openapi.yml",
+    "freeplay-search-api-openapi.yml",
+    "freeplay-sessions-api-openapi.yml",
+    "freeplay-test-runs-api-openapi.yml",
+    "freeplay-traces-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
