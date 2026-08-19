@@ -1,0 +1,118 @@
+{
+  "item": [
+    {
+      "id": "1fd86221-5d6f-4ce6-9d72-3e99d0b76e12",
+      "name": "Projects",
+      "description": {
+        "content": "List workspace projects.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ac003287-80cc-49b6-8315-47fbfb48533b",
+          "name": "List all projects in the workspace.",
+          "request": {
+            "name": "List all projects in the workspace.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "be0a4cca-f721-4d18-91de-eb4c57901bb4",
+              "name": "A list of projects.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"projects\": [\n    {\n      \"id\": \"da049087-e896-25d8-bf33-0e70dd1e73d0\",\n      \"name\": \"string\"\n    },\n    {\n      \"id\": \"24df7be0-0e9e-da7d-e0ef-f6872483f2ce\",\n      \"name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5c9c6d3c-37a3-4e30-b741-fe9866515d98",
+    "name": "Freeplay HTTP Agents Projects API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

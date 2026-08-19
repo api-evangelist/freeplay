@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP Agents Sessions API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve sessions with pagination and filtering.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/sessions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number for pagination."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of sessions per page."
+              }
+            ]
+          },
+          "docs": "Retrieve sessions with pagination and filtering."
+        },
+        {
+          "info": {
+            "name": "Permanently delete a session.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/sessions/:session_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Permanently delete a session."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

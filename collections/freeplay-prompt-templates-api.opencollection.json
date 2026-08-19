@@ -1,0 +1,241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP Agents Prompt Templates API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prompt Templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List prompt templates for a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              }
+            ]
+          },
+          "docs": "List prompt templates for a project."
+        },
+        {
+          "info": {
+            "name": "Create a prompt template.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a prompt template."
+        },
+        {
+          "info": {
+            "name": "Retrieve all prompt templates deployed in an environment.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/all/:environment_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "environment_name",
+                "value": "",
+                "type": "path",
+                "description": "Environment name (e.g. latest, production)."
+              }
+            ]
+          },
+          "docs": "Retrieve all prompt templates deployed in an environment."
+        },
+        {
+          "info": {
+            "name": "Retrieve a prompt template by name (formatted or raw).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/name/:template_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "template_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve a prompt template by name (formatted or raw)."
+        },
+        {
+          "info": {
+            "name": "Create a new version of a prompt template by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/name/:template_name/versions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "template_name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new version of a prompt template by name."
+        },
+        {
+          "info": {
+            "name": "Create a new version of a prompt template by template ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/id/:template_id/versions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new version of a prompt template by template ID."
+        },
+        {
+          "info": {
+            "name": "Retrieve a specific prompt template version by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/id/:template_id/versions/:version_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve a specific prompt template version by ID."
+        },
+        {
+          "info": {
+            "name": "Deploy / assign a prompt template version to one or more environments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/prompt-templates/id/:template_id/versions/:version_id/environments",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "template_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploy / assign a prompt template version to one or more environments."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

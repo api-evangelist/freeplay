@@ -1,0 +1,259 @@
+{
+  "item": [
+    {
+      "id": "36bdad7a-e983-484b-a30d-f751eb9e3f01",
+      "name": "Sessions",
+      "description": {
+        "content": "List, search, and delete sessions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fc6f8196-136d-4e67-abc2-b7b892411ced",
+          "name": "Retrieve sessions with pagination and filtering.",
+          "request": {
+            "name": "Retrieve sessions with pagination and filtering.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page number for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "Number of sessions per page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f55e7139-e478-4d04-a16b-411beff5da27",
+              "name": "A paginated list of sessions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sessions\": [\n    {\n      \"session_id\": \"ac526a50-c23a-150a-b044-b3df923fcf56\",\n      \"project_id\": \"7691a78b-7171-c954-9b6a-441c2f4d4f27\",\n      \"created_at\": \"1974-07-07T09:56:28.323Z\",\n      \"custom_metadata\": {\n        \"key_0\": false,\n        \"key_1\": 4267.477178059948,\n        \"key_2\": 4602\n      }\n    },\n    {\n      \"session_id\": \"b8d05ac5-8632-b0e1-7ab6-250c3a9822d7\",\n      \"project_id\": \"a07f19e1-a88d-bc4e-3eae-66e30b28a55c\",\n      \"created_at\": \"1953-11-18T06:47:05.749Z\",\n      \"custom_metadata\": {\n        \"key_0\": 214,\n        \"key_1\": true,\n        \"key_2\": 2312\n      }\n    }\n  ],\n  \"next_page\": 660\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14e98286-a183-4c59-8837-367950f781b2",
+          "name": "Permanently delete a session.",
+          "request": {
+            "name": "Permanently delete a session.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "sessions",
+                ":session_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "session_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c22e1d6f-0cb0-4efe-a00f-687519e95df5",
+              "name": "Session deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "sessions",
+                    ":session_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "session_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0a41344d-9a50-4d4a-a156-b3c8d1672994",
+    "name": "Freeplay HTTP Agents Sessions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

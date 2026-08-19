@@ -1,0 +1,147 @@
+{
+  "item": [
+    {
+      "id": "e0c12027-e8c2-406e-b6c5-88e777fee36f",
+      "name": "Agents",
+      "description": {
+        "content": "List agents within a project.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "575f3e53-c7dd-421a-bebc-6f7bc153e3ab",
+          "name": "List agents within a project with pagination.",
+          "request": {
+            "name": "List agents within a project with pagination.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "agents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2c1872a4-5ac1-4fa0-9d37-ef35cb674651",
+              "name": "A list of agents.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"agents\": [\n    {\n      \"agent_id\": \"e771579e-2376-d8ec-218c-dc1a15fd54c0\",\n      \"name\": \"string\"\n    },\n    {\n      \"agent_id\": \"1d65da25-760c-ed87-0d14-bfe8111097a1\",\n      \"name\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8bd399d4-8c75-4662-8185-8c3f7d24173a",
+    "name": "Freeplay HTTP Agents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

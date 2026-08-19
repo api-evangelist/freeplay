@@ -1,0 +1,1077 @@
+{
+  "item": [
+    {
+      "id": "7e975877-8282-4378-8031-661bc973caee",
+      "name": "Prompt Templates",
+      "description": {
+        "content": "Create, version, retrieve, and deploy prompt templates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c793aee4-3143-48d4-958a-b01b94c63561",
+          "name": "List prompt templates for a project.",
+          "request": {
+            "name": "List prompt templates for a project.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8a9fa5ff-fd03-42c6-9e54-dffd516e8a68",
+              "name": "A list of prompt templates.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_templates\": [\n    {\n      \"prompt_template_id\": \"91a028af-3227-403d-8254-0fa1d6e43b52\",\n      \"prompt_template_name\": \"string\",\n      \"project_id\": \"6e3af359-2f3d-24f2-e055-442e12e6b8a4\"\n    },\n    {\n      \"prompt_template_id\": \"ddfbd50d-c42a-3f25-67c5-b15a754754cc\",\n      \"prompt_template_name\": \"string\",\n      \"project_id\": \"7e4977ce-0bce-cb5f-5929-c90f0bedbe30\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05e8bff1-5605-4e9d-a082-baabe9045902",
+          "name": "Create a prompt template.",
+          "request": {
+            "name": "Create a prompt template.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt_template_name\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model_parameters\": {\n    \"key_0\": 1867.7392436758544,\n    \"key_1\": 5155.640417437605\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4731070d-d7d2-4e57-9862-33bed0c34a7f",
+              "name": "The created prompt template.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"prompt_template_name\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model_parameters\": {\n    \"key_0\": 3190.081421647051,\n    \"key_1\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"d372a4c7-c232-c51c-4c01-fac19c60bab9\",\n  \"prompt_template_name\": \"string\",\n  \"project_id\": \"fd0dcab0-cbdd-2f53-3ae8-d656ed9c1e49\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "03ee905a-33b4-4c81-b67a-eabfeec5a134",
+          "name": "Retrieve all prompt templates deployed in an environment.",
+          "request": {
+            "name": "Retrieve all prompt templates deployed in an environment.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "all",
+                ":environment_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "environment_name",
+                  "description": "(Required) Environment name (e.g. latest, production)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "53830b8e-ed34-4691-a1fb-744595ede017",
+              "name": "All prompt templates in the environment.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "all",
+                    ":environment_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "environment_name",
+                      "description": "(Required) Environment name (e.g. latest, production)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_templates\": [\n    {\n      \"prompt_template_id\": \"4d60e30a-5ff4-5e95-27e7-c2b4f2644c98\",\n      \"prompt_template_version_id\": \"9bb3191c-8fa1-6252-c111-68c72ed2f3a1\",\n      \"prompt_template_name\": \"string\",\n      \"environments\": [\n        \"string\",\n        \"string\"\n      ],\n      \"messages\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"model\": \"string\",\n      \"model_parameters\": {\n        \"key_0\": 4291,\n        \"key_1\": 7135.689733193742\n      }\n    },\n    {\n      \"prompt_template_id\": \"32a954c6-52b3-84b3-dd94-61f526803ad0\",\n      \"prompt_template_version_id\": \"11930ca5-ad6c-38f1-1eed-4512b9b9485f\",\n      \"prompt_template_name\": \"string\",\n      \"environments\": [\n        \"string\",\n        \"string\"\n      ],\n      \"messages\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"model\": \"string\",\n      \"model_parameters\": {\n        \"key_0\": 6614,\n        \"key_1\": true\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "59eca097-18d1-4fc5-852f-c64992a448a2",
+          "name": "Retrieve a prompt template by name (formatted or raw).",
+          "request": {
+            "name": "Retrieve a prompt template by name (formatted or raw).",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "name",
+                ":template_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "template_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"environment\": \"<string>\",\n  \"variables\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c013878b-345f-41ba-8ca8-da4513616c16",
+              "name": "The requested prompt template version.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "name",
+                    ":template_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "template_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"environment\": \"<string>\",\n  \"variables\": {\n    \"key_0\": 635.2671321148695,\n    \"key_1\": 8470\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"fc2e14b5-b25c-9501-13b6-8004fcba2dd0\",\n  \"prompt_template_version_id\": \"06d631b4-cce2-2cab-d507-30ddbdf054ae\",\n  \"prompt_template_name\": \"string\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"string\",\n  \"model_parameters\": {\n    \"key_0\": 2306,\n    \"key_1\": 2463\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aac23d11-5ca8-427c-85fc-f5e14f728477",
+          "name": "Create a new version of a prompt template by name.",
+          "request": {
+            "name": "Create a new version of a prompt template by name.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "name",
+                ":template_name",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "template_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"model_parameters\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4981fbf0-2567-43bf-9e77-7794580e0af7",
+              "name": "The created prompt template version.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "name",
+                    ":template_name",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "template_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"model_parameters\": {\n    \"key_0\": 9443.75602618864,\n    \"key_1\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"fc2e14b5-b25c-9501-13b6-8004fcba2dd0\",\n  \"prompt_template_version_id\": \"06d631b4-cce2-2cab-d507-30ddbdf054ae\",\n  \"prompt_template_name\": \"string\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"string\",\n  \"model_parameters\": {\n    \"key_0\": 2306,\n    \"key_1\": 2463\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6cc20222-e832-4220-ba27-149ec50d2ac0",
+          "name": "Create a new version of a prompt template by template ID.",
+          "request": {
+            "name": "Create a new version of a prompt template by template ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "id",
+                ":template_id",
+                "versions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "template_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"model_parameters\": {\n    \"key_0\": \"string\",\n    \"key_1\": 1727\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "75ec0abb-5d08-49ed-bb0b-77d4ebde525d",
+              "name": "The created prompt template version.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "id",
+                    ":template_id",
+                    "versions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "template_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"model_parameters\": {\n    \"key_0\": 9443.75602618864,\n    \"key_1\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"fc2e14b5-b25c-9501-13b6-8004fcba2dd0\",\n  \"prompt_template_version_id\": \"06d631b4-cce2-2cab-d507-30ddbdf054ae\",\n  \"prompt_template_name\": \"string\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"string\",\n  \"model_parameters\": {\n    \"key_0\": 2306,\n    \"key_1\": 2463\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ec8588d-624c-48f6-b0c2-457d337ebec8",
+          "name": "Retrieve a specific prompt template version by ID.",
+          "request": {
+            "name": "Retrieve a specific prompt template version by ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "id",
+                ":template_id",
+                "versions",
+                ":version_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "template_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "version_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"environment\": \"<string>\",\n  \"variables\": {\n    \"key_0\": true\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3c01dd34-992b-42af-885e-b1c04c69722e",
+              "name": "The requested prompt template version.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "id",
+                    ":template_id",
+                    "versions",
+                    ":version_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "template_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "version_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"environment\": \"<string>\",\n  \"variables\": {\n    \"key_0\": 635.2671321148695,\n    \"key_1\": 8470\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"fc2e14b5-b25c-9501-13b6-8004fcba2dd0\",\n  \"prompt_template_version_id\": \"06d631b4-cce2-2cab-d507-30ddbdf054ae\",\n  \"prompt_template_name\": \"string\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"string\",\n  \"model_parameters\": {\n    \"key_0\": 2306,\n    \"key_1\": 2463\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4fcf291-48ee-4678-9d44-e919e062cc06",
+          "name": "Deploy / assign a prompt template version to one or more environments.",
+          "request": {
+            "name": "Deploy / assign a prompt template version to one or more environments.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "prompt-templates",
+                "id",
+                ":template_id",
+                "versions",
+                ":version_id",
+                "environments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "template_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "version_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"environments\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f061c449-cdb5-426f-8b61-44db3a49ab6f",
+              "name": "The updated prompt template version with environment assignments.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "prompt-templates",
+                    "id",
+                    ":template_id",
+                    "versions",
+                    ":version_id",
+                    "environments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "template_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "version_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"environments\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prompt_template_id\": \"fc2e14b5-b25c-9501-13b6-8004fcba2dd0\",\n  \"prompt_template_version_id\": \"06d631b4-cce2-2cab-d507-30ddbdf054ae\",\n  \"prompt_template_name\": \"string\",\n  \"environments\": [\n    \"string\",\n    \"string\"\n  ],\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"string\",\n  \"model_parameters\": {\n    \"key_0\": 2306,\n    \"key_1\": 2463\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0d3b8bc5-e981-4c4e-9964-817f78bab430",
+    "name": "Freeplay HTTP Agents Prompt Templates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

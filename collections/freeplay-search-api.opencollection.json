@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP Agents Search API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search sessions with advanced filters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/search/sessions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search sessions with advanced filters."
+        },
+        {
+          "info": {
+            "name": "Search traces with advanced filters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/search/traces",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search traces with advanced filters."
+        },
+        {
+          "info": {
+            "name": "Search completions with advanced filters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/search/completions",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search completions with advanced filters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

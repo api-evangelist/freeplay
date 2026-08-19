@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP Agents API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agents within a project with pagination.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/agents",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List agents within a project with pagination."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

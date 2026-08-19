@@ -1,0 +1,633 @@
+{
+  "item": [
+    {
+      "id": "8c3998e3-f6c3-40c0-a243-54fb1a444282",
+      "name": "Datasets",
+      "description": {
+        "content": "Curate datasets and their test cases.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1c289edd-444b-47e7-becb-626ccaeff532",
+          "name": "Retrieve dataset metadata by name.",
+          "request": {
+            "name": "Retrieve dataset metadata by name.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "datasets",
+                "name",
+                ":dataset_name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "55ac308a-4930-42bf-ab35-0d1536b8ddda",
+              "name": "Dataset metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "datasets",
+                    "name",
+                    ":dataset_name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataset_id\": \"db2247a4-b33b-93f2-9561-053f81f4cf70\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"test_case_count\": 1254\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fbb48073-998a-4b62-9e1f-70d15d665bd8",
+          "name": "Retrieve dataset metadata by ID.",
+          "request": {
+            "name": "Retrieve dataset metadata by ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "datasets",
+                "id",
+                ":dataset_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataset_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2ca34f00-20fa-4dad-a5d9-fcd4db971811",
+              "name": "Dataset metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "datasets",
+                    "id",
+                    ":dataset_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataset_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataset_id\": \"db2247a4-b33b-93f2-9561-053f81f4cf70\",\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"test_case_count\": 1254\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e08bf0d-f4f3-443a-b51f-002a4c1ad33f",
+          "name": "Retrieve test cases for a dataset by name.",
+          "request": {
+            "name": "Retrieve test cases for a dataset by name.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "datasets",
+                "name",
+                ":dataset_name",
+                "test-cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataset_name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "654dd19a-5db9-4bf3-93ba-9e57c82eebe3",
+              "name": "A list of test cases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "datasets",
+                    "name",
+                    ":dataset_name",
+                    "test-cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataset_name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_cases\": [\n    {\n      \"test_case_id\": \"7487caaf-8382-62b3-c526-ea53ea7335b7\",\n      \"values\": {\n        \"key_0\": true,\n        \"key_1\": 6959\n      },\n      \"output\": \"string\",\n      \"history\": [\n        {\n          \"role\": \"assistant\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"content\": \"string\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 8637.708615889273,\n        \"key_1\": \"string\",\n        \"key_2\": true\n      }\n    },\n    {\n      \"test_case_id\": \"7a8c1d35-1f08-3229-a0f9-b9bbe9fb931d\",\n      \"values\": {\n        \"key_0\": 5235,\n        \"key_1\": 1341.714717401714\n      },\n      \"output\": \"string\",\n      \"history\": [\n        {\n          \"role\": \"user\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"tool\",\n          \"content\": \"string\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 6323\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0bbd4916-023e-458c-b32e-a3aebbb3aa81",
+          "name": "Retrieve test cases for a dataset by ID.",
+          "request": {
+            "name": "Retrieve test cases for a dataset by ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "datasets",
+                "id",
+                ":dataset_id",
+                "test-cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataset_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cea95ee5-8bf8-48aa-a1ab-0e1702b15034",
+              "name": "A list of test cases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "datasets",
+                    "id",
+                    ":dataset_id",
+                    "test-cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataset_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_cases\": [\n    {\n      \"test_case_id\": \"82d33fba-26ff-90d4-a867-91aba6d1beaf\",\n      \"values\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"output\": \"string\",\n      \"history\": [\n        {\n          \"role\": \"system\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"content\": \"string\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 3902,\n        \"key_1\": 9747,\n        \"key_2\": 8270,\n        \"key_3\": 816\n      }\n    },\n    {\n      \"test_case_id\": \"f4abffbc-2459-79f8-1ab5-6b2c2306200d\",\n      \"values\": {\n        \"key_0\": 1453.4579625369793,\n        \"key_1\": \"string\",\n        \"key_2\": 7714\n      },\n      \"output\": \"string\",\n      \"history\": [\n        {\n          \"role\": \"system\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"system\",\n          \"content\": \"string\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 6614,\n        \"key_1\": 5728\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "704851bf-ed2e-42e4-b0ec-97eb5d3871af",
+          "name": "Upload test cases to a dataset.",
+          "request": {
+            "name": "Upload test cases to a dataset.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "datasets",
+                "id",
+                ":dataset_id",
+                "test-cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "dataset_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"test_cases\": [\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 4046.8969094928075\n      }\n    },\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": \"string\"\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": true\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8062f190-569c-465e-83b8-5888e72c8d50",
+              "name": "The uploaded test cases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "datasets",
+                    "id",
+                    ":dataset_id",
+                    "test-cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "dataset_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"test_cases\": [\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": 8839.471638896079,\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\"\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": 6615.016075652819,\n        \"key_2\": 632.4450748015231\n      }\n    },\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": 9870,\n        \"key_1\": false\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": 6915.791835286878,\n        \"key_1\": \"string\",\n        \"key_2\": 2259\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_cases\": [\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": \"string\",\n        \"key_1\": 2553,\n        \"key_2\": 4606,\n        \"key_3\": 7746.281207224321,\n        \"key_4\": \"string\"\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": true\n      }\n    },\n    {\n      \"test_case_id\": \"<uuid>\",\n      \"values\": {\n        \"key_0\": 2684,\n        \"key_1\": true\n      },\n      \"output\": \"<string>\",\n      \"history\": [\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        },\n        {\n          \"role\": \"<string>\",\n          \"content\": \"<string>\"\n        }\n      ],\n      \"metadata\": {\n        \"key_0\": true\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7cf4e5d5-a320-4286-b49a-2054de212a23",
+    "name": "Freeplay HTTP Agents Datasets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

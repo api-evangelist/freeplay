@@ -1,0 +1,148 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Freeplay HTTP Agents Datasets API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datasets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve dataset metadata by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/datasets/name/:dataset_name",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "dataset_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve dataset metadata by name."
+        },
+        {
+          "info": {
+            "name": "Retrieve dataset metadata by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/datasets/id/:dataset_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve dataset metadata by ID."
+        },
+        {
+          "info": {
+            "name": "Retrieve test cases for a dataset by name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/datasets/name/:dataset_name/test-cases",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "dataset_name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve test cases for a dataset by name."
+        },
+        {
+          "info": {
+            "name": "Retrieve test cases for a dataset by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/datasets/id/:dataset_id/test-cases",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve test cases for a dataset by ID."
+        },
+        {
+          "info": {
+            "name": "Upload test cases to a dataset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.freeplay.ai/api/v2/projects/:project_id/datasets/id/:dataset_id/test-cases",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The Freeplay project ID."
+              },
+              {
+                "name": "dataset_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload test cases to a dataset."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

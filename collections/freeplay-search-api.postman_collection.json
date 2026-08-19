@@ -1,0 +1,395 @@
+{
+  "item": [
+    {
+      "id": "1c54f46e-dead-4f6c-8931-a447ec220ed4",
+      "name": "Search",
+      "description": {
+        "content": "API-only search over sessions, traces, and completions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3b77ac74-08cd-41d6-b8e4-4a9dfd56551f",
+          "name": "Search sessions with advanced filters.",
+          "request": {
+            "name": "Search sessions with advanced filters.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "search",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 4693,\n    \"key_1\": 7640\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "16fb8202-331e-4dc3-8065-b481ad0d9747",
+              "name": "Matching sessions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "search",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 3629.534534792522\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"sessions\": [\n    {\n      \"session_id\": \"8e58251f-c8c8-9408-b682-a4d92d2d8946\",\n      \"project_id\": \"7ab31c80-360f-3db8-694b-1585abcea970\",\n      \"created_at\": \"1986-06-05T22:16:22.618Z\",\n      \"custom_metadata\": {\n        \"key_0\": 4939,\n        \"key_1\": 8931.347165784451,\n        \"key_2\": \"string\"\n      }\n    },\n    {\n      \"session_id\": \"f5f887d4-356c-c3aa-0f9c-167c792fc926\",\n      \"project_id\": \"3fa8702d-ec48-66c4-7ced-deddd05d1db4\",\n      \"created_at\": \"1992-01-29T00:56:17.829Z\",\n      \"custom_metadata\": {\n        \"key_0\": 6936.833028405722\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b01dc1d-e793-4e65-a9c8-64f96680ebf0",
+          "name": "Search traces with advanced filters.",
+          "request": {
+            "name": "Search traces with advanced filters.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "search",
+                "traces"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 4693,\n    \"key_1\": 7640\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "656e99a9-55aa-4f80-b1a5-c5b57d39f9f9",
+              "name": "Matching traces.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "search",
+                    "traces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 3629.534534792522\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"traces\": [\n    {\n      \"trace_id\": \"b2cbabdd-14d8-e615-426a-29e84781afc2\",\n      \"session_id\": \"2969de5c-11b8-829e-bce7-8463bbc96cf6\",\n      \"input\": \"string\",\n      \"output\": \"string\"\n    },\n    {\n      \"trace_id\": \"0ce6eae0-12d1-733a-7abd-6fcac6b15d98\",\n      \"session_id\": \"7028f31c-cd69-c630-4d42-9f4dcdb7a756\",\n      \"input\": \"string\",\n      \"output\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "42077816-b35d-4417-9c42-0900c233ea39",
+          "name": "Search completions with advanced filters.",
+          "request": {
+            "name": "Search completions with advanced filters.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "search",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 4693,\n    \"key_1\": 7640\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8af7d9d6-66c9-4c00-9858-170a1383eb4f",
+              "name": "Matching completions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "search",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<string>\",\n  \"filters\": {\n    \"key_0\": 3629.534534792522\n  },\n  \"start_time\": \"<dateTime>\",\n  \"end_time\": \"<dateTime>\",\n  \"page\": \"<integer>\",\n  \"page_size\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"completions\": [\n    {\n      \"completion_id\": \"f104b575-fe9e-69bc-c421-c795ab1cd9a6\",\n      \"session_id\": \"b9ec658a-d516-1bca-5072-cd5318be0884\",\n      \"trace_id\": \"b398e620-78de-4410-6fe5-425efa3789ca\",\n      \"messages\": [\n        {\n          \"role\": \"tool\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"tool\",\n          \"content\": \"string\"\n        }\n      ],\n      \"model\": \"string\",\n      \"usage\": {\n        \"prompt_tokens\": 5698,\n        \"completion_tokens\": 2464,\n        \"total_tokens\": 9482\n      }\n    },\n    {\n      \"completion_id\": \"225d983f-92c6-a71f-7326-fb0a70730254\",\n      \"session_id\": \"620325e2-eedb-c6bb-e1eb-e47670f1ea86\",\n      \"trace_id\": \"f48dcf57-8201-ca21-3484-7508a19e10de\",\n      \"messages\": [\n        {\n          \"role\": \"tool\",\n          \"content\": \"string\"\n        },\n        {\n          \"role\": \"assistant\",\n          \"content\": \"string\"\n        }\n      ],\n      \"model\": \"string\",\n      \"usage\": {\n        \"prompt_tokens\": 3187,\n        \"completion_tokens\": 9860,\n        \"total_tokens\": 2383\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5dfb6d98-c61d-41a3-b345-fbb0b57052ed",
+    "name": "Freeplay HTTP Agents Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}

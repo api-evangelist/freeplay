@@ -1,0 +1,365 @@
+{
+  "item": [
+    {
+      "id": "8bb72e17-d7ac-4953-9a2c-97e5830beaeb",
+      "name": "Test Runs",
+      "description": {
+        "content": "Create, list, and retrieve batch test runs.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "87ae7949-3f79-4446-b5ac-723b19bd5738",
+          "name": "List test runs for a project.",
+          "request": {
+            "name": "List test runs for a project.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "test-runs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6a7a974b-ee00-402a-babb-9d61eaf0bf0f",
+              "name": "A list of test runs.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "test-runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_runs\": [\n    {\n      \"test_run_id\": \"c5292e1c-00d8-e7e9-c346-0e643ce3f8d8\",\n      \"name\": \"string\",\n      \"dataset_id\": \"78c09ea6-15fb-44bf-3abf-48c7b26a03e5\",\n      \"status\": \"string\",\n      \"results\": [\n        {\n          \"key_0\": \"string\",\n          \"key_1\": 5064\n        },\n        {\n          \"key_0\": 8172\n        }\n      ]\n    },\n    {\n      \"test_run_id\": \"ee6dfe4c-0118-df65-2238-18160eb01697\",\n      \"name\": \"string\",\n      \"dataset_id\": \"b623f402-2536-2285-a4b1-6ddda3f39cd0\",\n      \"status\": \"string\",\n      \"results\": [\n        {\n          \"key_0\": 5746.679201356739\n        },\n        {\n          \"key_0\": \"string\",\n          \"key_1\": 8311\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cf433a03-55b2-47db-8c67-906212315168",
+          "name": "Create a test run from a dataset.",
+          "request": {
+            "name": "Create a test run from a dataset.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "test-runs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dataset_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"prompt_template_version_id\": \"<uuid>\",\n  \"flavor_name\": \"<string>\",\n  \"include_outputs\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e8500827-aa82-4bbe-8b2d-20464a63e2d6",
+              "name": "The created test run.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "test-runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dataset_id\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"prompt_template_version_id\": \"<uuid>\",\n  \"flavor_name\": \"<string>\",\n  \"include_outputs\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_run_id\": \"e1c3e776-f0a7-2c51-99fb-386fdd639166\",\n  \"name\": \"string\",\n  \"dataset_id\": \"c6e143f3-9956-2234-adde-41a4d98371cc\",\n  \"status\": \"string\",\n  \"results\": [\n    {\n      \"key_0\": 9503.212045178352,\n      \"key_1\": 7790,\n      \"key_2\": true\n    },\n    {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4e014706-1afb-4ca1-9722-0ce806a74e3e",
+          "name": "Retrieve test run results by ID.",
+          "request": {
+            "name": "Retrieve test run results by ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "test-runs",
+                "id",
+                ":test_run_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "project_id",
+                  "description": "(Required) The Freeplay project ID."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "test_run_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d8944036-ab71-4163-876d-9e314b55fd0a",
+              "name": "The test run and its results.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "test-runs",
+                    "id",
+                    ":test_run_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "project_id",
+                      "description": "(Required) The Freeplay project ID."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "test_run_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"test_run_id\": \"e1c3e776-f0a7-2c51-99fb-386fdd639166\",\n  \"name\": \"string\",\n  \"dataset_id\": \"c6e143f3-9956-2234-adde-41a4d98371cc\",\n  \"status\": \"string\",\n  \"results\": [\n    {\n      \"key_0\": 9503.212045178352,\n      \"key_1\": 7790,\n      \"key_2\": true\n    },\n    {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.freeplay.ai/api/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1ea22d52-caff-4299-8dde-03e12f57e6dc",
+    "name": "Freeplay HTTP Agents Test Runs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.\n\nContact Support:\n Name: Freeplay Support",
+      "type": "text/plain"
+    }
+  }
+}
