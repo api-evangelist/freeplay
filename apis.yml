@@ -22,6 +22,13 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/freeplay.png
 tags:
+- Artificial Intelligence
+- LLM
+- Evaluation
+- Observability
+- Prompt Management
+- Experimentation
+tags_raw:
 - AI
 - LLM
 - Evaluation
@@ -134,6 +141,8 @@ apis:
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
