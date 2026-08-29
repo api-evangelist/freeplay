@@ -7,6 +7,18 @@ description: Freeplay is an LLM product experimentation, evaluation, and observa
   of truth for prompt templates, record completions and sessions/traces from production,
   curate test datasets, run batch test runs and LLM-judge evaluations, and capture
   human and customer feedback.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
