@@ -1,16 +1,7 @@
 {
   "provider": "freeplay",
   "sources": [
-    "freeplay-agents-api-openapi.yml",
-    "freeplay-completions-api-openapi.yml",
-    "freeplay-datasets-api-openapi.yml",
-    "freeplay-feedback-api-openapi.yml",
-    "freeplay-projects-api-openapi.yml",
-    "freeplay-prompt-templates-api-openapi.yml",
-    "freeplay-search-api-openapi.yml",
-    "freeplay-sessions-api-openapi.yml",
-    "freeplay-test-runs-api-openapi.yml",
-    "freeplay-traces-api-openapi.yml"
+    "_original/freeplay-openapi.yml"
   ],
   "outputs": [
     "freeplay-agents-api-openapi.yml",
@@ -27,6 +18,21 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "freeplay-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "freeplay-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-datasets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-feedback-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-prompt-templates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-test-runs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "freeplay-traces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents Sessions API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  title: Freeplay HTTP Sessions API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
   termsOfService: https://freeplay.ai/terms
   contact:
     name: Freeplay Support
@@ -29,7 +29,7 @@ paths:
       operationId: listSessions
       tags:
       - Sessions
-      summary: Retrieve sessions with pagination and filtering.
+      summary: Retrieve sessions with pagination and filtering
       parameters:
       - name: page
         in: query
@@ -54,8 +54,9 @@ paths:
                     items:
                       $ref: '#/components/schemas/Session'
                   next_page:
-                    type: integer
-                    nullable: true
+                    type:
+                    - integer
+                    - 'null'
   /projects/{project_id}/sessions/{session_id}:
     parameters:
     - $ref: '#/components/parameters/ProjectId'
@@ -64,27 +65,11 @@ paths:
       operationId: deleteSession
       tags:
       - Sessions
-      summary: Permanently delete a session.
+      summary: Permanently delete a session
       responses:
         '204':
           description: Session deleted.
 components:
-  parameters:
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   schemas:
     Session:
       type: object
@@ -101,6 +86,22 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
+  parameters:
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http

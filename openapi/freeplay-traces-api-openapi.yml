@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents Traces API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  title: Freeplay HTTP Traces API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
   termsOfService: https://freeplay.ai/terms
   contact:
     name: Freeplay Support
@@ -31,7 +31,7 @@ paths:
       operationId: recordTrace
       tags:
       - Traces
-      summary: Record a trace that groups related completions within a session.
+      summary: Record a trace that groups related completions within a session
       requestBody:
         required: true
         content:
@@ -46,29 +46,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trace'
 components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
-    TraceId:
-      name: trace_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
     Trace:
       type: object
@@ -93,6 +70,29 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    TraceId:
+      name: trace_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     bearerAuth:
       type: http

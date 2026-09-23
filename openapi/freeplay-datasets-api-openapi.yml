@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents Datasets API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  title: Freeplay HTTP Datasets API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
   termsOfService: https://freeplay.ai/terms
   contact:
     name: Freeplay Support
@@ -34,7 +34,7 @@ paths:
       operationId: getDatasetByName
       tags:
       - Datasets
-      summary: Retrieve dataset metadata by name.
+      summary: Retrieve dataset metadata by name
       responses:
         '200':
           description: Dataset metadata.
@@ -50,7 +50,7 @@ paths:
       operationId: getDatasetById
       tags:
       - Datasets
-      summary: Retrieve dataset metadata by ID.
+      summary: Retrieve dataset metadata by ID
       responses:
         '200':
           description: Dataset metadata.
@@ -70,7 +70,7 @@ paths:
       operationId: getTestCasesByDatasetName
       tags:
       - Datasets
-      summary: Retrieve test cases for a dataset by name.
+      summary: Retrieve test cases for a dataset by name
       responses:
         '200':
           description: A list of test cases.
@@ -91,7 +91,7 @@ paths:
       operationId: getTestCasesByDatasetId
       tags:
       - Datasets
-      summary: Retrieve test cases for a dataset by ID.
+      summary: Retrieve test cases for a dataset by ID
       responses:
         '200':
           description: A list of test cases.
@@ -108,7 +108,7 @@ paths:
       operationId: uploadTestCases
       tags:
       - Datasets
-      summary: Upload test cases to a dataset.
+      summary: Upload test cases to a dataset
       requestBody:
         required: true
         content:
@@ -129,26 +129,6 @@ paths:
                       $ref: '#/components/schemas/TestCase'
 components:
   schemas:
-    TestCase:
-      type: object
-      properties:
-        test_case_id:
-          type: string
-          format: uuid
-        values:
-          type: object
-          additionalProperties: true
-          description: Input variable values for the test case.
-        output:
-          type: string
-          description: Expected or reference output.
-        history:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        metadata:
-          type: object
-          additionalProperties: true
     UploadTestCasesRequest:
       type: object
       required:
@@ -182,6 +162,26 @@ components:
           - tool
         content:
           type: string
+    TestCase:
+      type: object
+      properties:
+        test_case_id:
+          type: string
+          format: uuid
+        values:
+          type: object
+          additionalProperties: true
+          description: Input variable values for the test case.
+        output:
+          type: string
+          description: Expected or reference output.
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        metadata:
+          type: object
+          additionalProperties: true
   parameters:
     DatasetId:
       name: dataset_id

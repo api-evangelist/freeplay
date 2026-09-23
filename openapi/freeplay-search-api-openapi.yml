@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents Search API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  title: Freeplay HTTP Search API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
   termsOfService: https://freeplay.ai/terms
   contact:
     name: Freeplay Support
@@ -29,7 +29,7 @@ paths:
       operationId: searchSessions
       tags:
       - Search
-      summary: Search sessions with advanced filters.
+      summary: Search sessions with advanced filters
       requestBody:
         required: true
         content:
@@ -55,7 +55,7 @@ paths:
       operationId: searchTraces
       tags:
       - Search
-      summary: Search traces with advanced filters.
+      summary: Search traces with advanced filters
       requestBody:
         required: true
         content:
@@ -81,7 +81,7 @@ paths:
       operationId: searchCompletions
       tags:
       - Search
-      summary: Search completions with advanced filters.
+      summary: Search completions with advanced filters
       requestBody:
         required: true
         content:
@@ -101,29 +101,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Completion'
 components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   schemas:
-    Trace:
-      type: object
-      properties:
-        trace_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        input:
-          type: string
-        output:
-          type: string
     SearchRequest:
       type: object
       properties:
@@ -141,15 +119,6 @@ components:
         page:
           type: integer
         page_size:
-          type: integer
-    Usage:
-      type: object
-      properties:
-        prompt_tokens:
-          type: integer
-        completion_tokens:
-          type: integer
-        total_tokens:
           type: integer
     Session:
       type: object
@@ -186,6 +155,19 @@ components:
           type: string
         usage:
           $ref: '#/components/schemas/Usage'
+    Trace:
+      type: object
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        input:
+          type: string
+        output:
+          type: string
     Message:
       type: object
       properties:
@@ -198,6 +180,24 @@ components:
           - tool
         content:
           type: string
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http

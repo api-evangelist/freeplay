@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents Prompt Templates API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform. It covers prompt template management, recording completions and sessions/traces, curating test cases and datasets, running batch test runs and evaluations, and recording customer and human feedback. The API root is your Freeplay instance URL plus /api/v2. For the standard cloud instance this is https://app.freeplay.ai/api/v2; private/self-hosted instances use a per-account subdomain such as https://{subdomain}.freeplay.ai/api/v2.
+  title: Freeplay HTTP Prompt Templates API
+  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
   termsOfService: https://freeplay.ai/terms
   contact:
     name: Freeplay Support
@@ -29,7 +29,7 @@ paths:
       operationId: listPromptTemplates
       tags:
       - Prompt Templates
-      summary: List prompt templates for a project.
+      summary: List prompt templates for a project
       responses:
         '200':
           description: A list of prompt templates.
@@ -46,7 +46,7 @@ paths:
       operationId: createPromptTemplate
       tags:
       - Prompt Templates
-      summary: Create a prompt template.
+      summary: Create a prompt template
       requestBody:
         required: true
         content:
@@ -73,7 +73,7 @@ paths:
       operationId: getAllPromptTemplatesInEnvironment
       tags:
       - Prompt Templates
-      summary: Retrieve all prompt templates deployed in an environment.
+      summary: Retrieve all prompt templates deployed in an environment
       responses:
         '200':
           description: All prompt templates in the environment.
@@ -94,7 +94,7 @@ paths:
       operationId: getPromptTemplateByName
       tags:
       - Prompt Templates
-      summary: Retrieve a prompt template by name (formatted or raw).
+      summary: Retrieve a prompt template by name (formatted or raw)
       requestBody:
         required: false
         content:
@@ -116,7 +116,7 @@ paths:
       operationId: createPromptTemplateVersionByName
       tags:
       - Prompt Templates
-      summary: Create a new version of a prompt template by name.
+      summary: Create a new version of a prompt template by name
       requestBody:
         required: true
         content:
@@ -138,7 +138,7 @@ paths:
       operationId: createPromptTemplateVersionById
       tags:
       - Prompt Templates
-      summary: Create a new version of a prompt template by template ID.
+      summary: Create a new version of a prompt template by template ID
       requestBody:
         required: true
         content:
@@ -161,7 +161,7 @@ paths:
       operationId: getPromptTemplateVersionById
       tags:
       - Prompt Templates
-      summary: Retrieve a specific prompt template version by ID.
+      summary: Retrieve a specific prompt template version by ID
       requestBody:
         required: false
         content:
@@ -184,7 +184,7 @@ paths:
       operationId: assignPromptTemplateVersionToEnvironments
       tags:
       - Prompt Templates
-      summary: Deploy / assign a prompt template version to one or more environments.
+      summary: Deploy / assign a prompt template version to one or more environments
       requestBody:
         required: true
         content:
@@ -206,7 +206,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/PromptTemplateVersion'
 components:
+  parameters:
+    TemplateId:
+      name: template_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    VersionId:
+      name: version_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    TemplateName:
+      name: template_name
+      in: path
+      required: true
+      schema:
+        type: string
   schemas:
+    PromptTemplate:
+      type: object
+      properties:
+        prompt_template_id:
+          type: string
+          format: uuid
+        prompt_template_name:
+          type: string
+        project_id:
+          type: string
+          format: uuid
     CreatePromptTemplateRequest:
       type: object
       required:
@@ -221,41 +261,6 @@ components:
         model_parameters:
           type: object
           additionalProperties: true
-    PromptTemplate:
-      type: object
-      properties:
-        prompt_template_id:
-          type: string
-          format: uuid
-        prompt_template_name:
-          type: string
-        project_id:
-          type: string
-          format: uuid
-    CreatePromptTemplateVersionRequest:
-      type: object
-      required:
-      - messages
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        model_parameters:
-          type: object
-          additionalProperties: true
-    GetPromptTemplateRequest:
-      type: object
-      properties:
-        environment:
-          type: string
-          description: Environment to resolve the deployed version from (e.g. latest, production).
-        variables:
-          type: object
-          additionalProperties: true
-          description: Variables used to format the template when requesting a formatted result.
     PromptTemplateVersion:
       type: object
       properties:
@@ -292,35 +297,30 @@ components:
           - tool
         content:
           type: string
-  parameters:
-    VersionId:
-      name: version_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
-    TemplateId:
-      name: template_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    TemplateName:
-      name: template_name
-      in: path
-      required: true
-      schema:
-        type: string
+    CreatePromptTemplateVersionRequest:
+      type: object
+      required:
+      - messages
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        model_parameters:
+          type: object
+          additionalProperties: true
+    GetPromptTemplateRequest:
+      type: object
+      properties:
+        environment:
+          type: string
+          description: Environment to resolve the deployed version from (e.g. latest, production).
+        variables:
+          type: object
+          additionalProperties: true
+          description: Variables used to format the template when requesting a formatted result.
   securitySchemes:
     bearerAuth:
       type: http
