@@ -93,7 +93,83 @@ paths:
               schema:
                 $ref: '#/components/schemas/Statistics'
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
+    Statistics:
+      type: object
+      properties:
+        completion_count:
+          type: integer
+        evaluations:
+          type: object
+          additionalProperties: true
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
+    StatisticsRequest:
+      type: object
+      properties:
+        environment:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+    Completion:
+      type: object
+      properties:
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
     RecordCompletionRequest:
       type: object
       required:
@@ -127,82 +203,6 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
-    Completion:
-      type: object
-      properties:
-        completion_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        trace_id:
-          type: string
-          format: uuid
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        usage:
-          $ref: '#/components/schemas/Usage'
-    Statistics:
-      type: object
-      properties:
-        completion_count:
-          type: integer
-        evaluations:
-          type: object
-          additionalProperties: true
-    Message:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
-    Usage:
-      type: object
-      properties:
-        prompt_tokens:
-          type: integer
-        completion_tokens:
-          type: integer
-        total_tokens:
-          type: integer
-    StatisticsRequest:
-      type: object
-      properties:
-        environment:
-          type: string
-        start_time:
-          type: string
-          format: date-time
-        end_time:
-          type: string
-          format: date-time
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   securitySchemes:
     bearerAuth:
       type: http

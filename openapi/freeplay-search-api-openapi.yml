@@ -101,40 +101,50 @@ paths:
                     items:
                       $ref: '#/components/schemas/Completion'
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
   schemas:
-    SearchRequest:
+    Message:
       type: object
       properties:
-        query:
+        role:
           type: string
-        filters:
-          type: object
-          additionalProperties: true
-        start_time:
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
           type: string
-          format: date-time
-        end_time:
-          type: string
-          format: date-time
-        page:
-          type: integer
-        page_size:
-          type: integer
-    Session:
+    Trace:
       type: object
       properties:
+        trace_id:
+          type: string
+          format: uuid
         session_id:
           type: string
           format: uuid
-        project_id:
+        input:
           type: string
-          format: uuid
-        created_at:
+        output:
           type: string
-          format: date-time
-        custom_metadata:
-          type: object
-          additionalProperties: true
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
     Completion:
       type: object
       properties:
@@ -155,49 +165,39 @@ components:
           type: string
         usage:
           $ref: '#/components/schemas/Usage'
-    Trace:
+    Session:
       type: object
       properties:
-        trace_id:
-          type: string
-          format: uuid
         session_id:
           type: string
           format: uuid
-        input:
+        project_id:
           type: string
-        output:
+          format: uuid
+        created_at:
           type: string
-    Message:
+          format: date-time
+        custom_metadata:
+          type: object
+          additionalProperties: true
+    SearchRequest:
       type: object
       properties:
-        role:
+        query:
           type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
+        filters:
+          type: object
+          additionalProperties: true
+        start_time:
           type: string
-    Usage:
-      type: object
-      properties:
-        prompt_tokens:
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        page:
           type: integer
-        completion_tokens:
+        page_size:
           type: integer
-        total_tokens:
-          type: integer
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http

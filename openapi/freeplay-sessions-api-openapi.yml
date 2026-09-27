@@ -70,6 +70,22 @@ paths:
         '204':
           description: Session deleted.
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    SessionId:
+      name: session_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     Session:
       type: object
@@ -86,22 +102,6 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
-  parameters:
-    SessionId:
-      name: session_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http

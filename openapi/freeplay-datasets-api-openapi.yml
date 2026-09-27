@@ -128,7 +128,35 @@ paths:
                     items:
                       $ref: '#/components/schemas/TestCase'
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
     UploadTestCasesRequest:
       type: object
       required:
@@ -150,18 +178,6 @@ components:
           type: string
         test_case_count:
           type: integer
-    Message:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
     TestCase:
       type: object
       properties:
@@ -182,22 +198,6 @@ components:
         metadata:
           type: object
           additionalProperties: true
-  parameters:
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http
