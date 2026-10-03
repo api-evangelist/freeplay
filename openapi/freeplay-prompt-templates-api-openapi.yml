@@ -207,32 +207,6 @@ paths:
                 $ref: '#/components/schemas/PromptTemplateVersion'
 components:
   schemas:
-    CreatePromptTemplateRequest:
-      type: object
-      required:
-      - prompt_template_name
-      properties:
-        prompt_template_name:
-          type: string
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model_parameters:
-          type: object
-          additionalProperties: true
-    Message:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
     PromptTemplateVersion:
       type: object
       properties:
@@ -257,17 +231,20 @@ components:
         model_parameters:
           type: object
           additionalProperties: true
-    PromptTemplate:
+    CreatePromptTemplateRequest:
       type: object
+      required:
+      - prompt_template_name
       properties:
-        prompt_template_id:
-          type: string
-          format: uuid
         prompt_template_name:
           type: string
-        project_id:
-          type: string
-          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model_parameters:
+          type: object
+          additionalProperties: true
     CreatePromptTemplateVersionRequest:
       type: object
       required:
@@ -292,6 +269,29 @@ components:
           type: object
           additionalProperties: true
           description: Variables used to format the template when requesting a formatted result.
+    PromptTemplate:
+      type: object
+      properties:
+        prompt_template_id:
+          type: string
+          format: uuid
+        prompt_template_name:
+          type: string
+        project_id:
+          type: string
+          format: uuid
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
   parameters:
     ProjectId:
       name: project_id
@@ -301,8 +301,8 @@ components:
         type: string
         format: uuid
       description: The Freeplay project ID.
-    VersionId:
-      name: version_id
+    TemplateId:
+      name: template_id
       in: path
       required: true
       schema:
@@ -314,8 +314,8 @@ components:
       required: true
       schema:
         type: string
-    TemplateId:
-      name: template_id
+    VersionId:
+      name: version_id
       in: path
       required: true
       schema:

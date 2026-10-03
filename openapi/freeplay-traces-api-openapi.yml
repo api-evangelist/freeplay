@@ -47,6 +47,13 @@ paths:
                 $ref: '#/components/schemas/Trace'
 components:
   parameters:
+    TraceId:
+      name: trace_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
     ProjectId:
       name: project_id
       in: path
@@ -55,13 +62,6 @@ components:
         type: string
         format: uuid
       description: The Freeplay project ID.
-    TraceId:
-      name: trace_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
     SessionId:
       name: session_id
       in: path

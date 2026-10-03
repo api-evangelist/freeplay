@@ -64,6 +64,17 @@ paths:
         '200':
           description: Feedback recorded.
 components:
+  schemas:
+    FeedbackRequest:
+      type: object
+      properties:
+        feedback:
+          type: object
+          additionalProperties: true
+          description: Map of feedback key to value (scores, labels, or free text).
+        source:
+          type: string
+          description: Origin of the feedback (e.g. customer, human-review).
   parameters:
     TraceId:
       name: trace_id
@@ -80,17 +91,6 @@ components:
         type: string
         format: uuid
       description: The Freeplay project ID.
-  schemas:
-    FeedbackRequest:
-      type: object
-      properties:
-        feedback:
-          type: object
-          additionalProperties: true
-          description: Map of feedback key to value (scores, labels, or free text).
-        source:
-          type: string
-          description: Origin of the feedback (e.g. customer, human-review).
   securitySchemes:
     bearerAuth:
       type: http

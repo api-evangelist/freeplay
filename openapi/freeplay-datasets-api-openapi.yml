@@ -145,18 +145,6 @@ components:
         type: string
         format: uuid
   schemas:
-    Message:
-      type: object
-      properties:
-        role:
-          type: string
-          enum:
-          - system
-          - user
-          - assistant
-          - tool
-        content:
-          type: string
     UploadTestCasesRequest:
       type: object
       required:
@@ -166,18 +154,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TestCase'
-    Dataset:
-      type: object
-      properties:
-        dataset_id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        test_case_count:
-          type: integer
     TestCase:
       type: object
       properties:
@@ -198,6 +174,30 @@ components:
         metadata:
           type: object
           additionalProperties: true
+    Dataset:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        test_case_count:
+          type: integer
+    Message:
+      type: object
+      properties:
+        role:
+          type: string
+          enum:
+          - system
+          - user
+          - assistant
+          - tool
+        content:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
