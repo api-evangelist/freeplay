@@ -128,52 +128,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/TestCase'
 components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
-    DatasetId:
-      name: dataset_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
-    UploadTestCasesRequest:
-      type: object
-      required:
-      - test_cases
-      properties:
-        test_cases:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCase'
-    TestCase:
-      type: object
-      properties:
-        test_case_id:
-          type: string
-          format: uuid
-        values:
-          type: object
-          additionalProperties: true
-          description: Input variable values for the test case.
-        output:
-          type: string
-          description: Expected or reference output.
-        history:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        metadata:
-          type: object
-          additionalProperties: true
     Dataset:
       type: object
       properties:
@@ -198,6 +153,51 @@ components:
           - tool
         content:
           type: string
+    TestCase:
+      type: object
+      properties:
+        test_case_id:
+          type: string
+          format: uuid
+        values:
+          type: object
+          additionalProperties: true
+          description: Input variable values for the test case.
+        output:
+          type: string
+          description: Expected or reference output.
+        history:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        metadata:
+          type: object
+          additionalProperties: true
+    UploadTestCasesRequest:
+      type: object
+      required:
+      - test_cases
+      properties:
+        test_cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCase'
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    DatasetId:
+      name: dataset_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     bearerAuth:
       type: http

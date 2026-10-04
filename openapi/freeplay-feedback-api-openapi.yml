@@ -64,6 +64,22 @@ paths:
         '200':
           description: Feedback recorded.
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
+    TraceId:
+      name: trace_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     FeedbackRequest:
       type: object
@@ -75,22 +91,6 @@ components:
         source:
           type: string
           description: Origin of the feedback (e.g. customer, human-review).
-  parameters:
-    TraceId:
-      name: trace_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http

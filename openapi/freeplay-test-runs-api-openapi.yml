@@ -83,6 +83,23 @@ paths:
                 $ref: '#/components/schemas/TestRun'
 components:
   schemas:
+    CreateTestRunRequest:
+      type: object
+      required:
+      - dataset_id
+      properties:
+        dataset_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        prompt_template_version_id:
+          type: string
+          format: uuid
+        flavor_name:
+          type: string
+        include_outputs:
+          type: boolean
     TestRun:
       type: object
       properties:
@@ -101,23 +118,6 @@ components:
           items:
             type: object
             additionalProperties: true
-    CreateTestRunRequest:
-      type: object
-      required:
-      - dataset_id
-      properties:
-        dataset_id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        prompt_template_version_id:
-          type: string
-          format: uuid
-        flavor_name:
-          type: string
-        include_outputs:
-          type: boolean
   parameters:
     ProjectId:
       name: project_id

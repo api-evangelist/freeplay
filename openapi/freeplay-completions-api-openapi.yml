@@ -94,37 +94,6 @@ paths:
                 $ref: '#/components/schemas/Statistics'
 components:
   schemas:
-    StatisticsRequest:
-      type: object
-      properties:
-        environment:
-          type: string
-        start_time:
-          type: string
-          format: date-time
-        end_time:
-          type: string
-          format: date-time
-    Completion:
-      type: object
-      properties:
-        completion_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        trace_id:
-          type: string
-          format: uuid
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        usage:
-          $ref: '#/components/schemas/Usage'
     Statistics:
       type: object
       properties:
@@ -145,6 +114,15 @@ components:
           - tool
         content:
           type: string
+    Usage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
     RecordCompletionRequest:
       type: object
       required:
@@ -178,15 +156,37 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
-    Usage:
+    StatisticsRequest:
       type: object
       properties:
-        prompt_tokens:
-          type: integer
-        completion_tokens:
-          type: integer
-        total_tokens:
-          type: integer
+        environment:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    Completion:
+      type: object
+      properties:
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
   parameters:
     ProjectId:
       name: project_id
