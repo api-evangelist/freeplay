@@ -1,0 +1,56 @@
+slug: freeplay
+provider: Freeplay
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Completions
+  spec_file: freeplay-completions-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: POST /projects/{project_id}/sessions/{session_id}/completions recordCompletion 'Record an
+    LLM completion to a session'; 'Aggregate evaluation statistics across completions'
+  reason: Recording and evaluating LLM completions is LLM observability/evaluation, i.e. AI model lifecycle
+    and LLMOps management.
+- tag: Prompt Templates
+  spec_file: freeplay-prompt-templates-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: createPromptTemplateVersionByName 'Create a new version of a prompt template'; assignPromptTemplateVersionToEnvironments
+    'Deploy / assign a prompt template version to one or more environments'
+  reason: Versioning and environment deployment of prompt templates is lifecycle management of AI assets
+    (LLMOps), the core of Artificial Intelligence Management.
+- tag: Datasets
+  spec_file: freeplay-datasets-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: POST /projects/{project_id}/datasets/id/{dataset_id}/test-cases uploadTestCases 'Upload test
+    cases to a dataset'
+  reason: Curation of evaluation datasets and test cases for LLM testing is part of the AI/ML model lifecycle
+    (MLOps) rather than generic data governance or software QA; some ambiguity with test management hence
+    0.7.
+- tag: Feedback
+  spec_file: freeplay-feedback-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.7
+  evidence: POST /projects/{project_id}/completion-feedback/id/{completion_id} recordCompletionFeedback
+    'Record feedback on a completion'
+  reason: Human/customer feedback captured against LLM completions and traces feeds model evaluation —
+    AI model lifecycle management, not customer feedback/VoC programmes.
