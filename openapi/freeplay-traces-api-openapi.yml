@@ -55,15 +55,15 @@ components:
         type: string
         format: uuid
       description: The Freeplay project ID.
-    TraceId:
-      name: trace_id
+    SessionId:
+      name: session_id
       in: path
       required: true
       schema:
         type: string
         format: uuid
-    SessionId:
-      name: session_id
+    TraceId:
+      name: trace_id
       in: path
       required: true
       schema:

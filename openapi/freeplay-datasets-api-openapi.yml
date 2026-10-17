@@ -153,6 +153,15 @@ components:
           - tool
         content:
           type: string
+    UploadTestCasesRequest:
+      type: object
+      required:
+      - test_cases
+      properties:
+        test_cases:
+          type: array
+          items:
+            $ref: '#/components/schemas/TestCase'
     TestCase:
       type: object
       properties:
@@ -173,15 +182,6 @@ components:
         metadata:
           type: object
           additionalProperties: true
-    UploadTestCasesRequest:
-      type: object
-      required:
-      - test_cases
-      properties:
-        test_cases:
-          type: array
-          items:
-            $ref: '#/components/schemas/TestCase'
   parameters:
     ProjectId:
       name: project_id

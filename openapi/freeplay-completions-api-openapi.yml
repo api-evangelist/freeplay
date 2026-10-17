@@ -94,14 +94,37 @@ paths:
                 $ref: '#/components/schemas/Statistics'
 components:
   schemas:
-    Statistics:
+    Completion:
       type: object
       properties:
-        completion_count:
-          type: integer
-        evaluations:
-          type: object
-          additionalProperties: true
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+    StatisticsRequest:
+      type: object
+      properties:
+        environment:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
     Message:
       type: object
       properties:
@@ -114,15 +137,6 @@ components:
           - tool
         content:
           type: string
-    Usage:
-      type: object
-      properties:
-        prompt_tokens:
-          type: integer
-        completion_tokens:
-          type: integer
-        total_tokens:
-          type: integer
     RecordCompletionRequest:
       type: object
       required:
@@ -156,37 +170,23 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
-    StatisticsRequest:
+    Statistics:
       type: object
       properties:
-        environment:
-          type: string
-        start_time:
-          type: string
-          format: date-time
-        end_time:
-          type: string
-          format: date-time
-    Completion:
+        completion_count:
+          type: integer
+        evaluations:
+          type: object
+          additionalProperties: true
+    Usage:
       type: object
       properties:
-        completion_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        trace_id:
-          type: string
-          format: uuid
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        usage:
-          $ref: '#/components/schemas/Usage'
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
   parameters:
     ProjectId:
       name: project_id

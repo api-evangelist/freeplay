@@ -101,16 +101,40 @@ paths:
                     items:
                       $ref: '#/components/schemas/Completion'
 components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
   schemas:
+    Completion:
+      type: object
+      properties:
+        completion_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        trace_id:
+          type: string
+          format: uuid
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        model:
+          type: string
+        usage:
+          $ref: '#/components/schemas/Usage'
+    Trace:
+      type: object
+      properties:
+        trace_id:
+          type: string
+          format: uuid
+        session_id:
+          type: string
+          format: uuid
+        input:
+          type: string
+        output:
+          type: string
     Message:
       type: object
       properties:
@@ -138,28 +162,6 @@ components:
         custom_metadata:
           type: object
           additionalProperties: true
-    Usage:
-      type: object
-      properties:
-        prompt_tokens:
-          type: integer
-        completion_tokens:
-          type: integer
-        total_tokens:
-          type: integer
-    Trace:
-      type: object
-      properties:
-        trace_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        input:
-          type: string
-        output:
-          type: string
     SearchRequest:
       type: object
       properties:
@@ -178,26 +180,24 @@ components:
           type: integer
         page_size:
           type: integer
-    Completion:
+    Usage:
       type: object
       properties:
-        completion_id:
-          type: string
-          format: uuid
-        session_id:
-          type: string
-          format: uuid
-        trace_id:
-          type: string
-          format: uuid
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        usage:
-          $ref: '#/components/schemas/Usage'
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The Freeplay project ID.
   securitySchemes:
     bearerAuth:
       type: http
