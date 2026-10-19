@@ -1,0 +1,1653 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Search & Analytics API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Search & Analytics
+paths:
+  /api/v2/projects/{project_id}/search/completions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: include_children
+        in: query
+        schema:
+          default: false
+          title: Include Children
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    anyOf:
+                    - items:
+                        $ref: '#/components/schemas/CompletionSearchInfo'
+                      type: array
+                    - items:
+                        $ref: '#/components/schemas/CompletionSearchInfoWithChildren'
+                      type: array
+                    title: Data
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: CompletionSearchResponse
+                type: object
+          description: 'CompletionSearchResponse(data: Union[List[server.search_api.types.CompletionSearchInfo], List[server.search_api.types.CompletionSearchInfoWithChildren]], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Query LLM completions using advanced filters. Use to find specific
+
+        prompts and responses, filter by evaluation results or metadata, prompt
+
+        templates, latency, and more.
+
+
+        Supports pagination and optional inclusion of all child traces and
+
+        completions within the session, using the `include_children` parameter.
+
+
+        `page_size` defaults to 30, maximum 100.
+
+
+        For filter operators and examples, see: https://docs.freeplay.ai/openapi/search-api-operators'
+      summary: Search Completions
+      tags:
+      - Search & Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                filters:
+                  anyOf:
+                  - $ref: '#/components/schemas/FieldFilter'
+                  - $ref: '#/components/schemas/AndFilter'
+                  - $ref: '#/components/schemas/OrFilter'
+                  - $ref: '#/components/schemas/NotFilter'
+                  - $ref: '#/components/schemas/EmptyFilter'
+                  title: Filters
+              required:
+              - filters
+              title: SearchRequest
+              type: object
+      operationId: post_search_completions
+  /api/v2/projects/{project_id}/search/sessions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: include_children
+        in: query
+        schema:
+          default: false
+          title: Include Children
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    anyOf:
+                    - items:
+                        $ref: '#/components/schemas/SessionSearchInfo'
+                      type: array
+                    - items:
+                        $ref: '#/components/schemas/SessionSearchInfoWithChildren'
+                      type: array
+                    title: Data
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: SessionSearchResponse
+                type: object
+          description: 'SessionSearchResponse(data: Union[List[server.search_api.types.SessionSearchInfo], List[server.search_api.types.SessionSearchInfoWithChildren]], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Query sessions using advanced filters. Use to find specific
+
+        conversations or filter by metadata.
+
+
+        Supports pagination and optional inclusion of all traces and completions
+
+        within the session, using the `include_children` parameter.
+
+
+        `page_size` defaults to 30, maximum 100.
+
+
+        For filter operators and examples, see: https://docs.freeplay.ai/openapi/search-api-operators'
+      summary: Search Sessions
+      tags:
+      - Search & Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                filters:
+                  anyOf:
+                  - $ref: '#/components/schemas/FieldFilter'
+                  - $ref: '#/components/schemas/AndFilter'
+                  - $ref: '#/components/schemas/OrFilter'
+                  - $ref: '#/components/schemas/NotFilter'
+                  - $ref: '#/components/schemas/EmptyFilter'
+                  title: Filters
+              required:
+              - filters
+              title: SearchRequest
+              type: object
+      operationId: post_search_sessions
+  /api/v2/projects/{project_id}/search/traces:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: include_children
+        in: query
+        schema:
+          default: false
+          title: Include Children
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    anyOf:
+                    - items:
+                        $ref: '#/components/schemas/TraceSearchInfo'
+                      type: array
+                    - items:
+                        $ref: '#/components/schemas/TraceSearchInfoWithChildren'
+                      type: array
+                    title: Data
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: TraceSearchResponse
+                type: object
+          description: 'TraceSearchResponse(data: Union[List[server.search_api.types.TraceSearchInfo], List[server.search_api.types.TraceSearchInfoWithChildren]], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Query traces using advanced filters. Use to find specific trace
+
+        executions, filter by metadata, or analyze trace patterns.
+
+
+        Supports pagination and optional inclusion of all child traces and
+
+        completions within the session, using the `include_children` parameter.
+
+
+        `page_size` defaults to 30, maximum 100.
+
+
+        For filter operators and examples, see: https://docs.freeplay.ai/openapi/search-api-operators'
+      summary: Search Traces
+      tags:
+      - Search & Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                filters:
+                  anyOf:
+                  - $ref: '#/components/schemas/FieldFilter'
+                  - $ref: '#/components/schemas/AndFilter'
+                  - $ref: '#/components/schemas/OrFilter'
+                  - $ref: '#/components/schemas/NotFilter'
+                  - $ref: '#/components/schemas/EmptyFilter'
+                  title: Filters
+              required:
+              - filters
+              title: SearchRequest
+              type: object
+      operationId: post_search_traces
+  /api/v2/projects/{project_id}/completions/statistics:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  summary_info:
+                    additionalProperties:
+                      additionalProperties:
+                        $ref: '#/components/schemas/EvaluationSummaryByEvalType'
+                      type: object
+                    title: Summary Info
+                    type: object
+                required:
+                - summary_info
+                title: CompletionSummaryStatsInfo
+                type: object
+          description: 'CompletionSummaryStatsInfo(summary_info: dict[str, dict[str, server.evaluations.evaluations_types.EvaluationSummaryByEvalType]])'
+      description: 'Retrieve aggregate evaluation statistics across all prompts for a date range. Use for dashboard metrics or trend analysis.
+
+
+        Maximum date range is 30 days.'
+      summary: Get All Completion Statistics
+      tags:
+      - Search & Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                to_date:
+                  default: null
+                  title: To Date
+                  type:
+                  - string
+                  - 'null'
+                from_date:
+                  default: null
+                  title: From Date
+                  type:
+                  - string
+                  - 'null'
+              title: GetCompletionSummaryInfo
+              type: object
+      operationId: post_get_all_completion_summaries
+  /api/v2/projects/{project_id}/completions/statistics/{prompt_template_id}:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: prompt_template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  summary_info:
+                    additionalProperties:
+                      additionalProperties:
+                        $ref: '#/components/schemas/EvaluationSummaryByEvalType'
+                      type: object
+                    title: Summary Info
+                    type: object
+                required:
+                - summary_info
+                title: CompletionSummaryStatsInfo
+                type: object
+          description: 'CompletionSummaryStatsInfo(summary_info: dict[str, dict[str, server.evaluations.evaluations_types.EvaluationSummaryByEvalType]])'
+      description: 'Retrieve evaluation statistics for a specific prompt template. Use to track quality metrics for individual prompts.
+
+
+        Maximum date range is 30 days.'
+      summary: Get Completion Statistics
+      tags:
+      - Search & Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                to_date:
+                  default: null
+                  title: To Date
+                  type:
+                  - string
+                  - 'null'
+                from_date:
+                  default: null
+                  title: From Date
+                  type:
+                  - string
+                  - 'null'
+              title: GetCompletionSummaryInfo
+              type: object
+      operationId: post_get_completion_summary
+  /api/v2/projects/{project_id}/sessions:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 10
+          title: Page Size
+          type: integer
+      - name: to_date
+        in: query
+        schema:
+          default: null
+          title: To Date
+          type:
+          - string
+          - 'null'
+      - name: from_date
+        in: query
+        schema:
+          default: null
+          title: From Date
+          type:
+          - string
+          - 'null'
+      - name: test_list
+        in: query
+        schema:
+          default: null
+          title: Test List
+          type:
+          - string
+          - 'null'
+      - name: test_run_id
+        in: query
+        schema:
+          default: null
+          title: Test Run Id
+          type:
+          - string
+          - 'null'
+      - name: prompt_name
+        in: query
+        schema:
+          default: null
+          title: Prompt Name
+          type:
+          - string
+          - 'null'
+      - name: review_queue_id
+        in: query
+        schema:
+          default: null
+          title: Review Queue Id
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DetailedSessionInfo'
+                type: array
+          description: "The type of parameterized generics.\n\nThat is, for example, `type(List[int])` is `_GenericAlias`.\n\nObjects which are instances of this class include:\n* Parameterized container types, e.g. `Tuple[int]`, `List[int]`.\n * Note that native container types, e.g. `tuple`, `list`, use\n   `types.GenericAlias` instead.\n* Parameterized classes:\n    class C[T]: pass\n    # C[int] is a _GenericAlias\n* `Callable` aliases, generic `Callable` aliases, and\n  parameterized `Callable` aliases:\n    T = TypeVar('T')\n    # _CallableGenericAlias inherits from _GenericAlias.\n    A = Callable[[], None]  # _CallableGenericAlias\n    B = Callable[[T], None]  # _CallableGenericAlias\n    C = B[int]  # _CallableGenericAlias\n* Parameterized `Final`, `ClassVar`, `TypeForm`, `TypeGuard`, and `TypeIs`:\n    # All _GenericAlias\n    Final[int]\n    ClassVar[float]\n    TypeForm[bytearray]\n    TypeGuard[bool]\n    TypeIs[range]\n\nNote that instances of this class are not classes (e.g by `inspect.isclass`),\neven though they behave like them."
+      description: 'Retrieve sessions with their completions, ordered by most recent first. Use to display conversation history or analyze LLM usage patterns. Traces are referenced by ID but not expanded.
+
+
+        Filter by custom metadata using query parameters prefixed with `custom_metadata.` (e.g., `custom_metadata.user_id=123`).
+
+
+        `page_size` defaults to 10, maximum 100.
+
+
+        Prefer using the `/search/sessions` endpoint for more advanced filtering.'
+      summary: List Sessions
+      tags:
+      - Search & Analytics
+      operationId: get_get_sessions_filtered
+components:
+  schemas:
+    TraceSearchInfo:
+      properties:
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        trace_id:
+          format: uuid
+          title: Trace Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        trace_metadata:
+          oneOf:
+          - $ref: '#/components/schemas/TraceMetadataInfo'
+          - type: 'null'
+        custom_metadata:
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        customer_feedback:
+          title: Customer Feedback
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        input:
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        output:
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        evaluation_results:
+          $ref: '#/components/schemas/EvaluationResultsInfo'
+      required:
+      - session_id
+      - trace_id
+      - review_queue_id
+      - trace_metadata
+      - custom_metadata
+      - customer_feedback
+      - input
+      - output
+      - evaluation_results
+      title: TraceSearchInfo
+      type: object
+    SessionSearchInfo:
+      properties:
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        session_metadata:
+          $ref: '#/components/schemas/SessionMetadataInfo'
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+        custom_metadata:
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        test_run_id:
+          title: Test Run Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      required:
+      - session_id
+      - review_queue_id
+      - session_metadata
+      - usage
+      - custom_metadata
+      - test_run_id
+      title: SessionSearchInfo
+      type: object
+    SessionCompletionInfo:
+      properties:
+        message_type:
+          title: Message Type
+          type: string
+        completion_id:
+          format: uuid
+          title: Completion Id
+          type: string
+        environment:
+          title: Environment
+          type:
+          - string
+          - 'null'
+        provider_name:
+          title: Provider Name
+          type:
+          - string
+          - 'null'
+        model_name:
+          title: Model Name
+          type:
+          - string
+          - 'null'
+        input_variables:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Input Variables
+          type: object
+        prompt:
+          items:
+            discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          title: Prompt
+          type: array
+        prompt_template_name:
+          title: Prompt Template Name
+          type:
+          - string
+          - 'null'
+        response:
+          title: Response
+          type:
+          - string
+          - 'null'
+        customer_feedback:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          title: Customer Feedback
+          type: object
+        evaluation_results:
+          items:
+            $ref: '#/components/schemas/EvaluationResultInfo'
+          title: Evaluation Results
+          type: array
+        client_evaluation_results:
+          items:
+            $ref: '#/components/schemas/ClientEvaluationResultInfo'
+          title: Client Evaluation Results
+          type: array
+        notes:
+          title: Notes
+          items:
+            $ref: '#/components/schemas/EvaluationNoteExportInfo'
+          type:
+          - array
+          - 'null'
+        trace_id:
+          title: Trace Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        format_version:
+          title: Format Version
+          type:
+          - integer
+          - 'null'
+        start_time:
+          title: Start Time
+          type:
+          - string
+          - 'null'
+        end_time:
+          title: End Time
+          type:
+          - string
+          - 'null'
+      required:
+      - message_type
+      - completion_id
+      - environment
+      - provider_name
+      - model_name
+      - input_variables
+      - prompt
+      - prompt_template_name
+      - response
+      - customer_feedback
+      - evaluation_results
+      - client_evaluation_results
+      - notes
+      - trace_id
+      - format_version
+      - start_time
+      - end_time
+      title: SessionCompletionInfo
+      type: object
+    HumanLabelInfo:
+      properties:
+        name:
+          title: Name
+          type: string
+        manual_score:
+          anyOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          title: Manual Score
+      required:
+      - name
+      - manual_score
+      title: HumanLabelInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    SessionMetadataInfo:
+      properties:
+        start_time:
+          title: Start Time
+          type:
+          - string
+          - 'null'
+        end_time:
+          title: End Time
+          type:
+          - string
+          - 'null'
+      required:
+      - start_time
+      - end_time
+      title: SessionMetadataInfo
+      type: object
+    FieldFilter:
+      properties:
+        field:
+          title: Field
+          type: string
+        op:
+          $ref: '#/components/schemas/FilterOperators'
+        value:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: number
+          - items:
+              anyOf:
+              - type: integer
+              - type: number
+            type: array
+          title: Value
+      required:
+      - field
+      - op
+      - value
+      title: FieldFilter
+      type: object
+    EvaluationSummaryByEvalType:
+      properties:
+        human_evals:
+          additionalProperties:
+            additionalProperties:
+              anyOf:
+              - type: integer
+              - type: number
+              - type: string
+            type: object
+          title: Human Evals
+          type: object
+        auto_evals:
+          additionalProperties:
+            additionalProperties:
+              anyOf:
+              - type: integer
+              - type: number
+              - type: string
+            type: object
+          title: Auto Evals
+          type: object
+        client_evals:
+          additionalProperties:
+            additionalProperties:
+              anyOf:
+              - type: integer
+              - type: number
+              - type: string
+            type: object
+          title: Client Evals
+          type: object
+        combined_evals:
+          additionalProperties:
+            additionalProperties:
+              anyOf:
+              - type: integer
+              - type: number
+              - type: string
+            type: object
+          title: Combined Evals
+          type: object
+      required:
+      - human_evals
+      - auto_evals
+      - client_evals
+      - combined_evals
+      title: EvaluationSummaryByEvalType
+      type: object
+    ImageBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: ImageBlock
+      type: object
+    DeveloperMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: DeveloperMessage
+      type: object
+    UsageInfo:
+      properties:
+        prompt_tokens:
+          title: Prompt Tokens
+          type: integer
+        completion_tokens:
+          title: Completion Tokens
+          type: integer
+      required:
+      - prompt_tokens
+      - completion_tokens
+      title: UsageInfo
+      type: object
+    EvaluationResultsInfo:
+      properties:
+        auto_evaluations:
+          additionalProperties:
+            $ref: '#/components/schemas/AutoEvaluationInfo'
+          title: Auto Evaluations
+          type: object
+        human_labels:
+          additionalProperties:
+            $ref: '#/components/schemas/HumanLabelInfo'
+          title: Human Labels
+          type: object
+        client_evaluations:
+          additionalProperties:
+            anyOf:
+            - type: boolean
+            - type: number
+          title: Client Evaluations
+          type: object
+      required:
+      - auto_evaluations
+      - human_labels
+      - client_evaluations
+      title: EvaluationResultsInfo
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    SystemMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: SystemMessage
+      type: object
+    TraceSearchInfoWithChildren:
+      properties:
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        trace_id:
+          format: uuid
+          title: Trace Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        trace_metadata:
+          oneOf:
+          - $ref: '#/components/schemas/TraceMetadataInfo'
+          - type: 'null'
+        custom_metadata:
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        customer_feedback:
+          title: Customer Feedback
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        input:
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        output:
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        evaluation_results:
+          $ref: '#/components/schemas/EvaluationResultsInfo'
+        children:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CompletionSearchInfoWithChildren'
+            - $ref: '#/components/schemas/TraceSearchInfoWithChildren'
+          title: Children
+          type: array
+      required:
+      - session_id
+      - trace_id
+      - review_queue_id
+      - trace_metadata
+      - custom_metadata
+      - customer_feedback
+      - input
+      - output
+      - evaluation_results
+      title: TraceSearchInfoWithChildren
+      type: object
+    OrFilter:
+      properties:
+        or:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/FieldFilter'
+            - $ref: '#/components/schemas/AndFilter'
+            - $ref: '#/components/schemas/OrFilter'
+            - $ref: '#/components/schemas/NotFilter'
+            - $ref: '#/components/schemas/EmptyFilter'
+          title: Or
+          type: array
+      required:
+      - or
+      title: OrFilter
+      type: object
+    FilterOperators:
+      enum:
+      - eq
+      - gt
+      - gte
+      - lt
+      - lte
+      - contains
+      - between
+      title: FilterOperators
+      type: string
+    AssistantMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      required:
+      - content
+      title: AssistantMessage
+      type: object
+    DetailedSessionInfo:
+      properties:
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        start_time:
+          title: Start Time
+          type: string
+        custom_metadata:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          title: Custom Metadata
+          type: object
+        messages:
+          items:
+            $ref: '#/components/schemas/SessionCompletionInfo'
+          title: Messages
+          type: array
+      required:
+      - session_id
+      - start_time
+      - custom_metadata
+      - messages
+      title: DetailedSessionInfo
+      type: object
+    EvaluationNoteExportInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        content:
+          title: Content
+          type: string
+        created_at:
+          title: Created At
+          type: string
+        created_by:
+          $ref: '#/components/schemas/UserAPIInfo'
+      required:
+      - id
+      - content
+      - created_at
+      - created_by
+      title: EvaluationNoteExportInfo
+      type: object
+    CompletionMetadataInfo:
+      properties:
+        environment:
+          title: Environment
+          type:
+          - string
+          - 'null'
+        start_time:
+          title: Start Time
+          type:
+          - string
+          - 'null'
+        end_time:
+          title: End Time
+          type:
+          - string
+          - 'null'
+        model:
+          title: Model
+          type:
+          - string
+          - 'null'
+        provider:
+          title: Provider
+          type:
+          - string
+          - 'null'
+        prompt_template:
+          title: Prompt Template
+          additionalProperties:
+            anyOf:
+            - type: string
+            - format: uuid
+              type: string
+          type:
+          - object
+          - 'null'
+        prompt_template_version_id:
+          title: Prompt Template Version Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        assignee:
+          title: Assignee
+          type:
+          - string
+          - 'null'
+        prompt_version_name:
+          title: Prompt Version Name
+          type:
+          - string
+          - 'null'
+        prompt_version_description:
+          title: Prompt Version Description
+          type:
+          - string
+          - 'null'
+      required:
+      - environment
+      - start_time
+      - end_time
+      - model
+      - provider
+      - prompt_template
+      - prompt_template_version_id
+      - assignee
+      - prompt_version_name
+      - prompt_version_description
+      title: CompletionMetadataInfo
+      type: object
+    InputVariable:
+      anyOf:
+      - type: string
+      - type: integer
+      - type: boolean
+      - type: number
+      - additionalProperties:
+          $ref: '#/components/schemas/InputVariable'
+        type: object
+      - items:
+          $ref: '#/components/schemas/InputVariable'
+        type: array
+    CompletionSearchInfoWithChildren:
+      properties:
+        completion_id:
+          format: uuid
+          title: Completion Id
+          type: string
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        evaluation_results:
+          $ref: '#/components/schemas/EvaluationResultsInfo'
+        completion_metadata:
+          $ref: '#/components/schemas/CompletionMetadataInfo'
+        customer_feedback:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          title: Customer Feedback
+          type: object
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+        messages:
+          items:
+            discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          title: Messages
+          type: array
+        input_variables:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Input Variables
+          type: object
+        children:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CompletionSearchInfoWithChildren'
+            - $ref: '#/components/schemas/TraceSearchInfoWithChildren'
+          title: Children
+          type: array
+      required:
+      - completion_id
+      - session_id
+      - review_queue_id
+      - evaluation_results
+      - completion_metadata
+      - customer_feedback
+      - usage
+      - messages
+      - input_variables
+      title: CompletionSearchInfoWithChildren
+      type: object
+    TraceMetadataInfo:
+      properties:
+        agent_name:
+          title: Agent Name
+          type:
+          - string
+          - 'null'
+        start_time:
+          title: Start Time
+          type:
+          - string
+          - 'null'
+        end_time:
+          title: End Time
+          type:
+          - string
+          - 'null'
+        assignee:
+          title: Assignee
+          type:
+          - string
+          - 'null'
+      required:
+      - agent_name
+      - start_time
+      - end_time
+      - assignee
+      title: TraceMetadataInfo
+      type: object
+    TextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: TextBlock
+      type: object
+    EmptyFilter:
+      properties: {}
+      title: EmptyFilter
+      type: object
+    AndFilter:
+      properties:
+        and:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/FieldFilter'
+            - $ref: '#/components/schemas/AndFilter'
+            - $ref: '#/components/schemas/OrFilter'
+            - $ref: '#/components/schemas/NotFilter'
+            - $ref: '#/components/schemas/EmptyFilter'
+          title: And
+          type: array
+      required:
+      - and
+      title: AndFilter
+      type: object
+    EvaluationResultInfo:
+      properties:
+        name:
+          title: Name
+          type: string
+        manual_score:
+          $ref: '#/components/schemas/JSONValue'
+        auto_eval_score:
+          $ref: '#/components/schemas/JSONValue'
+      required:
+      - name
+      - manual_score
+      - auto_eval_score
+      title: EvaluationResultInfo
+      type: object
+    UserAPIInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        email_address:
+          title: Email Address
+          type: string
+        first_name:
+          title: First Name
+          type: string
+        last_name:
+          title: Last Name
+          type: string
+      required:
+      - id
+      - email_address
+      - first_name
+      - last_name
+      title: UserAPIInfo
+      type: object
+    FileBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: FileBlock
+      type: object
+    ClientEvaluationResultInfo:
+      properties:
+        name:
+          title: Name
+          type: string
+        value:
+          $ref: '#/components/schemas/JSONValue'
+      required:
+      - name
+      - value
+      title: ClientEvaluationResultInfo
+      type: object
+    AutoEvaluationInfo:
+      properties:
+        name:
+          title: Name
+          type: string
+        auto_score:
+          anyOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          title: Auto Score
+        auto_explanation:
+          title: Auto Explanation
+          type:
+          - string
+          - 'null'
+        manual_score:
+          anyOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          title: Manual Score
+      required:
+      - name
+      - auto_score
+      - auto_explanation
+      - manual_score
+      title: AutoEvaluationInfo
+      type: object
+    UserMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: UserMessage
+      type: object
+    AudioBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: audio
+          default: audio
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: AudioBlock
+      type: object
+    ToolResultBlock:
+      properties:
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_call_id
+      - content
+      title: ToolResultBlock
+      type: object
+    SessionSearchInfoWithChildren:
+      properties:
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        session_metadata:
+          $ref: '#/components/schemas/SessionMetadataInfo'
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+        custom_metadata:
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        test_run_id:
+          title: Test Run Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        children:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/CompletionSearchInfoWithChildren'
+            - $ref: '#/components/schemas/TraceSearchInfoWithChildren'
+          title: Children
+          type: array
+      required:
+      - session_id
+      - review_queue_id
+      - session_metadata
+      - usage
+      - custom_metadata
+      - test_run_id
+      title: SessionSearchInfoWithChildren
+      type: object
+    NotFilter:
+      properties:
+        not:
+          anyOf:
+          - $ref: '#/components/schemas/FieldFilter'
+          - $ref: '#/components/schemas/AndFilter'
+          - $ref: '#/components/schemas/OrFilter'
+          - $ref: '#/components/schemas/NotFilter'
+          - $ref: '#/components/schemas/EmptyFilter'
+          title: Not
+      required:
+      - not
+      title: NotFilter
+      type: object
+    CompletionSearchInfo:
+      properties:
+        completion_id:
+          format: uuid
+          title: Completion Id
+          type: string
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        review_queue_id:
+          title: Review Queue Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        evaluation_results:
+          $ref: '#/components/schemas/EvaluationResultsInfo'
+        completion_metadata:
+          $ref: '#/components/schemas/CompletionMetadataInfo'
+        customer_feedback:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          title: Customer Feedback
+          type: object
+        usage:
+          $ref: '#/components/schemas/UsageInfo'
+        messages:
+          items:
+            discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          title: Messages
+          type: array
+        input_variables:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Input Variables
+          type: object
+      required:
+      - completion_id
+      - session_id
+      - review_queue_id
+      - evaluation_results
+      - completion_metadata
+      - customer_feedback
+      - usage
+      - messages
+      - input_variables
+      title: CompletionSearchInfo
+      type: object
+    ToolCallBlock:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        arguments:
+          $ref: '#/components/schemas/JSONValue'
+        thought_signature:
+          default: null
+          title: Thought Signature
+          type:
+          - string
+          - 'null'
+        type:
+          const: tool_call
+          default: tool_call
+          title: Type
+          type: string
+      required:
+      - id
+      - name
+      - arguments
+      title: ToolCallBlock
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

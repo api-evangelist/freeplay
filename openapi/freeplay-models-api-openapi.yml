@@ -1,0 +1,427 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Models API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Models
+paths:
+  /api/v2/models:
+    get:
+      parameters:
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/ModelReplicationInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: ModelListResponse
+                type: object
+          description: 'ModelListResponse(data: list[server.api_routes.models_api_v2.ModelReplicationInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve a paginated list of custom models configured for the account.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Models
+      tags:
+      - Models
+      operationId: get_list_models
+    post:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  display_name:
+                    title: Display Name
+                    type:
+                    - string
+                    - 'null'
+                  provider_name:
+                    title: Provider Name
+                    type: string
+                  provider_info:
+                    title: Provider Info
+                    additionalProperties:
+                      type: string
+                    type:
+                    - object
+                    - 'null'
+                  supports_tool_use:
+                    title: Supports Tool Use
+                    type: boolean
+                  model_family:
+                    title: Model Family
+                    type: string
+                  model_version:
+                    title: Model Version
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - display_name
+                - provider_name
+                - provider_info
+                - supports_tool_use
+                - model_family
+                - model_version
+                - created_at
+                title: ModelReplicationInfo
+                type: object
+          description: 'ModelReplicationInfo(id: uuid.UUID, name: str, display_name: Optional[str], provider_name: str, provider_info: Optional[dict[str, str]], supports_tool_use: bool, model_family: str, model_version: str, created_at: datetime.datetime)'
+      description: Create or upsert a custom model configuration for the account.
+      summary: Create Model
+      tags:
+      - Models
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  format: uuid
+                  title: Id
+                  type: string
+                name:
+                  title: Name
+                  type: string
+                provider_name:
+                  title: Provider Name
+                  type: string
+                model_family:
+                  title: Model Family
+                  type: string
+                model_version:
+                  title: Model Version
+                  type: string
+                display_name:
+                  default: null
+                  title: Display Name
+                  type:
+                  - string
+                  - 'null'
+                provider_info:
+                  default: null
+                  title: Provider Info
+                  additionalProperties:
+                    type: string
+                  type:
+                  - object
+                  - 'null'
+                supports_tool_use:
+                  default: true
+                  title: Supports Tool Use
+                  type: boolean
+              required:
+              - id
+              - name
+              - provider_name
+              - model_family
+              - model_version
+              title: ReplicateModelRequest
+              type: object
+      operationId: post_replicate_model
+  /api/v2/models/{model_id}:
+    get:
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  display_name:
+                    title: Display Name
+                    type:
+                    - string
+                    - 'null'
+                  provider_name:
+                    title: Provider Name
+                    type: string
+                  provider_info:
+                    title: Provider Info
+                    additionalProperties:
+                      type: string
+                    type:
+                    - object
+                    - 'null'
+                  supports_tool_use:
+                    title: Supports Tool Use
+                    type: boolean
+                  model_family:
+                    title: Model Family
+                    type: string
+                  model_version:
+                    title: Model Version
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - display_name
+                - provider_name
+                - provider_info
+                - supports_tool_use
+                - model_family
+                - model_version
+                - created_at
+                title: ModelReplicationInfo
+                type: object
+          description: 'ModelReplicationInfo(id: uuid.UUID, name: str, display_name: Optional[str], provider_name: str, provider_info: Optional[dict[str, str]], supports_tool_use: bool, model_family: str, model_version: str, created_at: datetime.datetime)'
+      description: Retrieve details for a specific custom model by ID.
+      summary: Get Model
+      tags:
+      - Models
+      operationId: get_get_model
+    put:
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  display_name:
+                    title: Display Name
+                    type:
+                    - string
+                    - 'null'
+                  provider_name:
+                    title: Provider Name
+                    type: string
+                  provider_info:
+                    title: Provider Info
+                    additionalProperties:
+                      type: string
+                    type:
+                    - object
+                    - 'null'
+                  supports_tool_use:
+                    title: Supports Tool Use
+                    type: boolean
+                  model_family:
+                    title: Model Family
+                    type: string
+                  model_version:
+                    title: Model Version
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - display_name
+                - provider_name
+                - provider_info
+                - supports_tool_use
+                - model_family
+                - model_version
+                - created_at
+                title: ModelReplicationInfo
+                type: object
+          description: 'ModelReplicationInfo(id: uuid.UUID, name: str, display_name: Optional[str], provider_name: str, provider_info: Optional[dict[str, str]], supports_tool_use: bool, model_family: str, model_version: str, created_at: datetime.datetime)'
+      description: Update an existing custom model configuration.
+      summary: Update Model
+      tags:
+      - Models
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                provider_name:
+                  title: Provider Name
+                  type: string
+                model_family:
+                  title: Model Family
+                  type: string
+                model_version:
+                  title: Model Version
+                  type: string
+                display_name:
+                  default: null
+                  title: Display Name
+                  type:
+                  - string
+                  - 'null'
+                provider_info:
+                  default: null
+                  title: Provider Info
+                  additionalProperties:
+                    type: string
+                  type:
+                  - object
+                  - 'null'
+                supports_tool_use:
+                  default: true
+                  title: Supports Tool Use
+                  type: boolean
+              required:
+              - name
+              - provider_name
+              - model_family
+              - model_version
+              title: UpdateModelRequest
+              type: object
+      operationId: put_update_model
+    delete:
+      parameters:
+      - name: model_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Delete a custom model configuration from the account.
+      summary: Delete Model
+      tags:
+      - Models
+      operationId: delete_delete_model
+components:
+  schemas:
+    ModelReplicationInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        display_name:
+          title: Display Name
+          type:
+          - string
+          - 'null'
+        provider_name:
+          title: Provider Name
+          type: string
+        provider_info:
+          title: Provider Info
+          additionalProperties:
+            type: string
+          type:
+          - object
+          - 'null'
+        supports_tool_use:
+          title: Supports Tool Use
+          type: boolean
+        model_family:
+          title: Model Family
+          type: string
+        model_version:
+          title: Model Version
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+      required:
+      - id
+      - name
+      - display_name
+      - provider_name
+      - provider_info
+      - supports_tool_use
+      - model_family
+      - model_version
+      - created_at
+      title: ModelReplicationInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

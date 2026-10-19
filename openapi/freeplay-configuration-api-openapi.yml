@@ -1,0 +1,1022 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Configuration API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Configuration
+paths:
+  /api/v2/projects:
+    post:
+      parameters: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  is_private:
+                    title: Is Private
+                    type: boolean
+                  freeplay_spend_limit_usd:
+                    title: Freeplay Spend Limit Usd
+                    type:
+                    - integer
+                    - 'null'
+                  data_retention_days:
+                    title: Data Retention Days
+                    type:
+                    - integer
+                    - 'null'
+                  enable_eval_insights:
+                    title: Enable Eval Insights
+                    type: boolean
+                  enable_review_insights:
+                    title: Enable Review Insights
+                    type: boolean
+                required:
+                - id
+                - name
+                - is_private
+                - freeplay_spend_limit_usd
+                - data_retention_days
+                - enable_eval_insights
+                - enable_review_insights
+                title: ProjectDetail
+                type: object
+          description: 'ProjectDetail(id: uuid.UUID, name: str, is_private: bool, freeplay_spend_limit_usd: Optional[int], data_retention_days: Optional[int], enable_eval_insights: bool, enable_review_insights: bool)'
+      description: Create a new project in your workspace. Use to organize prompts, datasets, and observability data by team or application.
+      summary: Create Project
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                is_private:
+                  default: false
+                  title: Is Private
+                  type: boolean
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                freeplay_spend_limit_usd:
+                  default: null
+                  title: Freeplay Spend Limit Usd
+                  type:
+                  - integer
+                  - 'null'
+                data_retention_days:
+                  default: null
+                  title: Data Retention Days
+                  type:
+                  - integer
+                  - 'null'
+                enable_eval_insights:
+                  default: true
+                  title: Enable Eval Insights
+                  type: boolean
+                enable_review_insights:
+                  default: true
+                  title: Enable Review Insights
+                  type: boolean
+              required:
+              - name
+              title: CreateProjectRequest
+              type: object
+      operationId: post_create_project
+  /api/v2/projects/all:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  projects:
+                    items:
+                      $ref: '#/components/schemas/ProjectInfo'
+                    title: Projects
+                    type: array
+                required:
+                - projects
+                title: Projects
+                type: object
+          description: 'Projects(projects: List[server.api_routes.projects_api_v2.ProjectInfo])'
+      description: Retrieve all projects accessible to the current user. Use to discover available projects or build project selection UIs.
+      summary: List Projects
+      tags:
+      - Configuration
+      operationId: get_get_projects
+  /api/v2/projects/{project_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  is_private:
+                    title: Is Private
+                    type: boolean
+                  freeplay_spend_limit_usd:
+                    title: Freeplay Spend Limit Usd
+                    type:
+                    - integer
+                    - 'null'
+                  data_retention_days:
+                    title: Data Retention Days
+                    type:
+                    - integer
+                    - 'null'
+                  enable_eval_insights:
+                    title: Enable Eval Insights
+                    type: boolean
+                  enable_review_insights:
+                    title: Enable Review Insights
+                    type: boolean
+                required:
+                - id
+                - name
+                - is_private
+                - freeplay_spend_limit_usd
+                - data_retention_days
+                - enable_eval_insights
+                - enable_review_insights
+                title: ProjectDetail
+                type: object
+          description: 'ProjectDetail(id: uuid.UUID, name: str, is_private: bool, freeplay_spend_limit_usd: Optional[int], data_retention_days: Optional[int], enable_eval_insights: bool, enable_review_insights: bool)'
+      description: Retrieve the current project's details. Use to check project settings like spend limits or data retention.
+      summary: Get Project
+      tags:
+      - Configuration
+      operationId: get_get_project
+    put:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  is_private:
+                    title: Is Private
+                    type: boolean
+                  freeplay_spend_limit_usd:
+                    title: Freeplay Spend Limit Usd
+                    type:
+                    - integer
+                    - 'null'
+                  data_retention_days:
+                    title: Data Retention Days
+                    type:
+                    - integer
+                    - 'null'
+                  enable_eval_insights:
+                    title: Enable Eval Insights
+                    type: boolean
+                  enable_review_insights:
+                    title: Enable Review Insights
+                    type: boolean
+                required:
+                - id
+                - name
+                - is_private
+                - freeplay_spend_limit_usd
+                - data_retention_days
+                - enable_eval_insights
+                - enable_review_insights
+                title: ProjectDetail
+                type: object
+          description: 'ProjectDetail(id: uuid.UUID, name: str, is_private: bool, freeplay_spend_limit_usd: Optional[int], data_retention_days: Optional[int], enable_eval_insights: bool, enable_review_insights: bool)'
+      description: Modify project settings like name, visibility, or resource limits. Requires project admin role.
+      summary: Update Project
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  default: null
+                  title: Name
+                  type:
+                  - string
+                  - 'null'
+                is_private:
+                  default: null
+                  title: Is Private
+                  type:
+                  - boolean
+                  - 'null'
+                freeplay_spend_limit_usd:
+                  default: null
+                  title: Freeplay Spend Limit Usd
+                  type:
+                  - integer
+                  - 'null'
+                data_retention_days:
+                  default: null
+                  title: Data Retention Days
+                  type:
+                  - integer
+                  - 'null'
+                enable_eval_insights:
+                  default: null
+                  title: Enable Eval Insights
+                  type:
+                  - boolean
+                  - 'null'
+                enable_review_insights:
+                  default: null
+                  title: Enable Review Insights
+                  type:
+                  - boolean
+                  - 'null'
+              title: UpdateProjectRequest
+              type: object
+      operationId: put_update_project
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Permanently delete a project and all its associated data. Requires project admin role.
+      summary: Delete Project
+      tags:
+      - Configuration
+      operationId: delete_delete_project
+  /api/v2/projects/{project_id}/members:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Grant a user access to the project with a specified role. Requires project admin role.
+      summary: Add Project Member
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  format: uuid
+                  title: User Id
+                  type: string
+                project_role_name:
+                  $ref: '#/components/schemas/ProjectRoleName'
+              required:
+              - user_id
+              - project_role_name
+              title: AddMemberRequest
+              type: object
+      operationId: post_add_member
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/MemberInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: MembersList
+                type: object
+          description: 'MembersList(data: List[server.api_routes.projects_api_v2.MemberInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all users with access to the project and their roles. Use for access management or auditing.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Project Members
+      tags:
+      - Configuration
+      operationId: get_list_members
+  /api/v2/projects/{project_id}/members/{user_id}:
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Revoke a user's access to the project. Requires project admin role.
+      summary: Remove Project Member
+      tags:
+      - Configuration
+      operationId: delete_remove_member
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Change a user's role in the project. Requires project admin role.
+      summary: Update Project Member
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                project_role_name:
+                  $ref: '#/components/schemas/ProjectRoleName'
+              required:
+              - project_role_name
+              title: UpdateMemberRequest
+              type: object
+      operationId: patch_update_member
+  /api/v2/environments:
+    get:
+      parameters:
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/EnvironmentInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: EnvironmentsListResponse
+                type: object
+          description: 'EnvironmentsListResponse(data: list[server.api_routes.environments_api_v2.EnvironmentInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all deployment environments in your workspace. Use to discover available environments for prompt deployment.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Environments
+      tags:
+      - Configuration
+      operationId: get_list_environments
+    post:
+      parameters: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - id
+                - name
+                title: EnvironmentInfo
+                type: object
+          description: 'EnvironmentInfo(id: uuid.UUID, name: str)'
+      description: Create a new deployment environment. Use to add environments beyond Freeplay defaults, like staging or feature branches.
+      summary: Create Environment
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+              required:
+              - name
+              title: CreateEnvironmentRequest
+              type: object
+      operationId: post_create_environment
+  /api/v2/environments/{environment_id}:
+    patch:
+      parameters:
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - id
+                - name
+                title: EnvironmentInfo
+                type: object
+          description: 'EnvironmentInfo(id: uuid.UUID, name: str)'
+      description: Rename an existing environment. Use when consolidating or reorganizing deployment targets.
+      summary: Update Environment
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+              required:
+              - name
+              title: UpdateEnvironmentRequest
+              type: object
+      operationId: patch_update_environment
+    delete:
+      parameters:
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Remove an environment. Use when retiring deployment targets no longer in use.
+      summary: Delete Environment
+      tags:
+      - Configuration
+      operationId: delete_delete_environment
+  /api/v2/users:
+    post:
+      parameters: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  email_address:
+                    title: Email Address
+                    type: string
+                  first_name:
+                    title: First Name
+                    type: string
+                  last_name:
+                    title: Last Name
+                    type: string
+                  account_role:
+                    title: Account Role
+                    type: string
+                  is_deleted:
+                    title: Is Deleted
+                    type: boolean
+                  profile_picture:
+                    default: null
+                    title: Profile Picture
+                    type:
+                    - string
+                    - 'null'
+                  profile_color:
+                    default: null
+                    title: Profile Color
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - email_address
+                - first_name
+                - last_name
+                - account_role
+                - is_deleted
+                title: UserResponse
+                type: object
+          description: 'UserResponse(id: uuid.UUID, email_address: str, first_name: str, last_name: str, account_role: str, is_deleted: bool, profile_picture: Optional[str] = None, profile_color: Optional[str] = None)'
+      description: Create a new user in your workspace. Requires account admin role. Use for automated user provisioning or SCIM integrations.
+      summary: Create User
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email_address:
+                  title: Email Address
+                  type: string
+                first_name:
+                  title: First Name
+                  type: string
+                last_name:
+                  title: Last Name
+                  type: string
+                account_role:
+                  $ref: '#/components/schemas/Roles'
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                profile_picture:
+                  default: null
+                  title: Profile Picture
+                  type:
+                  - string
+                  - 'null'
+                profile_color:
+                  default: null
+                  title: Profile Color
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - email_address
+              - first_name
+              - last_name
+              - account_role
+              title: CreateUserRequest
+              type: object
+      operationId: post_create_user
+    get:
+      parameters:
+      - name: include_deleted
+        in: query
+        schema:
+          default: null
+          title: Include Deleted
+          type:
+          - boolean
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  users:
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
+                    title: Users
+                    type: array
+                required:
+                - users
+                title: UsersListResponse
+                type: object
+          description: 'UsersListResponse(users: List[server.api_routes.users_api_v2.UserResponse])'
+      description: 'Retrieve all users in your workspace. Requires account admin role. Use for user management or access auditing.
+
+        Set include_deleted=true to include soft-deleted users.'
+      summary: List Users
+      tags:
+      - Configuration
+      operationId: get_list_users
+  /api/v2/users/{user_id}:
+    get:
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  email_address:
+                    title: Email Address
+                    type: string
+                  first_name:
+                    title: First Name
+                    type: string
+                  last_name:
+                    title: Last Name
+                    type: string
+                  account_role:
+                    title: Account Role
+                    type: string
+                  is_deleted:
+                    title: Is Deleted
+                    type: boolean
+                  profile_picture:
+                    default: null
+                    title: Profile Picture
+                    type:
+                    - string
+                    - 'null'
+                  profile_color:
+                    default: null
+                    title: Profile Color
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - email_address
+                - first_name
+                - last_name
+                - account_role
+                - is_deleted
+                title: UserResponse
+                type: object
+          description: 'UserResponse(id: uuid.UUID, email_address: str, first_name: str, last_name: str, account_role: str, is_deleted: bool, profile_picture: Optional[str] = None, profile_color: Optional[str] = None)'
+      description: Retrieve a user's details by ID. Requires account admin role. Use to check user settings or role assignments.
+      summary: Get User
+      tags:
+      - Configuration
+      operationId: get_get_user
+    patch:
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  email_address:
+                    title: Email Address
+                    type: string
+                  first_name:
+                    title: First Name
+                    type: string
+                  last_name:
+                    title: Last Name
+                    type: string
+                  account_role:
+                    title: Account Role
+                    type: string
+                  is_deleted:
+                    title: Is Deleted
+                    type: boolean
+                  profile_picture:
+                    default: null
+                    title: Profile Picture
+                    type:
+                    - string
+                    - 'null'
+                  profile_color:
+                    default: null
+                    title: Profile Color
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - email_address
+                - first_name
+                - last_name
+                - account_role
+                - is_deleted
+                title: UserResponse
+                type: object
+          description: 'UserResponse(id: uuid.UUID, email_address: str, first_name: str, last_name: str, account_role: str, is_deleted: bool, profile_picture: Optional[str] = None, profile_color: Optional[str] = None)'
+      description: Modify a user's name, role, or profile settings. Requires account admin role.
+      summary: Update User
+      tags:
+      - Configuration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                first_name:
+                  default: null
+                  title: First Name
+                  type:
+                  - string
+                  - 'null'
+                last_name:
+                  default: null
+                  title: Last Name
+                  type:
+                  - string
+                  - 'null'
+                account_role:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/Roles'
+                  - type: 'null'
+                profile_picture:
+                  default: null
+                  title: Profile Picture
+                  type:
+                  - string
+                  - 'null'
+                profile_color:
+                  default: null
+                  title: Profile Color
+                  type:
+                  - string
+                  - 'null'
+              title: UpdateUserRequest
+              type: object
+      operationId: patch_update_user
+    delete:
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Remove a user from your workspace. Requires account admin role. Use for offboarding or access revocation.
+      summary: Delete User
+      tags:
+      - Configuration
+      operationId: delete_delete_user
+components:
+  schemas:
+    UserResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        email_address:
+          title: Email Address
+          type: string
+        first_name:
+          title: First Name
+          type: string
+        last_name:
+          title: Last Name
+          type: string
+        account_role:
+          title: Account Role
+          type: string
+        is_deleted:
+          title: Is Deleted
+          type: boolean
+        profile_picture:
+          default: null
+          title: Profile Picture
+          type:
+          - string
+          - 'null'
+        profile_color:
+          default: null
+          title: Profile Color
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - email_address
+      - first_name
+      - last_name
+      - account_role
+      - is_deleted
+      title: UserResponse
+      type: object
+    MemberInfo:
+      properties:
+        user_id:
+          format: uuid
+          title: User Id
+          type: string
+        project_role_name:
+          $ref: '#/components/schemas/ProjectRoleName'
+      required:
+      - user_id
+      - project_role_name
+      title: MemberInfo
+      type: object
+    ProjectRoleName:
+      enum:
+      - Project Admin
+      - Project Editor
+      - Project Analyst
+      title: ProjectRoleName
+      type: string
+    EnvironmentInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      title: EnvironmentInfo
+      type: object
+    Roles:
+      enum:
+      - Account User
+      - Account Admin
+      - Account Analyst
+      - Account Guest
+      title: Roles
+      type: string
+    ProjectInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      title: ProjectInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

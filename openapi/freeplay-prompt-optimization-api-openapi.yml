@@ -1,0 +1,385 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Prompt Optimization API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Prompt Optimization
+paths:
+  /api/v2/projects/{project_id}/prompt-optimization-jobs:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                properties:
+                  job_id:
+                    format: uuid
+                    title: Job Id
+                    type: string
+                  status:
+                    title: Status
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - job_id
+                - status
+                - created_at
+                title: PromptOptimizationJobCreatedResponse
+                type: object
+          description: 'PromptOptimizationJobCreatedResponse(job_id: uuid.UUID, status: str, created_at: datetime.datetime)'
+      description: 'Creates an asynchronous job that optimizes the specified prompt template version.
+
+        The job will analyze examples from the dataset and generate an improved prompt.
+
+
+        When `run_test_after_optimization` is True (default), the job will also run
+
+        baseline and optimized test runs and create a comparison.
+
+
+        Poll GET /prompt-optimization-jobs/{job_id} to check job status.'
+      summary: Start a new prompt optimization job
+      tags:
+      - Prompt Optimization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                prompt_template_version_id:
+                  format: uuid
+                  title: Prompt Template Version Id
+                  type: string
+                dataset_id:
+                  format: uuid
+                  title: Dataset Id
+                  type: string
+                user_instructions:
+                  default: null
+                  title: User Instructions
+                  type:
+                  - string
+                  - 'null'
+                use_best_practices:
+                  default: true
+                  title: Use Best Practices
+                  type: boolean
+                use_labels:
+                  default: true
+                  title: Use Labels
+                  type: boolean
+                use_customer_feedback:
+                  default: true
+                  title: Use Customer Feedback
+                  type: boolean
+                run_test_after_optimization:
+                  default: true
+                  title: Run Test After Optimization
+                  type: boolean
+              required:
+              - prompt_template_version_id
+              - dataset_id
+              title: StartPromptOptimizationJobRequest
+              type: object
+      operationId: post_start_prompt_optimization_job
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: status
+        in: query
+        schema:
+          default: null
+          title: Status
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PromptOptimizationJobSummary'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: PromptOptimizationJobListResponse
+                type: object
+          description: 'PromptOptimizationJobListResponse(data: list[server.api_routes.prompt_optimization_jobs_api_v2.PromptOptimizationJobSummary], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Returns a paginated list of prompt optimization jobs, sorted by creation date (newest first).
+
+        Optionally filter by status.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List prompt optimization jobs for the project
+      tags:
+      - Prompt Optimization
+      operationId: get_list_prompt_optimization_jobs
+  /api/v2/projects/{project_id}/prompt-optimization-jobs/{job_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  job_id:
+                    format: uuid
+                    title: Job Id
+                    type: string
+                  status:
+                    title: Status
+                    type: string
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  original_version_id:
+                    format: uuid
+                    title: Original Version Id
+                    type: string
+                  run_test_after_optimization:
+                    title: Run Test After Optimization
+                    type: boolean
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                  optimized_version_id:
+                    default: null
+                    title: Optimized Version Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  test_run_id:
+                    default: null
+                    title: Test Run Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  comparison_id:
+                    default: null
+                    title: Comparison Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  changes_summary:
+                    default: null
+                    title: Changes Summary
+                    type:
+                    - string
+                    - 'null'
+                  error_message:
+                    default: null
+                    title: Error Message
+                    type:
+                    - string
+                    - 'null'
+                  data_sources_used:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/DataSourcesUsed'
+                    - type: 'null'
+                  completed_at:
+                    default: null
+                    title: Completed At
+                    format: date-time
+                    type:
+                    - string
+                    - 'null'
+                  progress:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/JobProgress'
+                    - type: 'null'
+                required:
+                - job_id
+                - status
+                - prompt_template_id
+                - original_version_id
+                - run_test_after_optimization
+                - created_at
+                title: PromptOptimizationJobStatusResponse
+                type: object
+          description: 'PromptOptimizationJobStatusResponse(job_id: uuid.UUID, status: str, prompt_template_id: uuid.UUID, original_version_id: uuid.UUID, run_test_after_optimization: bool, created_at: datetime.datetime, optimized_version_id: Optional[uuid.UUID] = None, test_run_id: Optional[uuid.UUID] = None, comparison_id: Optional[uuid.UUID] = None, changes_summary: Optional[str] = None, error_message: Optional[str] = None, data_sources_used: Optional[server.api_routes.prompt_optimization_jobs_api_v2.DataSourcesUsed] = None, completed_at: Optional[datetime.datetime] = None, progress: Optional[server.api_routes.prompt_optimization_jobs_api_v2.JobProgress] = None)'
+      description: 'Returns the current status of the prompt optimization job, including progress information
+
+        for polling. When complete, includes the optimized_version_id and optionally
+
+        test_run_id and comparison_id if run_test_after_optimization was True.'
+      summary: Get prompt optimization job status and details
+      tags:
+      - Prompt Optimization
+      operationId: get_get_prompt_optimization_job
+  /api/v2/projects/{project_id}/prompt-optimization-jobs/{job_id}/cancel:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Only jobs that have not yet completed can be cancelled.
+      summary: Cancel a pending or in-progress prompt optimization job
+      tags:
+      - Prompt Optimization
+      operationId: post_cancel_prompt_optimization_job
+components:
+  schemas:
+    JobProgress:
+      properties:
+        step:
+          title: Step
+          type: integer
+        total_steps:
+          title: Total Steps
+          type: integer
+        step_name:
+          title: Step Name
+          type: string
+      required:
+      - step
+      - total_steps
+      - step_name
+      title: JobProgress
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    DataSourcesUsed:
+      properties:
+        human_labels_count:
+          title: Human Labels Count
+          type: integer
+        customer_feedback_count:
+          title: Customer Feedback Count
+          type: integer
+      required:
+      - human_labels_count
+      - customer_feedback_count
+      title: DataSourcesUsed
+      type: object
+    PromptOptimizationJobSummary:
+      properties:
+        job_id:
+          format: uuid
+          title: Job Id
+          type: string
+        status:
+          title: Status
+          type: string
+        prompt_template_id:
+          format: uuid
+          title: Prompt Template Id
+          type: string
+        original_version_id:
+          format: uuid
+          title: Original Version Id
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        completed_at:
+          default: null
+          title: Completed At
+          format: date-time
+          type:
+          - string
+          - 'null'
+        optimized_version_id:
+          default: null
+          title: Optimized Version Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      required:
+      - job_id
+      - status
+      - prompt_template_id
+      - original_version_id
+      - created_at
+      title: PromptOptimizationJobSummary
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

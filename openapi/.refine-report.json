@@ -1,38 +1,47 @@
 {
   "provider": "freeplay",
   "sources": [
-    "_original/freeplay-openapi.yml"
+    "_original/freeplay-openapi.json"
   ],
   "outputs": [
+    "freeplay-agent-datasets-api-openapi.yml",
     "freeplay-agents-api-openapi.yml",
-    "freeplay-completions-api-openapi.yml",
-    "freeplay-datasets-api-openapi.yml",
-    "freeplay-feedback-api-openapi.yml",
-    "freeplay-projects-api-openapi.yml",
+    "freeplay-configuration-api-openapi.yml",
+    "freeplay-evaluation-criteria-api-openapi.yml",
+    "freeplay-insights-api-openapi.yml",
+    "freeplay-models-api-openapi.yml",
+    "freeplay-observability-api-openapi.yml",
+    "freeplay-prompt-datasets-api-openapi.yml",
+    "freeplay-prompt-optimization-api-openapi.yml",
     "freeplay-prompt-templates-api-openapi.yml",
-    "freeplay-search-api-openapi.yml",
-    "freeplay-sessions-api-openapi.yml",
-    "freeplay-test-runs-api-openapi.yml",
-    "freeplay-traces-api-openapi.yml"
+    "freeplay-review-queues-api-openapi.yml",
+    "freeplay-saved-searches-api-openapi.yml",
+    "freeplay-search-analytics-api-openapi.yml",
+    "freeplay-tags-api-openapi.yml",
+    "freeplay-test-runs-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "freeplay-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "freeplay-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "freeplay-openapi.json: declared missing tag: Agent Datasets",
+    "freeplay-openapi.json: declared missing tag: Agents",
+    "freeplay-openapi.json: declared missing tag: Configuration",
+    "freeplay-openapi.json: declared missing tag: Evaluation Criteria",
+    "freeplay-openapi.json: declared missing tag: Insights",
+    "freeplay-openapi.json: declared missing tag: Models",
+    "freeplay-openapi.json: declared missing tag: Observability",
+    "freeplay-openapi.json: declared missing tag: Prompt Datasets",
+    "freeplay-openapi.json: declared missing tag: Prompt Optimization",
+    "freeplay-openapi.json: declared missing tag: Prompt Templates",
+    "freeplay-openapi.json: declared missing tag: Review Queues",
+    "freeplay-openapi.json: declared missing tag: Saved Searches",
+    "freeplay-openapi.json: declared missing tag: Search & Analytics",
+    "freeplay-openapi.json: declared missing tag: Tags",
+    "freeplay-openapi.json: declared missing tag: Test Runs",
+    "apis.yml register: written (+12 apis, 15 total)"
   ],
-  "skipped": [
-    "freeplay-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-completions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-datasets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-feedback-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-prompt-templates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-test-runs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "freeplay-traces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

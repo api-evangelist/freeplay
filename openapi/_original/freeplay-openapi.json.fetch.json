@@ -1,0 +1,12 @@
+{
+ "url": "https://app.freeplay.ai/openapi.json",
+ "final": "https://app.freeplay.ai/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 364455,
+ "sha256": "69c553220183207a816661fdd6ea394235ca649e90aa2c5f452a837439033366",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

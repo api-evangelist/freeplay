@@ -1,0 +1,145 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Insights API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Insights
+paths:
+  /api/v2/projects/{project_id}/insights:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: prompt_template_id
+        in: query
+        schema:
+          default: null
+          title: Prompt Template Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      - name: agent_id
+        in: query
+        schema:
+          default: null
+          title: Agent Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/Insight'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: GetInsightsResponsePayload
+                type: object
+          description: 'GetInsightsResponsePayload(data: list[server.api_routes.insights_api_v2.Insight], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve a paginated list of insights for a project. Use to discover insights or filter by prompt template or agent.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: Get Insights
+      tags:
+      - Insights
+      operationId: get_get_insights
+components:
+  schemas:
+    Insight:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        prompt_template_id:
+          title: Prompt Template Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        agent_id:
+          title: Agent Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        record_count:
+          title: Record Count
+          type: integer
+        context_source:
+          title: Context Source
+          type: string
+        first_seen:
+          title: First Seen
+          type: number
+        last_seen:
+          title: Last Seen
+          type: number
+      required:
+      - id
+      - name
+      - description
+      - prompt_template_id
+      - agent_id
+      - record_count
+      - context_source
+      - first_seen
+      - last_seen
+      title: Insight
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

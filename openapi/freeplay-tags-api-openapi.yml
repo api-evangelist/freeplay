@@ -1,0 +1,125 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Tags API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Tags
+paths:
+  /api/v2/projects/{project_id}/tags:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entity_type
+        in: query
+        schema:
+          default: null
+          title: Entity Type
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  tags:
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - tags
+                title: TagsListResponse
+                type: object
+          description: 'TagsListResponse(tags: list[server.api_routes.tags_api_v2.TagResponse])'
+      description: Retrieve all tags in a project. Optionally filter by entity type (e.g., 'dataset').
+      summary: List Project Tags
+      tags:
+      - Tags
+      operationId: get_list_tags
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  color:
+                    title: Color
+                    type: string
+                required:
+                - id
+                - name
+                - color
+                title: TagResponse
+                type: object
+          description: 'TagResponse(id: str, name: str, color: str)'
+      description: Create a new tag in the project. If color is not provided, it will be auto-assigned.
+      summary: Create Tag
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                color:
+                  default: null
+                  title: Color
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              title: CreateTagRequest
+              type: object
+      operationId: post_create_tag
+components:
+  schemas:
+    TagResponse:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        color:
+          title: Color
+          type: string
+        association_count:
+          default: 0
+          title: Association Count
+          type: integer
+      required:
+      - id
+      - name
+      - color
+      title: TagResponse
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

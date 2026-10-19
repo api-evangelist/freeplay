@@ -1,73 +1,262 @@
 openapi: 3.2.0
 info:
-  title: Freeplay HTTP Agents API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
-  termsOfService: https://freeplay.ai/terms
-  contact:
-    name: Freeplay Support
-    url: https://docs.freeplay.ai/
-  version: v2
-servers:
-- url: https://app.freeplay.ai/api/v2
-  description: Freeplay Cloud (standard instance)
-- url: https://{subdomain}.freeplay.ai/api/v2
-  description: Private / self-hosted instance (per-account subdomain)
-  variables:
-    subdomain:
-      default: app
-      description: Your Freeplay account subdomain.
+  title: Freeplay Agents API
+  version: 0.1.0
 security:
-- bearerAuth: []
+- BearerAuth: []
 tags:
 - name: Agents
-  description: List agents within a project.
 paths:
-  /projects/{project_id}/agents:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    get:
-      operationId: listAgents
-      tags:
-      - Agents
-      summary: List agents within a project with pagination
+  /api/v2/projects/{project_id}/agents:
+    post:
       parameters:
-      - name: page
-        in: query
+      - name: project_id
+        in: path
+        required: true
         schema:
-          type: integer
+          type: string
       responses:
         '200':
-          description: A list of agents.
           content:
             application/json:
               schema:
-                type: object
                 properties:
-                  agents:
-                    type: array
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - id
+                - name
+                title: AgentInfo
+                type: object
+          description: 'AgentInfo(id: uuid.UUID, name: str)'
+      description: Create a new agent in your project. Agents are used to organize and group related sessions and traces.
+      summary: Create Agent
+      tags:
+      - Agents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              title: CreateAgentRequest
+              type: object
+      operationId: post_create_agent
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: name
+        in: query
+        schema:
+          default: null
+          title: Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
                     items:
-                      $ref: '#/components/schemas/Agent'
+                      $ref: '#/components/schemas/AgentInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: GetAgentsResponsePayload
+                type: object
+          description: 'GetAgentsResponsePayload(data: list[server.api_routes.agents_api_v2.AgentInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve a paginated list of agents for your project. Optionally filter by name.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Agents
+      tags:
+      - Agents
+      operationId: get_get_agents
+  /api/v2/projects/{project_id}/agents/{agent_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - id
+                - name
+                title: AgentInfo
+                type: object
+          description: 'AgentInfo(id: uuid.UUID, name: str)'
+      description: Retrieve details for a specific agent by ID.
+      summary: Get Agent
+      tags:
+      - Agents
+      operationId: get_get_agent
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                required:
+                - id
+                - name
+                title: AgentInfo
+                type: object
+          description: 'AgentInfo(id: uuid.UUID, name: str)'
+      description: Update the name of an existing agent.
+      summary: Update Agent
+      tags:
+      - Agents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+              required:
+              - name
+              title: UpdateAgentRequest
+              type: object
+      operationId: patch_update_agent
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Delete an agent from your project. This operation cannot be undone.
+      summary: Delete Agent
+      tags:
+      - Agents
+      operationId: delete_delete_agent
 components:
   schemas:
-    Agent:
-      type: object
+    AgentInfo:
       properties:
-        agent_id:
-          type: string
+        id:
           format: uuid
-        name:
+          title: Id
           type: string
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
+        name:
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      title: AgentInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

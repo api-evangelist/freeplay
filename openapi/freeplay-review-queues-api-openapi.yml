@@ -1,0 +1,158 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Review Queues API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Review Queues
+paths:
+  /api/v2/projects/{project_id}/review-queues:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/ReviewQueueDetailInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: ReviewQueuesListResponse
+                type: object
+          description: 'ReviewQueuesListResponse(data: list[server.api_routes.review_queues_api_v2.ReviewQueueDetailInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve a paginated list of review queues for the project, including
+
+        creator, assignees, and review progress counts.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Review Queues
+      tags:
+      - Review Queues
+      operationId: get_list_review_queues
+components:
+  schemas:
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    ReviewQueueUserInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        email_address:
+          title: Email Address
+          type: string
+        first_name:
+          title: First Name
+          type: string
+        last_name:
+          title: Last Name
+          type: string
+      required:
+      - id
+      - email_address
+      - first_name
+      - last_name
+      title: ReviewQueueUserInfo
+      type: object
+    ReviewQueueDetailInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        instructions:
+          title: Instructions
+          type: string
+        created_at:
+          title: Created At
+          type: number
+        due_date:
+          title: Due Date
+          type:
+          - number
+          - 'null'
+        is_archived:
+          title: Is Archived
+          type: boolean
+        creator:
+          oneOf:
+          - $ref: '#/components/schemas/ReviewQueueUserInfo'
+          - type: 'null'
+        reviewed_count:
+          title: Reviewed Count
+          type: integer
+        total_count:
+          title: Total Count
+          type: integer
+        assignees:
+          items:
+            $ref: '#/components/schemas/ReviewQueueUserInfo'
+          title: Assignees
+          type: array
+        unassigned_count:
+          title: Unassigned Count
+          type: integer
+      required:
+      - id
+      - name
+      - instructions
+      - created_at
+      - due_date
+      - is_archived
+      - creator
+      - reviewed_count
+      - total_count
+      - assignees
+      - unassigned_count
+      title: ReviewQueueDetailInfo
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

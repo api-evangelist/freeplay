@@ -80,104 +80,6 @@ apis:
     url: https://docs.freeplay.ai/docs/quick-start
   - type: Documentation
     url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-completions-api
-  name: Freeplay Completions API
-  description: Record completions and aggregate completion statistics.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Completions
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-completions-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-datasets-api
-  name: Freeplay Datasets API
-  description: Curate datasets and their test cases.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Datasets
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-datasets-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-feedback-api
-  name: Freeplay Feedback API
-  description: Record completion-level and trace-level feedback.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Feedback
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-feedback-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-projects-api
-  name: Freeplay Projects API
-  description: List workspace projects.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Project
-  tags_raw:
-  - Projects
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-projects-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
 - aid: freeplay:freeplay-prompt-templates-api
   name: Freeplay Prompt Templates API
   description: Create, version, retrieve, and deploy prompt templates.
@@ -188,54 +90,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/freeplay-prompt-templates-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-search-api
-  name: Freeplay Search API
-  description: API-only search over sessions, traces, and completions.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Search
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-search-api-openapi.yml
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/freeplay-sdk
-  - type: APIReference
-    url: https://docs.freeplay.ai/developer-resources/api-reference
-  - type: PostmanCollection
-    url: collections/freeplay.postman_collection.json
-  - type: OpenCollection
-    url: collections/freeplay.opencollection.json
-  - type: Documentation
-    url: https://docs.freeplay.ai/getting-started/integrate
-  - type: Documentation
-    url: https://docs.freeplay.ai/docs/quick-start
-  - type: Documentation
-    url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-sessions-api
-  name: Freeplay Sessions API
-  description: List, search, and delete sessions.
-  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
-  baseURL: https://app.freeplay.ai/api/v2
-  tags:
-  - Sessions
-  properties:
-  - type: OpenAPI
-    url: openapi/freeplay-sessions-api-openapi.yml
   - type: Documentation
     url: https://docs.freeplay.ai/docs/freeplay-sdk
   - type: APIReference
@@ -274,16 +128,280 @@ apis:
     url: https://docs.freeplay.ai/docs/quick-start
   - type: Documentation
     url: https://freeplay.ai/blog/llm-evaluation
-- aid: freeplay:freeplay-traces-api
-  name: Freeplay Traces API
-  description: Record traces that group related completions.
+- aid: freeplay:freeplay-agent-datasets-api
+  name: Freeplay Agent Datasets API
+  description: The Agent Datasets API from Freeplay — 5 operation(s) for agent datasets.
   humanURL: https://docs.freeplay.ai/developer-resources/api-reference
   baseURL: https://app.freeplay.ai/api/v2
   tags:
-  - Traces
+  - Agent Datasets
   properties:
   - type: OpenAPI
-    url: openapi/freeplay-traces-api-openapi.yml
+    url: openapi/freeplay-agent-datasets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-configuration-api
+  name: Freeplay Configuration API
+  description: The Configuration API from Freeplay — 9 operation(s) for configuration.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-configuration-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-evaluation-criteria-api
+  name: Freeplay Evaluation Criteria API
+  description: The Evaluation Criteria API from Freeplay — 17 operation(s) for evaluation criteria.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Evaluation Criteria
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-evaluation-criteria-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-insights-api
+  name: Freeplay Insights API
+  description: The Insights API from Freeplay — 1 operation(s) for insights.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Insights
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-insights-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-models-api
+  name: Freeplay Models API
+  description: The Models API from Freeplay — 2 operation(s) for models.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Models
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-models-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-observability-api
+  name: Freeplay Observability API
+  description: The Observability API from Freeplay — 9 operation(s) for observability.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Observability
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-observability-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-prompt-datasets-api
+  name: Freeplay Prompt Datasets API
+  description: The Prompt Datasets API from Freeplay — 9 operation(s) for prompt datasets.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Prompt Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-prompt-datasets-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-prompt-optimization-api
+  name: Freeplay Prompt Optimization API
+  description: The Prompt Optimization API from Freeplay — 3 operation(s) for prompt optimization.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Prompt Optimization
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-prompt-optimization-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-review-queues-api
+  name: Freeplay Review Queues API
+  description: The Review Queues API from Freeplay — 1 operation(s) for review queues.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Review Queues
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-review-queues-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-saved-searches-api
+  name: Freeplay Saved Searches API
+  description: The Saved Searches API from Freeplay — 2 operation(s) for saved searches.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Saved Searches
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-saved-searches-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-search-analytics-api
+  name: Freeplay Search & Analytics API
+  description: The Search & Analytics API from Freeplay — 6 operation(s) for search & analytics.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Search & Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-search-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/freeplay-sdk
+  - type: APIReference
+    url: https://docs.freeplay.ai/developer-resources/api-reference
+  - type: PostmanCollection
+    url: collections/freeplay.postman_collection.json
+  - type: OpenCollection
+    url: collections/freeplay.opencollection.json
+  - type: Documentation
+    url: https://docs.freeplay.ai/getting-started/integrate
+  - type: Documentation
+    url: https://docs.freeplay.ai/docs/quick-start
+  - type: Documentation
+    url: https://freeplay.ai/blog/llm-evaluation
+- aid: freeplay:freeplay-tags-api
+  name: Freeplay Tags API
+  description: The Tags API from Freeplay — 1 operation(s) for tags.
+  humanURL: https://docs.freeplay.ai/developer-resources/api-reference
+  baseURL: https://app.freeplay.ai/api/v2
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/freeplay-tags-api-openapi.yml
   - type: Documentation
     url: https://docs.freeplay.ai/docs/freeplay-sdk
   - type: APIReference

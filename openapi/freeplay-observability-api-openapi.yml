@@ -1,0 +1,2151 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Observability API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Observability
+paths:
+  /api/v2/projects/{project_id}/sessions/id/{session_id}/metadata:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: Merge custom metadata into an existing session. Use to enrich sessions with post-hoc context like user ID or business metrics. See SDK method.
+      summary: Update Session Metadata
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                anyOf:
+                - type: string
+                - type: number
+                - type: integer
+                - type: boolean
+              type: object
+      operationId: patch_update_session_metadata
+  /api/v2/projects/{project_id}/sessions/{session_id}:
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses: {}
+      description: Permanently delete a session and all associated completions. Use when removing test data or honoring data deletion requests.
+      summary: Delete Session
+      tags:
+      - Observability
+      operationId: delete_delete_session
+  /api/v2/projects/{project_id}/sessions/{session_id}/completions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  completion_id:
+                    description: The session entry ID
+                    format: uuid
+                    title: Completion Id
+                    type: string
+                required:
+                - completion_id
+                title: RecordCompletionInfo
+                type: object
+          description: 'RecordCompletionInfo(completion_id: uuid.UUID = FieldInfo(annotation=NoneType, required=True, description=''The session entry ID''))'
+      description: 'Log an LLM completion with its prompt, response, and metadata. This is the primary endpoint for observability. See SDK method.
+
+
+        Sessions are created implicitly—just generate a session_id client-side (UUID v4). Optionally provide your own completion_id too to avoid waiting for Freeplay''s response.'
+      summary: Record Completion
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                messages:
+                  anyOf:
+                  - items:
+                      discriminator:
+                        mapping:
+                          assistant: '#/components/schemas/OpenAIAssistantMessage'
+                          developer: '#/components/schemas/OpenAIDeveloperMessage'
+                          system: '#/components/schemas/OpenAISystemMessage'
+                          tool: '#/components/schemas/OpenAIToolMessage'
+                          user: '#/components/schemas/OpenAIUserMessage'
+                        propertyName: role
+                      oneOf:
+                      - $ref: '#/components/schemas/OpenAISystemMessage'
+                      - $ref: '#/components/schemas/OpenAIDeveloperMessage'
+                      - $ref: '#/components/schemas/OpenAIUserMessage'
+                      - $ref: '#/components/schemas/OpenAIAssistantMessage'
+                      - $ref: '#/components/schemas/OpenAIToolMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/AnthropicMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/SimpleProviderMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/VertexMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/BedrockConverseMessage'
+                    type: array
+                  - items:
+                      anyOf:
+                      - oneOf:
+                        - $ref: '#/components/schemas/OpenAIResponsesMessageItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesFunctionCallItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesFunctionCallOutputItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesReasoningItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesBuiltinToolItem'
+                      - $ref: '#/components/schemas/SimpleProviderMessage'
+                    type: array
+                  title: Messages
+                inputs:
+                  default: null
+                  title: Inputs
+                  additionalProperties:
+                    $ref: '#/components/schemas/InputVariable'
+                  type:
+                  - object
+                  - 'null'
+                media_inputs:
+                  default: null
+                  title: Media Inputs
+                  additionalProperties:
+                    discriminator:
+                      mapping:
+                        base64: '#/components/schemas/MediaInputBase64'
+                        url: '#/components/schemas/MediaInputUrl'
+                      propertyName: type
+                    oneOf:
+                    - $ref: '#/components/schemas/MediaInputUrl'
+                    - $ref: '#/components/schemas/MediaInputBase64'
+                  type:
+                  - object
+                  - 'null'
+                tool_schema:
+                  anyOf:
+                  - items:
+                      $ref: '#/components/schemas/OpenaiTool'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/AnthropicTool'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/VertexTool'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/OpenaiResponsesTool'
+                    type: array
+                  - type: 'null'
+                  default: null
+                  title: Tool Schema
+                session_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/SessionInfo'
+                  - type: 'null'
+                trace_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/TraceInfo'
+                  - type: 'null'
+                prompt_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/PromptInfo'
+                  - type: 'null'
+                call_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/CallInfo'
+                  - type: 'null'
+                test_run_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/TestRunInfo'
+                  - type: 'null'
+                eval_results:
+                  default: null
+                  title: Eval Results
+                  additionalProperties:
+                    anyOf:
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                response_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/ResponseInfo'
+                  - type: 'null'
+                completion_id:
+                  default: null
+                  title: Completion Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                parent_id:
+                  default: null
+                  title: Parent Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                output_schema:
+                  default: null
+                  title: Output Schema
+                  additionalProperties: true
+                  type:
+                  - object
+                  - 'null'
+              required:
+              - messages
+              title: RecordPayload
+              type: object
+      operationId: post_record_completion
+  /api/v2/projects/{project_id}/sessions/{session_id}/traces/id/{trace_id}:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: 'Create or update a trace within a session. Use to group related completions in agent workflows. See SDK method.
+
+
+        Generate the trace_id client-side (UUID v4) to avoid round-trip latency.'
+      summary: Record Trace
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                input:
+                  $ref: '#/components/schemas/JSONValue'
+                output:
+                  $ref: '#/components/schemas/JSONValue'
+                parent_id:
+                  default: null
+                  title: Parent Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                test_run_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/TestRunInfo'
+                  - type: 'null'
+                agent_name:
+                  default: null
+                  title: Agent Name
+                  type:
+                  - string
+                  - 'null'
+                custom_metadata:
+                  default: null
+                  title: Custom Metadata
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                eval_results:
+                  default: null
+                  title: Eval Results
+                  additionalProperties:
+                    anyOf:
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                name:
+                  default: null
+                  title: Name
+                  type:
+                  - string
+                  - 'null'
+                kind:
+                  default: null
+                  title: Kind
+                  const: tool
+                  type:
+                  - string
+                  - 'null'
+                start_time:
+                  default: null
+                  title: Start Time
+                  format: date-time
+                  type:
+                  - string
+                  - 'null'
+                end_time:
+                  default: null
+                  title: End Time
+                  format: date-time
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - input
+              - output
+              title: TracePayload
+              type: object
+      operationId: post_record_trace
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: Update a trace's output, metadata, feedback, eval results, and/or test run info by its trace ID.
+      summary: Update Trace by ID
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                output:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/JSONValue'
+                  - type: 'null'
+                metadata:
+                  default: null
+                  title: Metadata
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                feedback:
+                  default: null
+                  title: Feedback
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                eval_results:
+                  default: null
+                  title: Eval Results
+                  additionalProperties:
+                    anyOf:
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                test_run_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/TestRunInfo'
+                  - type: 'null'
+              title: TraceUpdateRequest
+              type: object
+      operationId: patch_update_trace_by_id
+  /api/v2/projects/{project_id}/sessions/{session_id}/traces/id/{trace_id}/metadata:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: Merge custom metadata into an existing trace. Use to enrich traces with post-hoc context.
+      summary: Update Trace Metadata
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                anyOf:
+                - type: string
+                - type: number
+                - type: integer
+                - type: boolean
+              type: object
+      operationId: patch_update_trace_metadata
+  /api/v2/projects/{project_id}/sessions/{session_id}/traces/otel-span-id/{otel_span_id_hex}:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: otel_span_id_hex
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: 'Update a trace''s output, metadata, feedback, eval results, and/or test run info by its OpenTelemetry span ID (hex string).
+
+
+        Note: OTEL spans are mapped to Freeplay Traces, so we use the OTEL span ID to identify Traces.'
+      summary: Update Trace by OTEL Span ID
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                output:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/JSONValue'
+                  - type: 'null'
+                metadata:
+                  default: null
+                  title: Metadata
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                feedback:
+                  default: null
+                  title: Feedback
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                eval_results:
+                  default: null
+                  title: Eval Results
+                  additionalProperties:
+                    anyOf:
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                test_run_info:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/TestRunInfo'
+                  - type: 'null'
+              title: TraceUpdateRequest
+              type: object
+      operationId: patch_update_trace_by_otel_span_id
+  /api/v2/projects/{project_id}/completions/{completion_id}:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: completion_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  completion_id:
+                    description: The session entry ID
+                    format: uuid
+                    title: Completion Id
+                    type: string
+                required:
+                - completion_id
+                title: RecordCompletionInfo
+                type: object
+          description: 'RecordCompletionInfo(completion_id: uuid.UUID = FieldInfo(annotation=NoneType, required=True, description=''The session entry ID''))'
+      description: Append messages or evaluation results to an existing completion. Use for streaming responses or adding post-hoc evaluation metrics.
+      summary: Update Completion
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                new_messages:
+                  anyOf:
+                  - items:
+                      discriminator:
+                        mapping:
+                          assistant: '#/components/schemas/OpenAIAssistantMessage'
+                          developer: '#/components/schemas/OpenAIDeveloperMessage'
+                          system: '#/components/schemas/OpenAISystemMessage'
+                          tool: '#/components/schemas/OpenAIToolMessage'
+                          user: '#/components/schemas/OpenAIUserMessage'
+                        propertyName: role
+                      oneOf:
+                      - $ref: '#/components/schemas/OpenAISystemMessage'
+                      - $ref: '#/components/schemas/OpenAIDeveloperMessage'
+                      - $ref: '#/components/schemas/OpenAIUserMessage'
+                      - $ref: '#/components/schemas/OpenAIAssistantMessage'
+                      - $ref: '#/components/schemas/OpenAIToolMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/AnthropicMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/SimpleProviderMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/VertexMessage'
+                    type: array
+                  - items:
+                      $ref: '#/components/schemas/BedrockConverseMessage'
+                    type: array
+                  - items:
+                      anyOf:
+                      - oneOf:
+                        - $ref: '#/components/schemas/OpenAIResponsesMessageItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesFunctionCallItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesFunctionCallOutputItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesReasoningItem'
+                        - $ref: '#/components/schemas/OpenAIResponsesBuiltinToolItem'
+                      - $ref: '#/components/schemas/SimpleProviderMessage'
+                    type: array
+                  - type: 'null'
+                  default: null
+                  title: New Messages
+                eval_results:
+                  default: null
+                  title: Eval Results
+                  additionalProperties:
+                    anyOf:
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+              title: RecordUpdatePayload
+              type: object
+      operationId: post_update
+  /api/v2/projects/{project_id}/completion-feedback/id/{completion_id}:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: completion_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: 'Record end-user feedback on a completion. Use to capture thumbs up/down ratings or custom feedback attributes. See SDK method.
+
+
+        The `freeplay_feedback` field must be "positive" or "negative". Additional custom fields are supported.'
+      summary: Add Completion Feedback
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                anyOf:
+                - type: string
+                - type: number
+                - type: integer
+                - type: boolean
+              type: object
+      operationId: post_create_completion_feedback
+  /api/v2/projects/{project_id}/trace-feedback/id/{trace_id}:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: 'Record end-user feedback on a trace. Use to capture feedback on conversation turns or agent workflow outcomes. See SDK method.
+
+
+        The `freeplay_feedback` field must be "positive" or "negative". Additional custom fields are supported.'
+      summary: Add Trace Feedback
+      tags:
+      - Observability
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                anyOf:
+                - type: string
+                - type: number
+                - type: integer
+                - type: boolean
+              type: object
+      operationId: post_trace_feedback
+components:
+  schemas:
+    AnthropicFileBlock:
+      properties:
+        source:
+          discriminator:
+            mapping:
+              base64: '#/components/schemas/AnthropicBase64Source'
+              url: '#/components/schemas/AnthropicURLSource'
+            propertyName: type
+          oneOf:
+          - $ref: '#/components/schemas/AnthropicBase64Source'
+          - $ref: '#/components/schemas/AnthropicURLSource'
+          title: Source
+        type:
+          const: document
+          default: document
+          title: Type
+          type: string
+      required:
+      - source
+      title: AnthropicFileBlock
+      type: object
+    AnthropicURLSource:
+      properties:
+        url:
+          title: Url
+          type: string
+        type:
+          const: url
+          default: url
+          title: Type
+          type: string
+      required:
+      - url
+      title: AnthropicURLSource
+      type: object
+    OpenAIToolCall:
+      properties:
+        id:
+          title: Id
+          type: string
+        function:
+          $ref: '#/components/schemas/OpenAIFunction'
+        type:
+          const: function
+          default: function
+          title: Type
+          type: string
+      required:
+      - id
+      - function
+      title: OpenAIToolCall
+      type: object
+    BedrockConverseMessage:
+      properties:
+        role:
+          enum:
+          - user
+          - assistant
+          title: Role
+          type: string
+        content:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BedrockTextBlock'
+            - $ref: '#/components/schemas/BedrockJsonBlock'
+            - $ref: '#/components/schemas/BedrockImageBlock'
+            - $ref: '#/components/schemas/BedrockDocumentBlock'
+            - $ref: '#/components/schemas/BedrockToolUseBlock'
+            - $ref: '#/components/schemas/BedrockToolResultBlock'
+          title: Content
+          type: array
+      required:
+      - role
+      - content
+      title: BedrockConverseMessage
+      type: object
+    ApiStyle:
+      enum:
+      - batch
+      - default
+      title: ApiStyle
+      type: string
+    BedrockJsonBlock:
+      properties:
+        json:
+          $ref: '#/components/schemas/JSONValue'
+        type:
+          const: json
+          default: json
+          title: Type
+          type: string
+      required:
+      - json
+      title: BedrockJsonBlock
+      type: object
+    AnthropicImageBlock:
+      properties:
+        source:
+          discriminator:
+            mapping:
+              base64: '#/components/schemas/AnthropicBase64Source'
+              url: '#/components/schemas/AnthropicURLSource'
+            propertyName: type
+          oneOf:
+          - $ref: '#/components/schemas/AnthropicBase64Source'
+          - $ref: '#/components/schemas/AnthropicURLSource'
+          title: Source
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - source
+      title: AnthropicImageBlock
+      type: object
+    VertexFunctionCallPart:
+      properties:
+        functionCall:
+          $ref: '#/components/schemas/VertexFunctionCall'
+        thoughtSignature:
+          default: null
+          title: Thoughtsignature
+          type:
+          - string
+          - 'null'
+      required:
+      - functionCall
+      title: VertexFunctionCallPart
+      type: object
+    BedrockImageBlock:
+      properties:
+        image:
+          $ref: '#/components/schemas/BedrockImageContent'
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - image
+      title: BedrockImageBlock
+      type: object
+    TestRunInfo:
+      properties:
+        test_run_id:
+          format: uuid
+          title: Test Run Id
+          type: string
+        test_case_id:
+          format: uuid
+          title: Test Case Id
+          type: string
+      required:
+      - test_run_id
+      - test_case_id
+      title: TestRunInfo
+      type: object
+    BedrockImageContent:
+      properties:
+        format:
+          title: Format
+          type: string
+        source:
+          $ref: '#/components/schemas/BedrockSource'
+      required:
+      - format
+      - source
+      title: BedrockImageContent
+      type: object
+    BedrockDocumentContent:
+      properties:
+        format:
+          title: Format
+          type: string
+        name:
+          title: Name
+          type: string
+        source:
+          $ref: '#/components/schemas/BedrockSource'
+      required:
+      - format
+      - name
+      - source
+      title: BedrockDocumentContent
+      type: object
+    VertexFunctionResponse:
+      properties:
+        name:
+          title: Name
+          type: string
+        response:
+          $ref: '#/components/schemas/JSONValue'
+      required:
+      - name
+      - response
+      title: VertexFunctionResponse
+      type: object
+    SessionInfo:
+      properties:
+        custom_metadata:
+          default: null
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+      title: SessionInfo
+      type: object
+    AnthropicTextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: AnthropicTextBlock
+      type: object
+    SimpleProviderMessage:
+      properties:
+        role:
+          anyOf:
+          - const: system
+            type: string
+          - const: developer
+            type: string
+          - const: user
+            type: string
+          - const: assistant
+            type: string
+          title: Role
+        content:
+          title: Content
+          type: string
+      required:
+      - role
+      - content
+      title: SimpleProviderMessage
+      type: object
+    VertexInlineData:
+      properties:
+        mimeType:
+          title: Mimetype
+          type: string
+        data:
+          title: Data
+          type: string
+      required:
+      - mimeType
+      - data
+      title: VertexInlineData
+      type: object
+    VertexFunctionCall:
+      properties:
+        name:
+          title: Name
+          type: string
+        args:
+          additionalProperties: true
+          title: Args
+          type: object
+      required:
+      - name
+      - args
+      title: VertexFunctionCall
+      type: object
+    OpenAIFunction:
+      properties:
+        arguments:
+          title: Arguments
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - arguments
+      - name
+      title: OpenAIFunction
+      type: object
+    OpenAIResponsesFunctionCallOutputItem:
+      properties:
+        output:
+          title: Output
+          type: string
+        call_id:
+          default: null
+          title: Call Id
+          type:
+          - string
+          - 'null'
+        id:
+          default: null
+          title: Id
+          type:
+          - string
+          - 'null'
+        type:
+          const: function_call_output
+          default: function_call_output
+          title: Type
+          type: string
+      required:
+      - output
+      title: OpenAIResponsesFunctionCallOutputItem
+      type: object
+    AnthropicToolResultBlock:
+      properties:
+        tool_use_id:
+          title: Tool Use Id
+          type: string
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/AnthropicTextBlock'
+              - $ref: '#/components/schemas/AnthropicImageBlock'
+            type: array
+          title: Content
+        is_error:
+          default: null
+          title: Is Error
+          type:
+          - boolean
+          - 'null'
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_use_id
+      - content
+      title: AnthropicToolResultBlock
+      type: object
+    FunctionCall:
+      properties:
+        name:
+          title: Name
+          type: string
+        arguments:
+          title: Arguments
+          type: string
+      required:
+      - name
+      - arguments
+      title: FunctionCall
+      type: object
+    OpenAIResponsesReasoningItem:
+      properties:
+        id:
+          default: null
+          title: Id
+          type:
+          - string
+          - 'null'
+        summary:
+          default: null
+          title: Summary
+          items:
+            $ref: '#/components/schemas/JSONValue'
+          type:
+          - array
+          - 'null'
+        type:
+          const: reasoning
+          default: reasoning
+          title: Type
+          type: string
+      title: OpenAIResponsesReasoningItem
+      type: object
+    VertexTool:
+      properties:
+        functionDeclarations:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/OpenaiFunction'
+            - $ref: '#/components/schemas/VertexFunction'
+          title: Functiondeclarations
+          type: array
+      required:
+      - functionDeclarations
+      title: VertexTool
+      type: object
+    OpenAIImageURL:
+      properties:
+        url:
+          title: Url
+          type: string
+        detail:
+          default: null
+          title: Detail
+          enum:
+          - auto
+          - low
+          - high
+          type:
+          - string
+          - 'null'
+      required:
+      - url
+      title: OpenAIImageURL
+      type: object
+    OpenaiFunction:
+      properties:
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        parameters:
+          additionalProperties: true
+          title: Parameters
+          type: object
+      required:
+      - name
+      - description
+      - parameters
+      title: OpenaiFunction
+      type: object
+    OpenAIResponsesMessageItem:
+      properties:
+        role:
+          enum:
+          - user
+          - system
+          - developer
+          - assistant
+          title: Role
+          type: string
+        content:
+          anyOf:
+          - items:
+              discriminator:
+                mapping:
+                  input_file: '#/components/schemas/OpenAIResponsesInputFileContent'
+                  input_image: '#/components/schemas/OpenAIResponsesInputImageContent'
+                  input_text: '#/components/schemas/OpenAIResponsesInputTextContent'
+                  output_text: '#/components/schemas/OpenAIResponsesOutputTextContent'
+                  refusal: '#/components/schemas/OpenAIResponsesRefusalContent'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/OpenAIResponsesOutputTextContent'
+              - $ref: '#/components/schemas/OpenAIResponsesInputTextContent'
+              - $ref: '#/components/schemas/OpenAIResponsesRefusalContent'
+              - $ref: '#/components/schemas/OpenAIResponsesInputImageContent'
+              - $ref: '#/components/schemas/OpenAIResponsesInputFileContent'
+            type: array
+          - type: string
+          title: Content
+        id:
+          default: null
+          title: Id
+          type:
+          - string
+          - 'null'
+        status:
+          default: null
+          title: Status
+          type:
+          - string
+          - 'null'
+        type:
+          const: message
+          default: message
+          title: Type
+          type: string
+      required:
+      - role
+      - content
+      title: OpenAIResponsesMessageItem
+      type: object
+    OpenAITextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: OpenAITextBlock
+      type: object
+    VertexMessage:
+      properties:
+        parts:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/VertexTextPart'
+            - $ref: '#/components/schemas/VertexInlineDataPart'
+            - $ref: '#/components/schemas/VertexFunctionCallPart'
+            - $ref: '#/components/schemas/VertexFunctionResponsePart'
+          title: Parts
+          type: array
+        role:
+          default: user
+          enum:
+          - model
+          - user
+          title: Role
+          type: string
+      required:
+      - parts
+      title: VertexMessage
+      type: object
+    OpenAIResponsesBuiltinToolItem:
+      properties:
+        type:
+          title: Type
+          type: string
+        id:
+          default: null
+          title: Id
+          type:
+          - string
+          - 'null'
+        status:
+          default: null
+          title: Status
+          type:
+          - string
+          - 'null'
+      required:
+      - type
+      title: OpenAIResponsesBuiltinToolItem
+      type: object
+    OpenAIUserMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  file: '#/components/schemas/OpenAIFileBlock'
+                  image_url: '#/components/schemas/OpenAIImageBlock'
+                  input_audio: '#/components/schemas/OpenAIAudioBlock'
+                  text: '#/components/schemas/OpenAITextBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/OpenAITextBlock'
+              - $ref: '#/components/schemas/OpenAIImageBlock'
+              - $ref: '#/components/schemas/OpenAIAudioBlock'
+              - $ref: '#/components/schemas/OpenAIFileBlock'
+            type: array
+          title: Content
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: OpenAIUserMessage
+      type: object
+    UsageInfo:
+      properties:
+        prompt_tokens:
+          title: Prompt Tokens
+          type: integer
+        completion_tokens:
+          title: Completion Tokens
+          type: integer
+      required:
+      - prompt_tokens
+      - completion_tokens
+      title: UsageInfo
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    OpenaiTool:
+      properties:
+        type:
+          const: function
+          title: Type
+          type: string
+        function:
+          $ref: '#/components/schemas/OpenaiFunction'
+      required:
+      - type
+      - function
+      title: OpenaiTool
+      type: object
+    OpenAIResponsesOutputTextContent:
+      properties:
+        text:
+          title: Text
+          type: string
+        annotations:
+          items:
+            $ref: '#/components/schemas/JSONValue'
+          title: Annotations
+          type: array
+        type:
+          const: output_text
+          default: output_text
+          title: Type
+          type: string
+      required:
+      - text
+      title: OpenAIResponsesOutputTextContent
+      type: object
+    AnthropicToolUseBlock:
+      properties:
+        id:
+          title: Id
+          type: string
+        input:
+          $ref: '#/components/schemas/JSONValue'
+        name:
+          title: Name
+          type: string
+        type:
+          const: tool_use
+          default: tool_use
+          title: Type
+          type: string
+      required:
+      - id
+      - input
+      - name
+      title: AnthropicToolUseBlock
+      type: object
+    OpenAIResponsesInputImageContent:
+      properties:
+        image_url:
+          title: Image Url
+          type: string
+        detail:
+          default: null
+          title: Detail
+          enum:
+          - auto
+          - low
+          - high
+          type:
+          - string
+          - 'null'
+        type:
+          const: input_image
+          default: input_image
+          title: Type
+          type: string
+      required:
+      - image_url
+      title: OpenAIResponsesInputImageContent
+      type: object
+    BedrockToolUseBlockContent:
+      properties:
+        toolUseId:
+          title: Tooluseid
+          type: string
+        name:
+          title: Name
+          type: string
+        input:
+          $ref: '#/components/schemas/JSONValue'
+      required:
+      - toolUseId
+      - name
+      - input
+      title: BedrockToolUseBlockContent
+      type: object
+    BedrockToolResultBlock:
+      properties:
+        toolResult:
+          $ref: '#/components/schemas/BedrockToolResultBlockContent'
+        type:
+          const: toolResult
+          default: toolResult
+          title: Type
+          type: string
+      required:
+      - toolResult
+      title: BedrockToolResultBlock
+      type: object
+    OpenAIImageBlock:
+      properties:
+        image_url:
+          $ref: '#/components/schemas/OpenAIImageURL'
+        type:
+          const: image_url
+          default: image_url
+          title: Type
+          type: string
+      required:
+      - image_url
+      title: OpenAIImageBlock
+      type: object
+    VertexFunction:
+      properties:
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        parameters:
+          additionalProperties: true
+          title: Parameters
+          type: object
+      required:
+      - name
+      - description
+      - parameters
+      title: VertexFunction
+      type: object
+    OpenaiResponsesTool:
+      properties:
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        parameters:
+          additionalProperties: true
+          title: Parameters
+          type: object
+        type:
+          const: function
+          default: function
+          title: Type
+          type: string
+      required:
+      - name
+      - description
+      - parameters
+      title: OpenaiResponsesTool
+      type: object
+    MediaInputUrl:
+      properties:
+        type:
+          const: url
+          title: Type
+          type: string
+        url:
+          title: Url
+          type: string
+      required:
+      - type
+      - url
+      title: MediaInputUrl
+      type: object
+    OpenAIRefusalBlock:
+      properties:
+        refusal:
+          title: Refusal
+          type: string
+        type:
+          const: refusal
+          default: refusal
+          title: Type
+          type: string
+      required:
+      - refusal
+      title: OpenAIRefusalBlock
+      type: object
+    AnthropicTool:
+      properties:
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+        input_schema:
+          additionalProperties: true
+          title: Input Schema
+          type: object
+      required:
+      - name
+      - description
+      - input_schema
+      title: AnthropicTool
+      type: object
+    AnthropicBase64Source:
+      properties:
+        data:
+          title: Data
+          type: string
+        media_type:
+          title: Media Type
+          type: string
+        type:
+          const: base64
+          default: base64
+          title: Type
+          type: string
+      required:
+      - data
+      - media_type
+      title: AnthropicBase64Source
+      type: object
+    AnthropicMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  document: '#/components/schemas/AnthropicFileBlock'
+                  image: '#/components/schemas/AnthropicImageBlock'
+                  text: '#/components/schemas/AnthropicTextBlock'
+                  tool_result: '#/components/schemas/AnthropicToolResultBlock'
+                  tool_use: '#/components/schemas/AnthropicToolUseBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/AnthropicTextBlock'
+              - $ref: '#/components/schemas/AnthropicImageBlock'
+              - $ref: '#/components/schemas/AnthropicFileBlock'
+              - $ref: '#/components/schemas/AnthropicToolUseBlock'
+              - $ref: '#/components/schemas/AnthropicToolResultBlock'
+            type: array
+          title: Content
+        role:
+          enum:
+          - user
+          - assistant
+          title: Role
+          type: string
+      required:
+      - content
+      - role
+      title: AnthropicMessage
+      type: object
+    OpenAIAssistantMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  file: '#/components/schemas/OpenAIFileBlock'
+                  image_url: '#/components/schemas/OpenAIImageBlock'
+                  input_audio: '#/components/schemas/OpenAIAudioBlock'
+                  text: '#/components/schemas/OpenAITextBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/OpenAITextBlock'
+              - $ref: '#/components/schemas/OpenAIImageBlock'
+              - $ref: '#/components/schemas/OpenAIAudioBlock'
+              - $ref: '#/components/schemas/OpenAIFileBlock'
+            type: array
+          - items:
+              $ref: '#/components/schemas/OpenAITextBlock'
+            type: array
+          - $ref: '#/components/schemas/OpenAIRefusalBlock'
+          - type: 'null'
+          default: null
+          title: Content
+        name:
+          default: null
+          title: Name
+          type:
+          - string
+          - 'null'
+        audio:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/OpenAIAudio'
+          - type: 'null'
+        refusal:
+          default: null
+          title: Refusal
+          type:
+          - string
+          - 'null'
+        tool_calls:
+          default: null
+          title: Tool Calls
+          items:
+            $ref: '#/components/schemas/OpenAIToolCall'
+          type:
+          - array
+          - 'null'
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      title: OpenAIAssistantMessage
+      type: object
+    InputVariable:
+      anyOf:
+      - type: string
+      - type: integer
+      - type: boolean
+      - type: number
+      - additionalProperties:
+          $ref: '#/components/schemas/InputVariable'
+        type: object
+      - items:
+          $ref: '#/components/schemas/InputVariable'
+        type: array
+    VertexFunctionResponsePart:
+      properties:
+        functionResponse:
+          $ref: '#/components/schemas/VertexFunctionResponse'
+      required:
+      - functionResponse
+      title: VertexFunctionResponsePart
+      type: object
+    TraceInfo:
+      properties:
+        trace_id:
+          format: uuid
+          title: Trace Id
+          type: string
+      required:
+      - trace_id
+      title: TraceInfo
+      type: object
+    OpenAISystemMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: OpenAISystemMessage
+      type: object
+    BedrockToolResultBlockContent:
+      properties:
+        toolUseId:
+          title: Tooluseid
+          type: string
+        content:
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/BedrockTextBlock'
+            - $ref: '#/components/schemas/BedrockJsonBlock'
+            - $ref: '#/components/schemas/BedrockImageBlock'
+            - $ref: '#/components/schemas/BedrockDocumentBlock'
+          title: Content
+          type: array
+        status:
+          default: null
+          title: Status
+          enum:
+          - success
+          - error
+          type:
+          - string
+          - 'null'
+      required:
+      - toolUseId
+      - content
+      title: BedrockToolResultBlockContent
+      type: object
+    BedrockSource:
+      properties:
+        bytes:
+          title: Bytes
+          type: string
+      required:
+      - bytes
+      title: BedrockSource
+      type: object
+    OpenAIFileURL:
+      properties:
+        filename:
+          title: Filename
+          type: string
+        file_data:
+          title: File Data
+          type: string
+      required:
+      - filename
+      - file_data
+      title: OpenAIFileURL
+      type: object
+    OpenAIResponsesInputFileContent:
+      properties:
+        file_data:
+          title: File Data
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        type:
+          const: input_file
+          default: input_file
+          title: Type
+          type: string
+      required:
+      - file_data
+      title: OpenAIResponsesInputFileContent
+      type: object
+    BedrockDocumentBlock:
+      properties:
+        document:
+          $ref: '#/components/schemas/BedrockDocumentContent'
+        type:
+          const: document
+          default: document
+          title: Type
+          type: string
+      required:
+      - document
+      title: BedrockDocumentBlock
+      type: object
+    BedrockToolUseBlock:
+      properties:
+        toolUse:
+          $ref: '#/components/schemas/BedrockToolUseBlockContent'
+        type:
+          const: toolUse
+          default: toolUse
+          title: Type
+          type: string
+      required:
+      - toolUse
+      title: BedrockToolUseBlock
+      type: object
+    VertexInlineDataPart:
+      properties:
+        inlineData:
+          $ref: '#/components/schemas/VertexInlineData'
+      required:
+      - inlineData
+      title: VertexInlineDataPart
+      type: object
+    ResponseInfo:
+      properties:
+        function_call_response:
+          default: null
+          description: Deprecated and unused please pass functions through messages.
+          oneOf:
+          - $ref: '#/components/schemas/FunctionCall'
+          - type: 'null'
+      title: ResponseInfo
+      type: object
+    PromptInfo:
+      properties:
+        prompt_template_version_id:
+          format: uuid
+          title: Prompt Template Version Id
+          type: string
+        environment:
+          default: null
+          title: Environment
+          type:
+          - string
+          - 'null'
+      required:
+      - prompt_template_version_id
+      title: PromptInfo
+      type: object
+    OpenAIResponsesFunctionCallItem:
+      properties:
+        name:
+          title: Name
+          type: string
+        arguments:
+          title: Arguments
+          type: string
+        call_id:
+          default: null
+          title: Call Id
+          type:
+          - string
+          - 'null'
+        id:
+          default: null
+          title: Id
+          type:
+          - string
+          - 'null'
+        status:
+          default: null
+          title: Status
+          type:
+          - string
+          - 'null'
+        type:
+          const: function_call
+          default: function_call
+          title: Type
+          type: string
+      required:
+      - name
+      - arguments
+      title: OpenAIResponsesFunctionCallItem
+      type: object
+    VertexTextPart:
+      properties:
+        text:
+          title: Text
+          type: string
+      required:
+      - text
+      title: VertexTextPart
+      type: object
+    OpenAIDeveloperMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: OpenAIDeveloperMessage
+      type: object
+    OpenAIAudioBlock:
+      properties:
+        input_audio:
+          $ref: '#/components/schemas/OpenAIAudioBase64'
+        type:
+          const: input_audio
+          default: input_audio
+          title: Type
+          type: string
+      required:
+      - input_audio
+      title: OpenAIAudioBlock
+      type: object
+    OpenAIToolMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  file: '#/components/schemas/OpenAIFileBlock'
+                  image_url: '#/components/schemas/OpenAIImageBlock'
+                  input_audio: '#/components/schemas/OpenAIAudioBlock'
+                  text: '#/components/schemas/OpenAITextBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/OpenAITextBlock'
+              - $ref: '#/components/schemas/OpenAIImageBlock'
+              - $ref: '#/components/schemas/OpenAIAudioBlock'
+              - $ref: '#/components/schemas/OpenAIFileBlock'
+            type: array
+          title: Content
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        role:
+          const: tool
+          default: tool
+          title: Role
+          type: string
+      required:
+      - content
+      - tool_call_id
+      title: OpenAIToolMessage
+      type: object
+    OpenAIResponsesInputTextContent:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: input_text
+          default: input_text
+          title: Type
+          type: string
+      required:
+      - text
+      title: OpenAIResponsesInputTextContent
+      type: object
+    MediaInputBase64:
+      properties:
+        type:
+          const: base64
+          title: Type
+          type: string
+        data:
+          title: Data
+          type: string
+        content_type:
+          title: Content Type
+          type: string
+      required:
+      - type
+      - data
+      - content_type
+      title: MediaInputBase64
+      type: object
+    OpenAIAudio:
+      properties:
+        id:
+          title: Id
+          type: string
+        data:
+          default: null
+          title: Data
+          type:
+          - string
+          - 'null'
+        transcript:
+          default: null
+          title: Transcript
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      title: OpenAIAudio
+      type: object
+    OpenAIAudioBase64:
+      properties:
+        data:
+          title: Data
+          type: string
+        format:
+          enum:
+          - wav
+          - mp3
+          title: Format
+          type: string
+      required:
+      - data
+      - format
+      title: OpenAIAudioBase64
+      type: object
+    OpenAIResponsesRefusalContent:
+      properties:
+        refusal:
+          title: Refusal
+          type: string
+        type:
+          const: refusal
+          default: refusal
+          title: Type
+          type: string
+      required:
+      - refusal
+      title: OpenAIResponsesRefusalContent
+      type: object
+    BedrockTextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: BedrockTextBlock
+      type: object
+    CallInfo:
+      properties:
+        start_time:
+          default: null
+          title: Start Time
+          type:
+          - number
+          - 'null'
+        end_time:
+          default: null
+          title: End Time
+          type:
+          - number
+          - 'null'
+        model:
+          default: null
+          title: Model
+          type:
+          - string
+          - 'null'
+        provider:
+          default: null
+          title: Provider
+          type:
+          - string
+          - 'null'
+        provider_info:
+          default: null
+          title: Provider Info
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+        llm_parameters:
+          default: null
+          title: Llm Parameters
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+            - additionalProperties: true
+              type: object
+          type:
+          - object
+          - 'null'
+        usage:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/UsageInfo'
+          - type: 'null'
+        api_style:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/ApiStyle'
+          - type: 'null'
+      title: CallInfo
+      type: object
+    OpenAIFileBlock:
+      properties:
+        file:
+          $ref: '#/components/schemas/OpenAIFileURL'
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - file
+      title: OpenAIFileBlock
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

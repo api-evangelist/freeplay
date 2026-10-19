@@ -1,134 +1,1037 @@
 openapi: 3.2.0
 info:
-  title: Freeplay HTTP Test Runs API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
-  termsOfService: https://freeplay.ai/terms
-  contact:
-    name: Freeplay Support
-    url: https://docs.freeplay.ai/
-  version: v2
-servers:
-- url: https://app.freeplay.ai/api/v2
-  description: Freeplay Cloud (standard instance)
-- url: https://{subdomain}.freeplay.ai/api/v2
-  description: Private / self-hosted instance (per-account subdomain)
-  variables:
-    subdomain:
-      default: app
-      description: Your Freeplay account subdomain.
+  title: Freeplay Test Runs API
+  version: 0.1.0
 security:
-- bearerAuth: []
+- BearerAuth: []
 tags:
 - name: Test Runs
-  description: Create, list, and retrieve batch test runs.
 paths:
-  /projects/{project_id}/test-runs:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    get:
-      operationId: listTestRuns
-      tags:
-      - Test Runs
-      summary: List test runs for a project
+  /api/v2/projects/{project_id}/test-runs:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
-        '200':
-          description: A list of test runs.
+        '201':
           content:
             application/json:
               schema:
-                type: object
                 properties:
-                  test_runs:
-                    type: array
+                  test_run_id:
+                    title: Test Run Id
+                    type: string
+                  test_run_name:
+                    title: Test Run Name
+                    type: string
+                  test_run_description:
+                    title: Test Run Description
+                    type: string
+                  test_cases:
+                    title: Test Cases
                     items:
-                      $ref: '#/components/schemas/TestRun'
-    post:
-      operationId: createTestRun
+                      $ref: '#/components/schemas/TestCaseInfo'
+                    type:
+                    - array
+                    - 'null'
+                  trace_test_cases:
+                    title: Trace Test Cases
+                    items:
+                      $ref: '#/components/schemas/TraceTestCaseInfo'
+                    type:
+                    - array
+                    - 'null'
+                required:
+                - test_run_id
+                - test_run_name
+                - test_run_description
+                - test_cases
+                - trace_test_cases
+                title: TestRunWithTestCasesInfo
+                type: object
+          description: 'TestRunWithTestCasesInfo(test_run_id: str, test_run_name: str, test_run_description: str, test_cases: Optional[list[server.api_routes.test_runs_api_v2.TestCaseInfo]], trace_test_cases: Optional[list[server.api_routes.test_runs_api_v2.TraceTestCaseInfo]])'
+      description: ''
+      summary: Create Test Run
       tags:
       - Test Runs
-      summary: Create a test run from a dataset
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTestRunRequest'
+              properties:
+                dataset_name:
+                  title: Dataset Name
+                  type: string
+                include_outputs:
+                  default: null
+                  title: Include Outputs
+                  type:
+                  - boolean
+                  - 'null'
+                test_run_name:
+                  default: null
+                  title: Test Run Name
+                  type:
+                  - string
+                  - 'null'
+                test_run_description:
+                  default: null
+                  title: Test Run Description
+                  type:
+                  - string
+                  - 'null'
+                flavor_name:
+                  default: null
+                  title: Flavor Name
+                  type:
+                  - string
+                  - 'null'
+                target_evaluation_ids:
+                  default: null
+                  title: Target Evaluation Ids
+                  items:
+                    format: uuid
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              required:
+              - dataset_name
+              title: CreateTestRunInfo
+              type: object
+      operationId: post_create_with_test_cases
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type:
+          - integer
+          - 'null'
+      - name: page_size
+        in: query
+        schema:
+          default: 100
+          title: Page Size
+          type:
+          - integer
+          - 'null'
       responses:
         '200':
-          description: The created test run.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestRun'
-  /projects/{project_id}/test-runs/id/{test_run_id}:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - name: test_run_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    get:
-      operationId: getTestRun
+                properties:
+                  test_runs:
+                    items:
+                      $ref: '#/components/schemas/TestRunInfo'
+                    title: Test Runs
+                    type: array
+                required:
+                - test_runs
+                title: TestRunListResponseInfo
+                type: object
+          description: 'TestRunListResponseInfo(test_runs: list[shared.sqlalchemy.models.TestRun])'
+      description: '`page_size` defaults to 100, maximum 100.'
+      summary: List Test Runs
       tags:
       - Test Runs
-      summary: Retrieve test run results by ID
+      operationId: get_get_test_runs
+  /api/v2/projects/{project_id}/test-runs/id/{test_run_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_run_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
-          description: The test run and its results.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestRun'
+                properties:
+                  id:
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type:
+                    - string
+                    - 'null'
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  created_at:
+                    title: Created At
+                    type:
+                    - integer
+                    - 'null'
+                  prompt_name:
+                    title: Prompt Name
+                    type:
+                    - string
+                    - 'null'
+                  prompt_version:
+                    title: Prompt Version
+                    type:
+                    - string
+                    - 'null'
+                  model_name:
+                    title: Model Name
+                    type:
+                    - string
+                    - 'null'
+                  sessions_count:
+                    title: Sessions Count
+                    type:
+                    - integer
+                    - 'null'
+                  summary_statistics:
+                    $ref: '#/components/schemas/SummaryStatistics'
+                  status:
+                    default: null
+                    title: Status
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - name
+                - description
+                - created_at
+                - prompt_name
+                - prompt_version
+                - model_name
+                - sessions_count
+                - summary_statistics
+                title: TestRunResponseInfo
+                type: object
+          description: 'TestRunResponseInfo(test_run_summary_info: server.test_runs.test_runs_service.TestRunSummaryInfo, summary_statistics: server.test_runs.test_runs_service.SummaryStatistics)'
+      description: ''
+      summary: Get Test Run Results
+      tags:
+      - Test Runs
+      operationId: get_get_test_run_results
 components:
   schemas:
-    CreateTestRunRequest:
-      type: object
-      required:
-      - dataset_id
+    UploadedMediaReference:
       properties:
-        dataset_id:
+        base64Data:
+          title: Base64Data
           type: string
-          format: uuid
-        name:
+        contentType:
+          title: Contenttype
           type: string
-        prompt_template_version_id:
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
           type: string
-          format: uuid
-        flavor_name:
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: uploaded_file
+          default: uploaded_file
+          title: Kind
           type: string
-        include_outputs:
-          type: boolean
-    TestRun:
+      required:
+      - base64Data
+      - contentType
+      - media_type
+      title: UploadedMediaReference
       type: object
+    TestRunInfo:
       properties:
         test_run_id:
-          type: string
           format: uuid
-        name:
+          title: Test Run Id
           type: string
-        dataset_id:
-          type: string
+        test_case_id:
           format: uuid
-        status:
+          title: Test Case Id
           type: string
-        results:
-          type: array
+      required:
+      - test_run_id
+      - test_case_id
+      title: TestRunInfo
+      type: object
+    UserMessageInfo:
+      properties:
+        content:
           items:
-            type: object
-            additionalProperties: true
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: UserMessageInfo
+      type: object
+    TestCaseMediaReference:
+      properties:
+        asset_id:
+          format: uuid
+          title: Asset Id
+          type: string
+        test_case_id:
+          format: uuid
+          title: Test Case Id
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: test_case_asset
+          default: test_case_asset
+          title: Kind
+          type: string
+      required:
+      - asset_id
+      - test_case_id
+      - media_type
+      title: TestCaseMediaReference
+      type: object
+    ToolResultBlockInfo:
+      properties:
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        content:
+          items:
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_call_id
+      - content
+      title: ToolResultBlockInfo
+      type: object
+    ImageBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: ImageBlock
+      type: object
+    DeveloperMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: DeveloperMessage
+      type: object
+    DeveloperMessageInfo:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: DeveloperMessageInfo
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    SystemMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: SystemMessage
+      type: object
+    TraceTestCaseInfo:
+      properties:
+        test_case_id:
+          title: Test Case Id
+          type: string
+        input:
+          $ref: '#/components/schemas/JSONValue'
+        output:
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        custom_metadata:
+          default: null
+          title: Custom Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        test_case_type:
+          const: trace
+          default: trace
+          title: Test Case Type
+          type: string
+      required:
+      - test_case_id
+      - input
+      - output
+      title: TraceTestCaseInfo
+      type: object
+    AssistantMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      required:
+      - content
+      title: AssistantMessage
+      type: object
+    ToolCallBlockInfo:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        arguments:
+          $ref: '#/components/schemas/JSONValue'
+        thought_signature:
+          default: null
+          title: Thought Signature
+          type:
+          - string
+          - 'null'
+        type:
+          const: tool_call
+          default: tool_call
+          title: Type
+          type: string
+      required:
+      - id
+      - name
+      - arguments
+      title: ToolCallBlockInfo
+      type: object
+    SummaryStatistics:
+      properties:
+        human_evaluation:
+          default: null
+          title: Human Evaluation
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+        auto_evaluation:
+          default: null
+          title: Auto Evaluation
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+        client_evaluation:
+          default: null
+          title: Client Evaluation
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+      title: SummaryStatistics
+      type: object
+    ImageBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: ImageBlockInfo
+      type: object
+    InputVariable:
+      anyOf:
+      - type: string
+      - type: integer
+      - type: boolean
+      - type: number
+      - additionalProperties:
+          $ref: '#/components/schemas/InputVariable'
+        type: object
+      - items:
+          $ref: '#/components/schemas/InputVariable'
+        type: array
+    AssistantMessageInfo:
+      properties:
+        content:
+          items:
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      required:
+      - content
+      title: AssistantMessageInfo
+      type: object
+    TextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: TextBlock
+      type: object
+    AudioBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: audio
+          default: audio
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: AudioBlockInfo
+      type: object
+    FileBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: FileBlock
+      type: object
+    TextBlockInfo:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: TextBlockInfo
+      type: object
+    SystemMessageInfo:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: SystemMessageInfo
+      type: object
+    UserMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: UserMessage
+      type: object
+    AudioBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: audio
+          default: audio
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: AudioBlock
+      type: object
+    ToolResultBlock:
+      properties:
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_call_id
+      - content
+      title: ToolResultBlock
+      type: object
+    SessionMediaReference:
+      properties:
+        asset_id:
+          format: uuid
+          title: Asset Id
+          type: string
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: session_asset
+          default: session_asset
+          title: Kind
+          type: string
+      required:
+      - asset_id
+      - session_id
+      - media_type
+      title: SessionMediaReference
+      type: object
+    FileBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: FileBlockInfo
+      type: object
+    TestCaseInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        values:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Values
+          type: object
+        output:
+          title: Output
+          type:
+          - string
+          - 'null'
+        output_message:
+          anyOf:
+          - discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessageInfo'
+                developer: '#/components/schemas/DeveloperMessageInfo'
+                system: '#/components/schemas/SystemMessageInfo'
+                user: '#/components/schemas/UserMessageInfo'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessageInfo'
+            - $ref: '#/components/schemas/SystemMessageInfo'
+            - $ref: '#/components/schemas/DeveloperMessageInfo'
+            - $ref: '#/components/schemas/AssistantMessageInfo'
+          - $ref: '#/components/schemas/UserMessage'
+          - $ref: '#/components/schemas/AssistantMessage'
+          - $ref: '#/components/schemas/SystemMessage'
+          - $ref: '#/components/schemas/DeveloperMessage'
+          - type: 'null'
+          title: Output Message
+        history:
+          title: History
+          items:
+            anyOf:
+            - discriminator:
+                mapping:
+                  assistant: '#/components/schemas/AssistantMessageInfo'
+                  developer: '#/components/schemas/DeveloperMessageInfo'
+                  system: '#/components/schemas/SystemMessageInfo'
+                  user: '#/components/schemas/UserMessageInfo'
+                propertyName: role
+              oneOf:
+              - $ref: '#/components/schemas/UserMessageInfo'
+              - $ref: '#/components/schemas/SystemMessageInfo'
+              - $ref: '#/components/schemas/DeveloperMessageInfo'
+              - $ref: '#/components/schemas/AssistantMessageInfo'
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+          type:
+          - array
+          - 'null'
+        metadata:
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          type:
+          - object
+          - 'null'
+      required:
+      - id
+      - values
+      - output
+      - output_message
+      - history
+      - metadata
+      title: TestCaseInfo
+      type: object
+    ToolCallBlock:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        arguments:
+          $ref: '#/components/schemas/JSONValue'
+        thought_signature:
+          default: null
+          title: Thought Signature
+          type:
+          - string
+          - 'null'
+        type:
+          const: tool_call
+          default: tool_call
+          title: Type
+          type: string
+      required:
+      - id
+      - name
+      - arguments
+      title: ToolCallBlock
+      type: object
+    DownloadedMediaReference:
+      properties:
+        base64Data:
+          title: Base64Data
+          type: string
+        contentType:
+          title: Contenttype
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        asset_id:
+          default: null
+          title: Asset Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        session_id:
+          default: null
+          title: Session Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        test_case_id:
+          default: null
+          title: Test Case Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: downloaded_file
+          default: downloaded_file
+          title: Kind
+          type: string
+      required:
+      - base64Data
+      - contentType
+      - media_type
+      title: DownloadedMediaReference
+      type: object
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

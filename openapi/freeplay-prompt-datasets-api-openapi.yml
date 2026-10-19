@@ -1,0 +1,2146 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Prompt Datasets API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Prompt Datasets
+paths:
+  /api/v2/projects/{project_id}/datasets/id/{dataset_id}/test-cases:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: null
+          title: Page
+          type:
+          - string
+          - 'null'
+      - name: page_size
+        in: query
+        schema:
+          default: null
+          title: Page Size
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TestCaseInfo'
+                type: array
+          description: 'Built-in mutable sequence.
+
+
+            If no argument is given, the constructor creates a new empty list.
+
+            The argument must be an iterable if specified.'
+      description: '`page_size` defaults to 10, maximum 10.'
+      summary: List Prompt Test Cases
+      tags:
+      - Prompt Datasets
+      operationId: get_get_test_cases_by_id
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    title: Message
+                    type: string
+                required:
+                - message
+                title: SimpleResponseWithMessage
+                type: object
+          description: 'SimpleResponseWithMessage(message: str)'
+      description: 'Add test cases to a dataset using the legacy upload format. Use for bulk imports with input/output pairs.
+
+
+        Maximum 100 examples per request.'
+      summary: Upload Prompt Test Cases
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                examples:
+                  items:
+                    $ref: '#/components/schemas/TestCaseUploadWithMedia'
+                  title: Examples
+                  type: array
+              required:
+              - examples
+              title: TestCasesUploadRequest
+              type: object
+      operationId: post_upload_test_cases
+  /api/v2/projects/{project_id}/datasets/name/{dataset_name}/test-cases:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: null
+          title: Page
+          type:
+          - string
+          - 'null'
+      - name: page_size
+        in: query
+        schema:
+          default: null
+          title: Page Size
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TestCaseInfo'
+                type: array
+          description: 'Built-in mutable sequence.
+
+
+            If no argument is given, the constructor creates a new empty list.
+
+            The argument must be an iterable if specified.'
+      description: '`page_size` defaults to 10, maximum 10.'
+      summary: List Prompt Test Cases by Dataset Name
+      tags:
+      - Prompt Datasets
+      operationId: get_get_test_cases_by_name
+  /api/v2/projects/{project_id}/prompt-datasets/{dataset_id}/test-cases:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PromptTestCaseResponse'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: PromptTestCasesListResponse
+                type: object
+          description: 'PromptTestCasesListResponse(data: list[server.api_routes.prompt_datasets_api_v2.PromptTestCaseResponse], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all row-level test cases in a prompt dataset. Use to review dataset contents or export for analysis.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Prompt Test Cases
+      tags:
+      - Prompt Datasets
+      operationId: get_get_prompt_dataset_test_cases
+  /api/v2/projects/{project_id}/prompt-datasets/{dataset_id}/test-cases/bulk:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PromptTestCaseResponse'
+                    title: Data
+                    type: array
+                required:
+                - data
+                title: CreatePromptTestCasesResponse
+                type: object
+          description: 'CreatePromptTestCasesResponse(data: list[server.api_routes.prompt_datasets_api_v2.PromptTestCaseResponse])'
+      description: 'Add multiple test cases to a dataset in a single request. Use for batch imports, e.g. from CSV or production logs.
+
+
+        Maximum 100 test cases per request.'
+      summary: Bulk Create Prompt Test Cases
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                data:
+                  items:
+                    $ref: '#/components/schemas/PromptTestCase'
+                  title: Data
+                  type: array
+              required:
+              - data
+              title: CreatePromptTestCasesRequest
+              type: object
+      operationId: post_bulk_create_prompt_dataset_test_cases
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: 'Remove multiple test cases in a single request. Use for batch cleanup operations.
+
+
+        Maximum 100 test cases per request.'
+      summary: Bulk Delete Prompt Test Cases
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                test_case_ids:
+                  items:
+                    format: uuid
+                    type: string
+                  title: Test Case Ids
+                  type: array
+              required:
+              - test_case_ids
+              title: BulkDeletePromptTestCasesRequest
+              type: object
+      operationId: delete_bulk_delete_prompt_dataset_test_cases
+  /api/v2/projects/{project_id}/prompt-datasets/{dataset_id}/test-cases/{test_case_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  inputs:
+                    additionalProperties: true
+                    title: Inputs
+                    type: object
+                  output:
+                    default: null
+                    title: Output
+                    type:
+                    - string
+                    - 'null'
+                  output_message:
+                    anyOf:
+                    - discriminator:
+                        mapping:
+                          assistant: '#/components/schemas/AssistantMessageInfo'
+                          developer: '#/components/schemas/DeveloperMessageInfo'
+                          system: '#/components/schemas/SystemMessageInfo'
+                          user: '#/components/schemas/UserMessageInfo'
+                        propertyName: role
+                      oneOf:
+                      - $ref: '#/components/schemas/UserMessageInfo'
+                      - $ref: '#/components/schemas/SystemMessageInfo'
+                      - $ref: '#/components/schemas/DeveloperMessageInfo'
+                      - $ref: '#/components/schemas/AssistantMessageInfo'
+                    - $ref: '#/components/schemas/UserMessage'
+                    - $ref: '#/components/schemas/AssistantMessage'
+                    - $ref: '#/components/schemas/SystemMessage'
+                    - $ref: '#/components/schemas/DeveloperMessage'
+                    - type: 'null'
+                    default: null
+                    title: Output Message
+                  metadata:
+                    default: null
+                    title: Metadata
+                    additionalProperties:
+                      anyOf:
+                      - type: string
+                      - type: number
+                      - type: integer
+                      - type: boolean
+                    type:
+                    - object
+                    - 'null'
+                  media_inputs:
+                    default: null
+                    title: Media Inputs
+                    additionalProperties:
+                      $ref: '#/components/schemas/MediaInputBase64'
+                    type:
+                    - object
+                    - 'null'
+                  history:
+                    default: null
+                    title: History
+                    items:
+                      anyOf:
+                      - discriminator:
+                          mapping:
+                            assistant: '#/components/schemas/AssistantMessageInfo'
+                            developer: '#/components/schemas/DeveloperMessageInfo'
+                            system: '#/components/schemas/SystemMessageInfo'
+                            user: '#/components/schemas/UserMessageInfo'
+                          propertyName: role
+                        oneOf:
+                        - $ref: '#/components/schemas/UserMessageInfo'
+                        - $ref: '#/components/schemas/SystemMessageInfo'
+                        - $ref: '#/components/schemas/DeveloperMessageInfo'
+                        - $ref: '#/components/schemas/AssistantMessageInfo'
+                      - $ref: '#/components/schemas/UserMessage'
+                      - $ref: '#/components/schemas/AssistantMessage'
+                      - $ref: '#/components/schemas/SystemMessage'
+                      - $ref: '#/components/schemas/DeveloperMessage'
+                    type:
+                    - array
+                    - 'null'
+                required:
+                - id
+                - inputs
+                title: PromptTestCaseResponse
+                type: object
+          description: 'PromptTestCaseResponse(test_case: shared.sqlalchemy.models.TestCase, media_inputs: Optional[dict[str, server.project_sessions.types.MediaInputBase64]])'
+      description: Retrieve a specific test case (dataset row) by ID. Use to inspect test case details or debug test run results.
+      summary: Get Prompt Test Case
+      tags:
+      - Prompt Datasets
+      operationId: get_get_prompt_dataset_test_case
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  inputs:
+                    additionalProperties: true
+                    title: Inputs
+                    type: object
+                  output:
+                    default: null
+                    title: Output
+                    type:
+                    - string
+                    - 'null'
+                  output_message:
+                    anyOf:
+                    - discriminator:
+                        mapping:
+                          assistant: '#/components/schemas/AssistantMessageInfo'
+                          developer: '#/components/schemas/DeveloperMessageInfo'
+                          system: '#/components/schemas/SystemMessageInfo'
+                          user: '#/components/schemas/UserMessageInfo'
+                        propertyName: role
+                      oneOf:
+                      - $ref: '#/components/schemas/UserMessageInfo'
+                      - $ref: '#/components/schemas/SystemMessageInfo'
+                      - $ref: '#/components/schemas/DeveloperMessageInfo'
+                      - $ref: '#/components/schemas/AssistantMessageInfo'
+                    - $ref: '#/components/schemas/UserMessage'
+                    - $ref: '#/components/schemas/AssistantMessage'
+                    - $ref: '#/components/schemas/SystemMessage'
+                    - $ref: '#/components/schemas/DeveloperMessage'
+                    - type: 'null'
+                    default: null
+                    title: Output Message
+                  metadata:
+                    default: null
+                    title: Metadata
+                    additionalProperties:
+                      anyOf:
+                      - type: string
+                      - type: number
+                      - type: integer
+                      - type: boolean
+                    type:
+                    - object
+                    - 'null'
+                  media_inputs:
+                    default: null
+                    title: Media Inputs
+                    additionalProperties:
+                      $ref: '#/components/schemas/MediaInputBase64'
+                    type:
+                    - object
+                    - 'null'
+                  history:
+                    default: null
+                    title: History
+                    items:
+                      anyOf:
+                      - discriminator:
+                          mapping:
+                            assistant: '#/components/schemas/AssistantMessageInfo'
+                            developer: '#/components/schemas/DeveloperMessageInfo'
+                            system: '#/components/schemas/SystemMessageInfo'
+                            user: '#/components/schemas/UserMessageInfo'
+                          propertyName: role
+                        oneOf:
+                        - $ref: '#/components/schemas/UserMessageInfo'
+                        - $ref: '#/components/schemas/SystemMessageInfo'
+                        - $ref: '#/components/schemas/DeveloperMessageInfo'
+                        - $ref: '#/components/schemas/AssistantMessageInfo'
+                      - $ref: '#/components/schemas/UserMessage'
+                      - $ref: '#/components/schemas/AssistantMessage'
+                      - $ref: '#/components/schemas/SystemMessage'
+                      - $ref: '#/components/schemas/DeveloperMessage'
+                    type:
+                    - array
+                    - 'null'
+                required:
+                - id
+                - inputs
+                title: PromptTestCaseResponse
+                type: object
+          description: 'PromptTestCaseResponse(test_case: shared.sqlalchemy.models.TestCase, media_inputs: Optional[dict[str, server.project_sessions.types.MediaInputBase64]])'
+      description: Modify an existing test case's inputs, output, or metadata. Use to change ground truth output values or correct errors.
+      summary: Update Prompt Test Case
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                inputs:
+                  default: null
+                  title: Inputs
+                  additionalProperties: true
+                  type:
+                  - object
+                  - 'null'
+                output:
+                  default: null
+                  title: Output
+                  type:
+                  - string
+                  - 'null'
+                metadata:
+                  default: null
+                  title: Metadata
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: number
+                    - type: integer
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+                history:
+                  default: null
+                  title: History
+                  items:
+                    discriminator:
+                      mapping:
+                        assistant: '#/components/schemas/AssistantMessage'
+                        developer: '#/components/schemas/DeveloperMessage'
+                        system: '#/components/schemas/SystemMessage'
+                        user: '#/components/schemas/UserMessage'
+                      propertyName: role
+                    oneOf:
+                    - $ref: '#/components/schemas/UserMessage'
+                    - $ref: '#/components/schemas/SystemMessage'
+                    - $ref: '#/components/schemas/DeveloperMessage'
+                    - $ref: '#/components/schemas/AssistantMessage'
+                  type:
+                  - array
+                  - 'null'
+                media_inputs:
+                  default: null
+                  title: Media Inputs
+                  additionalProperties:
+                    discriminator:
+                      mapping:
+                        base64: '#/components/schemas/MediaInputBase64'
+                        url: '#/components/schemas/MediaInputUrl'
+                      propertyName: type
+                    oneOf:
+                    - $ref: '#/components/schemas/MediaInputUrl'
+                    - $ref: '#/components/schemas/MediaInputBase64'
+                  type:
+                  - object
+                  - 'null'
+              title: UpdatePromptTestCaseRequest
+              type: object
+      operationId: patch_update_prompt_dataset_test_case
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Remove a test case from a dataset. Use to clean up invalid or outdated test cases.
+      summary: Delete Prompt Test Case
+      tags:
+      - Prompt Datasets
+      operationId: delete_delete_prompt_dataset_test_case
+  /api/v2/projects/{project_id}/datasets/id/{dataset_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type: string
+                required:
+                - id
+                - name
+                - description
+                title: TestListInfo
+                type: object
+          description: 'TestListInfo(test_list: shared.sqlalchemy.models.Dataset)'
+      description: ''
+      summary: Get Prompt Dataset
+      tags:
+      - Prompt Datasets
+      operationId: get_get_by_id
+  /api/v2/projects/{project_id}/datasets/name/{dataset_name}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type: string
+                required:
+                - id
+                - name
+                - description
+                title: TestListInfo
+                type: object
+          description: 'TestListInfo(test_list: shared.sqlalchemy.models.Dataset)'
+      description: ''
+      summary: Get Prompt Dataset by Name
+      tags:
+      - Prompt Datasets
+      operationId: get_get_by_name
+  /api/v2/projects/{project_id}/prompt-datasets:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  input_names:
+                    items:
+                      type: string
+                    title: Input Names
+                    type: array
+                  media_input_names:
+                    items:
+                      type: string
+                    title: Media Input Names
+                    type: array
+                  support_history:
+                    title: Support History
+                    type: boolean
+                  description:
+                    default: null
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - input_names
+                - media_input_names
+                - support_history
+                title: PromptDatasetResponse
+                type: object
+          description: 'PromptDatasetResponse(dataset: shared.sqlalchemy.models.Dataset, tags: Optional[list[''TagResponse'']] = None)'
+      description: Create a new dataset for prompt-level testing. Use to organize test cases for evaluating individual prompts.
+      summary: Create Prompt-Level Dataset
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                input_names:
+                  default: null
+                  title: Input Names
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                media_input_names:
+                  default: null
+                  title: Media Input Names
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                support_history:
+                  default: false
+                  title: Support History
+                  type: boolean
+                tags:
+                  default: null
+                  title: Tags
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              required:
+              - name
+              title: CreatePromptDatasetRequest
+              type: object
+      operationId: post_create_prompt_dataset
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: id
+        in: query
+        schema:
+          default: null
+          title: Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      - name: name
+        in: query
+        schema:
+          default: null
+          title: Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PromptDatasetResponse'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: PromptDatasetsListResponse
+                type: object
+          description: 'PromptDatasetsListResponse(data: list[server.api_routes.prompt_datasets_api_v2.PromptDatasetResponse], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all prompt-level datasets in a project. Use to discover available datasets for test runs.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Prompt Datasets
+      tags:
+      - Prompt Datasets
+      operationId: get_get_prompt_datasets
+  /api/v2/projects/{project_id}/prompt-datasets/{dataset_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  input_names:
+                    items:
+                      type: string
+                    title: Input Names
+                    type: array
+                  media_input_names:
+                    items:
+                      type: string
+                    title: Media Input Names
+                    type: array
+                  support_history:
+                    title: Support History
+                    type: boolean
+                  description:
+                    default: null
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - input_names
+                - media_input_names
+                - support_history
+                title: PromptDatasetResponse
+                type: object
+          description: 'PromptDatasetResponse(dataset: shared.sqlalchemy.models.Dataset, tags: Optional[list[''TagResponse'']] = None)'
+      description: Retrieve a prompt dataset's metadata by ID. Use to check dataset configuration or input schema.
+      summary: Get Prompt Dataset
+      tags:
+      - Prompt Datasets
+      operationId: get_get_prompt_dataset
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  input_names:
+                    items:
+                      type: string
+                    title: Input Names
+                    type: array
+                  media_input_names:
+                    items:
+                      type: string
+                    title: Media Input Names
+                    type: array
+                  support_history:
+                    title: Support History
+                    type: boolean
+                  description:
+                    default: null
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - input_names
+                - media_input_names
+                - support_history
+                title: PromptDatasetResponse
+                type: object
+          description: 'PromptDatasetResponse(dataset: shared.sqlalchemy.models.Dataset, tags: Optional[list[''TagResponse'']] = None)'
+      description: Modify a prompt dataset's name, description, or input schema. Use to evolve datasets as prompt requirements change.
+      summary: Update Prompt Dataset
+      tags:
+      - Prompt Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  default: null
+                  title: Name
+                  type:
+                  - string
+                  - 'null'
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                input_names:
+                  default: null
+                  title: Input Names
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                media_input_names:
+                  default: null
+                  title: Media Input Names
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                support_history:
+                  default: null
+                  title: Support History
+                  type:
+                  - boolean
+                  - 'null'
+                tags:
+                  default: null
+                  title: Tags
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              title: UpdatePromptDatasetRequest
+              type: object
+      operationId: patch_update_prompt_dataset
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Archive a prompt dataset and its test cases. Use when retiring datasets no longer needed.
+      summary: Delete Prompt Dataset
+      tags:
+      - Prompt Datasets
+      operationId: delete_delete_prompt_dataset
+components:
+  schemas:
+    UploadedMediaReference:
+      properties:
+        base64Data:
+          title: Base64Data
+          type: string
+        contentType:
+          title: Contenttype
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: uploaded_file
+          default: uploaded_file
+          title: Kind
+          type: string
+      required:
+      - base64Data
+      - contentType
+      - media_type
+      title: UploadedMediaReference
+      type: object
+    UserMessageInfo:
+      properties:
+        content:
+          items:
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: UserMessageInfo
+      type: object
+    TestCaseMediaReference:
+      properties:
+        asset_id:
+          format: uuid
+          title: Asset Id
+          type: string
+        test_case_id:
+          format: uuid
+          title: Test Case Id
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: test_case_asset
+          default: test_case_asset
+          title: Kind
+          type: string
+      required:
+      - asset_id
+      - test_case_id
+      - media_type
+      title: TestCaseMediaReference
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    ToolResultBlockInfo:
+      properties:
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        content:
+          items:
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_call_id
+      - content
+      title: ToolResultBlockInfo
+      type: object
+    ImageBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: ImageBlock
+      type: object
+    DeveloperMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: DeveloperMessage
+      type: object
+    PromptTestCaseResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        inputs:
+          additionalProperties: true
+          title: Inputs
+          type: object
+        output:
+          default: null
+          title: Output
+          type:
+          - string
+          - 'null'
+        output_message:
+          anyOf:
+          - discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessageInfo'
+                developer: '#/components/schemas/DeveloperMessageInfo'
+                system: '#/components/schemas/SystemMessageInfo'
+                user: '#/components/schemas/UserMessageInfo'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessageInfo'
+            - $ref: '#/components/schemas/SystemMessageInfo'
+            - $ref: '#/components/schemas/DeveloperMessageInfo'
+            - $ref: '#/components/schemas/AssistantMessageInfo'
+          - $ref: '#/components/schemas/UserMessage'
+          - $ref: '#/components/schemas/AssistantMessage'
+          - $ref: '#/components/schemas/SystemMessage'
+          - $ref: '#/components/schemas/DeveloperMessage'
+          - type: 'null'
+          default: null
+          title: Output Message
+        metadata:
+          default: null
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        media_inputs:
+          default: null
+          title: Media Inputs
+          additionalProperties:
+            $ref: '#/components/schemas/MediaInputBase64'
+          type:
+          - object
+          - 'null'
+        history:
+          default: null
+          title: History
+          items:
+            anyOf:
+            - discriminator:
+                mapping:
+                  assistant: '#/components/schemas/AssistantMessageInfo'
+                  developer: '#/components/schemas/DeveloperMessageInfo'
+                  system: '#/components/schemas/SystemMessageInfo'
+                  user: '#/components/schemas/UserMessageInfo'
+                propertyName: role
+              oneOf:
+              - $ref: '#/components/schemas/UserMessageInfo'
+              - $ref: '#/components/schemas/SystemMessageInfo'
+              - $ref: '#/components/schemas/DeveloperMessageInfo'
+              - $ref: '#/components/schemas/AssistantMessageInfo'
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+          type:
+          - array
+          - 'null'
+      required:
+      - id
+      - inputs
+      title: PromptTestCaseResponse
+      type: object
+    DeveloperMessageInfo:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: developer
+          default: developer
+          title: Role
+          type: string
+      required:
+      - content
+      title: DeveloperMessageInfo
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    SystemMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: SystemMessage
+      type: object
+    AssistantMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      required:
+      - content
+      title: AssistantMessage
+      type: object
+    PromptTestCase:
+      properties:
+        inputs:
+          additionalProperties: true
+          title: Inputs
+          type: object
+        output:
+          default: null
+          title: Output
+          type:
+          - string
+          - 'null'
+        metadata:
+          default: null
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: integer
+            - type: boolean
+          type:
+          - object
+          - 'null'
+        history:
+          default: null
+          title: History
+          items:
+            discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          type:
+          - array
+          - 'null'
+        media_inputs:
+          default: null
+          title: Media Inputs
+          additionalProperties:
+            discriminator:
+              mapping:
+                base64: '#/components/schemas/MediaInputBase64'
+                url: '#/components/schemas/MediaInputUrl'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/MediaInputUrl'
+            - $ref: '#/components/schemas/MediaInputBase64'
+          type:
+          - object
+          - 'null'
+      required:
+      - inputs
+      title: PromptTestCase
+      type: object
+    MediaInputUrl:
+      properties:
+        type:
+          const: url
+          title: Type
+          type: string
+        url:
+          title: Url
+          type: string
+      required:
+      - type
+      - url
+      title: MediaInputUrl
+      type: object
+    ToolCallBlockInfo:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        arguments:
+          $ref: '#/components/schemas/JSONValue'
+        thought_signature:
+          default: null
+          title: Thought Signature
+          type:
+          - string
+          - 'null'
+        type:
+          const: tool_call
+          default: tool_call
+          title: Type
+          type: string
+      required:
+      - id
+      - name
+      - arguments
+      title: ToolCallBlockInfo
+      type: object
+    TagResponse:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        color:
+          title: Color
+          type: string
+        association_count:
+          default: 0
+          title: Association Count
+          type: integer
+      required:
+      - id
+      - name
+      - color
+      title: TagResponse
+      type: object
+    ImageBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: image
+          default: image
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: ImageBlockInfo
+      type: object
+    InputVariable:
+      anyOf:
+      - type: string
+      - type: integer
+      - type: boolean
+      - type: number
+      - additionalProperties:
+          $ref: '#/components/schemas/InputVariable'
+        type: object
+      - items:
+          $ref: '#/components/schemas/InputVariable'
+        type: array
+    AssistantMessageInfo:
+      properties:
+        content:
+          items:
+            discriminator:
+              mapping:
+                audio: '#/components/schemas/AudioBlockInfo'
+                file: '#/components/schemas/FileBlockInfo'
+                image: '#/components/schemas/ImageBlockInfo'
+                text: '#/components/schemas/TextBlockInfo'
+                tool_call: '#/components/schemas/ToolCallBlockInfo'
+                tool_result: '#/components/schemas/ToolResultBlockInfo'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/TextBlockInfo'
+            - $ref: '#/components/schemas/ToolResultBlockInfo'
+            - $ref: '#/components/schemas/ToolCallBlockInfo'
+            - $ref: '#/components/schemas/ImageBlockInfo'
+            - $ref: '#/components/schemas/AudioBlockInfo'
+            - $ref: '#/components/schemas/FileBlockInfo'
+          title: Content
+          type: array
+        role:
+          const: assistant
+          default: assistant
+          title: Role
+          type: string
+      required:
+      - content
+      title: AssistantMessageInfo
+      type: object
+    TextBlock:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: TextBlock
+      type: object
+    AudioBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: audio
+          default: audio
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: AudioBlockInfo
+      type: object
+    FileBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: FileBlock
+      type: object
+    TextBlockInfo:
+      properties:
+        text:
+          title: Text
+          type: string
+        type:
+          const: text
+          default: text
+          title: Type
+          type: string
+      required:
+      - text
+      title: TextBlockInfo
+      type: object
+    SystemMessageInfo:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          const: system
+          default: system
+          title: Role
+          type: string
+      required:
+      - content
+      title: SystemMessageInfo
+      type: object
+    UserMessage:
+      properties:
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        role:
+          const: user
+          default: user
+          title: Role
+          type: string
+      required:
+      - content
+      title: UserMessage
+      type: object
+    AudioBlock:
+      properties:
+        media_id:
+          format: uuid
+          title: Media Id
+          type: string
+        type:
+          const: audio
+          default: audio
+          title: Type
+          type: string
+      required:
+      - media_id
+      title: AudioBlock
+      type: object
+    ToolResultBlock:
+      properties:
+        tool_call_id:
+          title: Tool Call Id
+          type: string
+        content:
+          anyOf:
+          - type: string
+          - items:
+              discriminator:
+                mapping:
+                  audio: '#/components/schemas/AudioBlock'
+                  file: '#/components/schemas/FileBlock'
+                  image: '#/components/schemas/ImageBlock'
+                  text: '#/components/schemas/TextBlock'
+                  tool_call: '#/components/schemas/ToolCallBlock'
+                  tool_result: '#/components/schemas/ToolResultBlock'
+                propertyName: type
+              oneOf:
+              - $ref: '#/components/schemas/TextBlock'
+              - $ref: '#/components/schemas/ToolResultBlock'
+              - $ref: '#/components/schemas/ToolCallBlock'
+              - $ref: '#/components/schemas/ImageBlock'
+              - $ref: '#/components/schemas/AudioBlock'
+              - $ref: '#/components/schemas/FileBlock'
+            type: array
+          title: Content
+        type:
+          const: tool_result
+          default: tool_result
+          title: Type
+          type: string
+      required:
+      - tool_call_id
+      - content
+      title: ToolResultBlock
+      type: object
+    SessionMediaReference:
+      properties:
+        asset_id:
+          format: uuid
+          title: Asset Id
+          type: string
+        session_id:
+          format: uuid
+          title: Session Id
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: session_asset
+          default: session_asset
+          title: Kind
+          type: string
+      required:
+      - asset_id
+      - session_id
+      - media_type
+      title: SessionMediaReference
+      type: object
+    TestCaseUploadWithMedia:
+      properties:
+        inputs:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Inputs
+          type: object
+        history:
+          default: null
+          title: History
+          items:
+            discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          type:
+          - array
+          - 'null'
+        output:
+          default: null
+          title: Output
+          type:
+          - string
+          - 'null'
+        metadata:
+          default: null
+          title: Metadata
+          additionalProperties:
+            type: string
+          type:
+          - object
+          - 'null'
+        media_inputs:
+          default: null
+          title: Media Inputs
+          additionalProperties:
+            discriminator:
+              mapping:
+                base64: '#/components/schemas/MediaInputBase64'
+                url: '#/components/schemas/MediaInputUrl'
+              propertyName: type
+            oneOf:
+            - $ref: '#/components/schemas/MediaInputUrl'
+            - $ref: '#/components/schemas/MediaInputBase64'
+          type:
+          - object
+          - 'null'
+        output_message:
+          anyOf:
+          - discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessage'
+                developer: '#/components/schemas/DeveloperMessage'
+                system: '#/components/schemas/SystemMessage'
+                user: '#/components/schemas/UserMessage'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+          - type: 'null'
+          default: null
+          title: Output Message
+      required:
+      - inputs
+      title: TestCaseUploadWithMedia
+      type: object
+    FileBlockInfo:
+      properties:
+        media_reference:
+          discriminator:
+            mapping:
+              downloaded_file: '#/components/schemas/DownloadedMediaReference'
+              session_asset: '#/components/schemas/SessionMediaReference'
+              test_case_asset: '#/components/schemas/TestCaseMediaReference'
+              uploaded_file: '#/components/schemas/UploadedMediaReference'
+            propertyName: kind
+          oneOf:
+          - $ref: '#/components/schemas/SessionMediaReference'
+          - $ref: '#/components/schemas/TestCaseMediaReference'
+          - $ref: '#/components/schemas/UploadedMediaReference'
+          - $ref: '#/components/schemas/DownloadedMediaReference'
+          title: Media Reference
+        type:
+          const: file
+          default: file
+          title: Type
+          type: string
+      required:
+      - media_reference
+      title: FileBlockInfo
+      type: object
+    TestCaseInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        values:
+          additionalProperties:
+            $ref: '#/components/schemas/InputVariable'
+          title: Values
+          type: object
+        output:
+          title: Output
+          type:
+          - string
+          - 'null'
+        output_message:
+          anyOf:
+          - discriminator:
+              mapping:
+                assistant: '#/components/schemas/AssistantMessageInfo'
+                developer: '#/components/schemas/DeveloperMessageInfo'
+                system: '#/components/schemas/SystemMessageInfo'
+                user: '#/components/schemas/UserMessageInfo'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/UserMessageInfo'
+            - $ref: '#/components/schemas/SystemMessageInfo'
+            - $ref: '#/components/schemas/DeveloperMessageInfo'
+            - $ref: '#/components/schemas/AssistantMessageInfo'
+          - $ref: '#/components/schemas/UserMessage'
+          - $ref: '#/components/schemas/AssistantMessage'
+          - $ref: '#/components/schemas/SystemMessage'
+          - $ref: '#/components/schemas/DeveloperMessage'
+          - type: 'null'
+          title: Output Message
+        history:
+          title: History
+          items:
+            anyOf:
+            - discriminator:
+                mapping:
+                  assistant: '#/components/schemas/AssistantMessageInfo'
+                  developer: '#/components/schemas/DeveloperMessageInfo'
+                  system: '#/components/schemas/SystemMessageInfo'
+                  user: '#/components/schemas/UserMessageInfo'
+                propertyName: role
+              oneOf:
+              - $ref: '#/components/schemas/UserMessageInfo'
+              - $ref: '#/components/schemas/SystemMessageInfo'
+              - $ref: '#/components/schemas/DeveloperMessageInfo'
+              - $ref: '#/components/schemas/AssistantMessageInfo'
+            - $ref: '#/components/schemas/UserMessage'
+            - $ref: '#/components/schemas/AssistantMessage'
+            - $ref: '#/components/schemas/SystemMessage'
+            - $ref: '#/components/schemas/DeveloperMessage'
+          type:
+          - array
+          - 'null'
+        metadata:
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          type:
+          - object
+          - 'null'
+      required:
+      - id
+      - values
+      - output
+      - output_message
+      - history
+      - metadata
+      title: TestCaseInfo
+      type: object
+    MediaInputBase64:
+      properties:
+        type:
+          const: base64
+          title: Type
+          type: string
+        data:
+          title: Data
+          type: string
+        content_type:
+          title: Content Type
+          type: string
+      required:
+      - type
+      - data
+      - content_type
+      title: MediaInputBase64
+      type: object
+    ToolCallBlock:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        arguments:
+          $ref: '#/components/schemas/JSONValue'
+        thought_signature:
+          default: null
+          title: Thought Signature
+          type:
+          - string
+          - 'null'
+        type:
+          const: tool_call
+          default: tool_call
+          title: Type
+          type: string
+      required:
+      - id
+      - name
+      - arguments
+      title: ToolCallBlock
+      type: object
+    PromptDatasetResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        input_names:
+          items:
+            type: string
+          title: Input Names
+          type: array
+        media_input_names:
+          items:
+            type: string
+          title: Media Input Names
+          type: array
+        support_history:
+          title: Support History
+          type: boolean
+        description:
+          default: null
+          title: Description
+          type:
+          - string
+          - 'null'
+        tags:
+          default: null
+          items:
+            $ref: '#/components/schemas/TagResponse'
+          title: Tags
+          type: array
+      required:
+      - id
+      - name
+      - input_names
+      - media_input_names
+      - support_history
+      title: PromptDatasetResponse
+      type: object
+    DownloadedMediaReference:
+      properties:
+        base64Data:
+          title: Base64Data
+          type: string
+        contentType:
+          title: Contenttype
+          type: string
+        media_type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Media Type
+          type: string
+        asset_id:
+          default: null
+          title: Asset Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        session_id:
+          default: null
+          title: Session Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        test_case_id:
+          default: null
+          title: Test Case Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        filename:
+          default: null
+          title: Filename
+          type:
+          - string
+          - 'null'
+        kind:
+          const: downloaded_file
+          default: downloaded_file
+          title: Kind
+          type: string
+      required:
+      - base64Data
+      - contentType
+      - media_type
+      title: DownloadedMediaReference
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

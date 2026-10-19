@@ -1,328 +1,1462 @@
 openapi: 3.2.0
 info:
-  title: Freeplay HTTP Prompt Templates API
-  description: The Freeplay HTTP API provides programmatic access to the Freeplay LLM experimentation, evaluation, and observability platform.
-  termsOfService: https://freeplay.ai/terms
-  contact:
-    name: Freeplay Support
-    url: https://docs.freeplay.ai/
-  version: v2
-servers:
-- url: https://app.freeplay.ai/api/v2
-  description: Freeplay Cloud (standard instance)
-- url: https://{subdomain}.freeplay.ai/api/v2
-  description: Private / self-hosted instance (per-account subdomain)
-  variables:
-    subdomain:
-      default: app
-      description: Your Freeplay account subdomain.
+  title: Freeplay Prompt Templates API
+  version: 0.1.0
 security:
-- bearerAuth: []
+- BearerAuth: []
 tags:
 - name: Prompt Templates
-  description: Create, version, retrieve, and deploy prompt templates.
 paths:
-  /projects/{project_id}/prompt-templates:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    get:
-      operationId: listPromptTemplates
-      tags:
-      - Prompt Templates
-      summary: List prompt templates for a project
+  /api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
-        '200':
-          description: A list of prompt templates.
+        '201':
           content:
             application/json:
               schema:
-                type: object
                 properties:
-                  prompt_templates:
-                    type: array
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                  content:
                     items:
-                      $ref: '#/components/schemas/PromptTemplate'
-    post:
-      operationId: createPromptTemplate
-      tags:
-      - Prompt Templates
-      summary: Create a prompt template
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePromptTemplateRequest'
-      responses:
-        '200':
-          description: The created prompt template.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptTemplate'
-  /projects/{project_id}/prompt-templates/all/{environment_name}:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - name: environment_name
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Environment name (e.g. latest, production).
-    get:
-      operationId: getAllPromptTemplatesInEnvironment
-      tags:
-      - Prompt Templates
-      summary: Retrieve all prompt templates deployed in an environment
-      responses:
-        '200':
-          description: All prompt templates in the environment.
-          content:
-            application/json:
-              schema:
+                      anyOf:
+                      - $ref: '#/components/schemas/ChatMessageWithMediaSlot'
+                      - $ref: '#/components/schemas/ChatMessage'
+                      - $ref: '#/components/schemas/HistoryPlaceholder'
+                    title: Content
+                    type: array
+                  tool_schema:
+                    title: Tool Schema
+                    items:
+                      $ref: '#/components/schemas/NormalizedToolSchema'
+                    type:
+                    - array
+                    - 'null'
+                  output_schema:
+                    title: Output Schema
+                    additionalProperties: true
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                - content
+                - tool_schema
+                - output_schema
+                title: PlainPromptTemplate
                 type: object
-                properties:
-                  prompt_templates:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/PromptTemplateVersion'
-  /projects/{project_id}/prompt-templates/name/{template_name}:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - $ref: '#/components/parameters/TemplateName'
-    post:
-      operationId: getPromptTemplateByName
+          description: 'PlainPromptTemplate(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID, content: list[typing.Union[server.project_sessions.prompt_template_model.ChatMessageWithMediaSlot, server.project_sessions.prompt_template_model.ChatMessage, server.project_sessions.prompt_template_model.HistoryPlaceholder]], tool_schema: Optional[list[shared.common.NormalizedToolSchema]], output_schema: Optional[dict[str, Any]])'
+      description: 'Create a new version of an existing prompt template. Freeplay assigns a random ID. Use when you have the template ID from a previous API call.
+
+
+        **Version Creation Semantics:**
+
+
+        A new version is created only if there is no existing version with identical:
+
+        - Content (prompt messages)
+
+        - Model
+
+        - LLM parameters
+
+        - Version name (if provided)
+
+        - Version description
+
+        - Tool schema
+
+        - Output schema
+
+
+        If an identical version exists in any of the target environments, that version is reused and its environments are updated to match the requested environments. This ensures you never create duplicate versions with the same configuration.
+
+
+        **Environment Deployment:**
+
+
+        - When creating a new version, it will be deployed to the specified environments (or "latest" if none specified)
+
+        - When reuploading an existing prompt template with a new environment, the environments on that prompt template version will be updated
+
+
+        These checks are performed so that you can safely upload prompt templates without worrying that you will be creating duplicate versions. This is especially useful in development workflows where your prompts are stored in code.'
+      summary: Create prompt template version by ID
       tags:
       - Prompt Templates
-      summary: Retrieve a prompt template by name (formatted or raw)
       requestBody:
-        required: false
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GetPromptTemplateRequest'
-      responses:
-        '200':
-          description: The requested prompt template version.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptTemplateVersion'
-  /projects/{project_id}/prompt-templates/name/{template_name}/versions:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - $ref: '#/components/parameters/TemplateName'
-    post:
-      operationId: createPromptTemplateVersionByName
-      tags:
-      - Prompt Templates
-      summary: Create a new version of a prompt template by name
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePromptTemplateVersionRequest'
-      responses:
-        '200':
-          description: The created prompt template version.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptTemplateVersion'
-  /projects/{project_id}/prompt-templates/id/{template_id}/versions:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - $ref: '#/components/parameters/TemplateId'
-    post:
-      operationId: createPromptTemplateVersionById
-      tags:
-      - Prompt Templates
-      summary: Create a new version of a prompt template by template ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePromptTemplateVersionRequest'
-      responses:
-        '200':
-          description: The created prompt template version.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptTemplateVersion'
-  /projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - $ref: '#/components/parameters/TemplateId'
-    - $ref: '#/components/parameters/VersionId'
-    post:
-      operationId: getPromptTemplateVersionById
-      tags:
-      - Prompt Templates
-      summary: Retrieve a specific prompt template version by ID
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/GetPromptTemplateRequest'
-      responses:
-        '200':
-          description: The requested prompt template version.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PromptTemplateVersion'
-  /projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}/environments:
-    parameters:
-    - $ref: '#/components/parameters/ProjectId'
-    - $ref: '#/components/parameters/TemplateId'
-    - $ref: '#/components/parameters/VersionId'
-    post:
-      operationId: assignPromptTemplateVersionToEnvironments
-      tags:
-      - Prompt Templates
-      summary: Deploy / assign a prompt template version to one or more environments
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
               properties:
-                environments:
+                template_messages:
+                  items:
+                    anyOf:
+                    - $ref: '#/components/schemas/PromptTemplateMessageInfo'
+                    - $ref: '#/components/schemas/HistoryPlaceholderInfo'
+                  title: Template Messages
                   type: array
+                model:
+                  title: Model
+                  type: string
+                provider:
+                  title: Provider
+                  type: string
+                version_name:
+                  default: null
+                  title: Version Name
+                  type:
+                  - string
+                  - 'null'
+                version_description:
+                  default: null
+                  title: Version Description
+                  type:
+                  - string
+                  - 'null'
+                llm_parameters:
+                  default: null
+                  title: Llm Parameters
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                    - additionalProperties: true
+                      type: object
+                  type:
+                  - object
+                  - 'null'
+                tool_schema:
+                  default: null
+                  title: Tool Schema
+                  items:
+                    $ref: '#/components/schemas/NormalizedToolSchema'
+                  type:
+                  - array
+                  - 'null'
+                output_schema:
+                  default: null
+                  title: Output Schema
+                  additionalProperties: true
+                  type:
+                  - object
+                  - 'null'
+                environments:
+                  default: null
+                  title: Environments
                   items:
                     type: string
+                  type:
+                  - array
+                  - 'null'
               required:
-              - environments
+              - template_messages
+              - model
+              - provider
+              title: CreateTemplateVersionRequest
+              type: object
+      operationId: post_create_template_version_by_id
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: from_version
+        in: query
+        schema:
+          default: null
+          title: From Version
+          type:
+          - string
+          - 'null'
       responses:
         '200':
-          description: The updated prompt template version with environment assignments.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PromptTemplateVersion'
-components:
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The Freeplay project ID.
-    TemplateId:
-      name: template_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    VersionId:
-      name: version_id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-    TemplateName:
-      name: template_name
-      in: path
-      required: true
-      schema:
-        type: string
-  schemas:
-    CreatePromptTemplateVersionRequest:
-      type: object
-      required:
-      - messages
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PlainPromptTemplate'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: PromptTemplateVersionListResponse
+                type: object
+          description: 'PromptTemplateVersionListResponse(data: list[server.api_routes.prompt_templates_api_v2.PlainPromptTemplate], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all versions of a prompt template. Use to view version history or compare changes over time.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List prompt template versions
+      tags:
+      - Prompt Templates
+      operationId: get_list_prompt_template_versions
+  /api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
           type: string
-        model_parameters:
-          type: object
-          additionalProperties: true
-    Message:
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                  content:
+                    items:
+                      anyOf:
+                      - $ref: '#/components/schemas/ChatMessageWithMediaSlot'
+                      - $ref: '#/components/schemas/ChatMessage'
+                      - $ref: '#/components/schemas/HistoryPlaceholder'
+                    title: Content
+                    type: array
+                  tool_schema:
+                    title: Tool Schema
+                    items:
+                      $ref: '#/components/schemas/NormalizedToolSchema'
+                    type:
+                    - array
+                    - 'null'
+                  output_schema:
+                    title: Output Schema
+                    additionalProperties: true
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                - content
+                - tool_schema
+                - output_schema
+                title: PlainPromptTemplate
+                type: object
+          description: 'PlainPromptTemplate(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID, content: list[typing.Union[server.project_sessions.prompt_template_model.ChatMessageWithMediaSlot, server.project_sessions.prompt_template_model.ChatMessage, server.project_sessions.prompt_template_model.HistoryPlaceholder]], tool_schema: Optional[list[shared.common.NormalizedToolSchema]], output_schema: Optional[dict[str, Any]])'
+      description: ''
+      summary: Get prompt template version by ID
+      tags:
+      - Prompt Templates
+      operationId: get_get_by_template_version_id
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment
+        in: query
+        schema:
+          default: null
+          title: Environment
+          type:
+          - string
+          - 'null'
+      - name: format
+        in: query
+        schema:
+          default: null
+          title: Format
+          type:
+          - string
+          - 'null'
+      - name: flavor_name
+        in: query
+        schema:
+          default: null
+          title: Flavor Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                title: PromptTemplateVersion
+                type: object
+          description: 'PromptTemplateVersion(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID)'
+      description: ''
+      summary: Get bound prompt template version by ID
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                $ref: '#/components/schemas/JSONValue'
+              type: object
+      operationId: post_get_bound_by_template_version_id
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: ''
+      summary: Delete prompt template version
+      tags:
+      - Prompt Templates
+      operationId: delete_delete_template_version
+  /api/v2/projects/{project_id}/prompt-templates/id/{template_id}/versions/{version_id}/environments:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Deploy a prompt version to one or more environments. Use to promote versions through dev, staging, and production.
+      summary: Update environment for prompt template version
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                environments:
+                  items:
+                    type: string
+                  title: Environments
+                  type: array
+              required:
+              - environments
+              title: UpdateTemplateVersionEnvironmentsRequest
+              type: object
+      operationId: post_update_template_version_environments
+  /api/v2/projects/{project_id}/prompt-templates/name/{template_name}/versions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: create_template_if_not_exists
+        in: query
+        schema:
+          default: null
+          title: Create Template If Not Exists
+          type:
+          - boolean
+          - 'null'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                  content:
+                    items:
+                      anyOf:
+                      - $ref: '#/components/schemas/ChatMessageWithMediaSlot'
+                      - $ref: '#/components/schemas/ChatMessage'
+                      - $ref: '#/components/schemas/HistoryPlaceholder'
+                    title: Content
+                    type: array
+                  tool_schema:
+                    title: Tool Schema
+                    items:
+                      $ref: '#/components/schemas/NormalizedToolSchema'
+                    type:
+                    - array
+                    - 'null'
+                  output_schema:
+                    title: Output Schema
+                    additionalProperties: true
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                - content
+                - tool_schema
+                - output_schema
+                title: PlainPromptTemplate
+                type: object
+          description: 'PlainPromptTemplate(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID, content: list[typing.Union[server.project_sessions.prompt_template_model.ChatMessageWithMediaSlot, server.project_sessions.prompt_template_model.ChatMessage, server.project_sessions.prompt_template_model.HistoryPlaceholder]], tool_schema: Optional[list[shared.common.NormalizedToolSchema]], output_schema: Optional[dict[str, Any]])'
+      description: 'Create a new version of a prompt template, referenced by a string or name you define. See SDK method.
+
+
+        Set `create_template_if_not_exists=true` to auto-create the template if it doesn''t exist.
+
+
+        **Version Creation Semantics:**
+
+
+        A new version is created only if there is no existing version with identical:
+
+        - Content (prompt messages)
+
+        - Model
+
+        - LLM parameters
+
+        - Version name (if provided)
+
+        - Version description
+
+        - Tool schema
+
+        - Output schema
+
+
+        If an identical version exists in any of the target environments, that version is reused and its environments are updated to match the requested environments. This ensures you never create duplicate versions with the same configuration.
+
+
+        **Environment Deployment:**
+
+
+        - When creating a new version, it will be deployed to the specified environments (or "latest" if none specified)
+
+        - When reuploading an existing prompt template with a new environment, the environments on that prompt template version will be updated
+
+
+        These checks are performed so that you can safely upload prompt templates without worrying that you will be creating duplicate versions. This is especially useful in development workflows where your prompts are stored in code.'
+      summary: Create prompt template version by name
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                template_messages:
+                  items:
+                    anyOf:
+                    - $ref: '#/components/schemas/PromptTemplateMessageInfo'
+                    - $ref: '#/components/schemas/HistoryPlaceholderInfo'
+                  title: Template Messages
+                  type: array
+                model:
+                  title: Model
+                  type: string
+                provider:
+                  title: Provider
+                  type: string
+                version_name:
+                  default: null
+                  title: Version Name
+                  type:
+                  - string
+                  - 'null'
+                version_description:
+                  default: null
+                  title: Version Description
+                  type:
+                  - string
+                  - 'null'
+                llm_parameters:
+                  default: null
+                  title: Llm Parameters
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                    - additionalProperties: true
+                      type: object
+                  type:
+                  - object
+                  - 'null'
+                tool_schema:
+                  default: null
+                  title: Tool Schema
+                  items:
+                    $ref: '#/components/schemas/NormalizedToolSchema'
+                  type:
+                  - array
+                  - 'null'
+                output_schema:
+                  default: null
+                  title: Output Schema
+                  additionalProperties: true
+                  type:
+                  - object
+                  - 'null'
+                environments:
+                  default: null
+                  title: Environments
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              required:
+              - template_messages
+              - model
+              - provider
+              title: CreateTemplateVersionRequest
+              type: object
+      operationId: post_create_template_version_by_name
+  /api/v2/projects/{project_id}/prompt-templates:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PromptTemplateInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: PromptTemplateListResponse
+                type: object
+          description: 'PromptTemplateListResponse(data: list[server.api_routes.prompt_templates_api_v2.PromptTemplateInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all prompt templates in a project. Use to discover available templates or build template management UIs.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List prompt templates
+      tags:
+      - Prompt Templates
+      operationId: get_list_prompt_templates
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                required:
+                - id
+                title: CreatePromptTemplateResponse
+                type: object
+          description: 'CreatePromptTemplateResponse(id: uuid.UUID)'
+      description: Create a new prompt template without any versions. Use when you need to reserve a template name before adding versions.
+      summary: Create prompt template
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              title: CreatePromptTemplateRequest
+              type: object
+      operationId: post_create_prompt_template
+  /api/v2/projects/{project_id}/prompt-templates/all/{environment}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_templates:
+                    items:
+                      $ref: '#/components/schemas/PlainPromptTemplate'
+                    title: Prompt Templates
+                    type: array
+                required:
+                - prompt_templates
+                title: PromptTemplatesByEnvironmentResponse
+                type: object
+          description: 'PromptTemplatesByEnvironmentResponse(prompt_templates: list[server.api_routes.prompt_templates_api_v2.PlainPromptTemplate])'
+      description: ''
+      summary: Get all prompt templates by environment
+      tags:
+      - Prompt Templates
+      operationId: get_get_all_by_environment
+  /api/v2/projects/{project_id}/prompt-templates/id/{template_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  latest_template_version_id:
+                    default: null
+                    title: Latest Template Version Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - name
+                title: PromptTemplateInfo
+                type: object
+          description: 'PromptTemplateInfo(id: uuid.UUID, name: str, latest_template_version_id: Optional[uuid.UUID] = None)'
+      description: Retrieve a prompt template's metadata by ID. Use to check if a template exists or get its latest version ID.
+      summary: Get prompt template
+      tags:
+      - Prompt Templates
+      operationId: get_get_prompt_template
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Rename a prompt template. Use when refactoring template names across your codebase.
+      summary: Update prompt template
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+              required:
+              - name
+              title: UpdatePromptTemplateRequest
+              type: object
+      operationId: patch_update_prompt_template
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: template_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Archive a prompt template and all its versions. Use when retiring templates that are no longer needed. This is a soft delete.
+      summary: Delete prompt template
+      tags:
+      - Prompt Templates
+      operationId: delete_delete_prompt_template
+  /api/v2/projects/{project_id}/prompt-templates/name/{name}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment
+        in: query
+        schema:
+          default: null
+          title: Environment
+          type:
+          - string
+          - 'null'
+      - name: format
+        in: query
+        schema:
+          default: null
+          title: Format
+          type:
+          - string
+          - 'null'
+      - name: flavor_name
+        in: query
+        schema:
+          default: null
+          title: Flavor Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                  content:
+                    items:
+                      anyOf:
+                      - $ref: '#/components/schemas/ChatMessageWithMediaSlot'
+                      - $ref: '#/components/schemas/ChatMessage'
+                      - $ref: '#/components/schemas/HistoryPlaceholder'
+                    title: Content
+                    type: array
+                  tool_schema:
+                    title: Tool Schema
+                    items:
+                      $ref: '#/components/schemas/NormalizedToolSchema'
+                    type:
+                    - array
+                    - 'null'
+                  output_schema:
+                    title: Output Schema
+                    additionalProperties: true
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                - content
+                - tool_schema
+                - output_schema
+                title: PlainPromptTemplate
+                type: object
+          description: 'PlainPromptTemplate(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID, content: list[typing.Union[server.project_sessions.prompt_template_model.ChatMessageWithMediaSlot, server.project_sessions.prompt_template_model.ChatMessage, server.project_sessions.prompt_template_model.HistoryPlaceholder]], tool_schema: Optional[list[shared.common.NormalizedToolSchema]], output_schema: Optional[dict[str, Any]])'
+      description: ''
+      summary: Get prompt template by name and environment
+      tags:
+      - Prompt Templates
+      operationId: get_get_by_name_and_environment
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment
+        in: query
+        schema:
+          default: null
+          title: Environment
+          type:
+          - string
+          - 'null'
+      - name: format
+        in: query
+        schema:
+          default: null
+          title: Format
+          type:
+          - string
+          - 'null'
+      - name: flavor_name
+        in: query
+        schema:
+          default: null
+          title: Flavor Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  prompt_template_id:
+                    format: uuid
+                    title: Prompt Template Id
+                    type: string
+                  prompt_template_version_id:
+                    format: uuid
+                    title: Prompt Template Version Id
+                    type: string
+                  prompt_template_name:
+                    title: Prompt Template Name
+                    type: string
+                  version_name:
+                    title: Version Name
+                    type:
+                    - string
+                    - 'null'
+                  version_description:
+                    title: Version Description
+                    type:
+                    - string
+                    - 'null'
+                  metadata:
+                    $ref: '#/components/schemas/PromptTemplateMetadata'
+                  format_version:
+                    title: Format Version
+                    type: integer
+                  project_id:
+                    format: uuid
+                    title: Project Id
+                    type: string
+                required:
+                - prompt_template_id
+                - prompt_template_version_id
+                - prompt_template_name
+                - version_name
+                - version_description
+                - metadata
+                - format_version
+                - project_id
+                title: PromptTemplateVersion
+                type: object
+          description: 'PromptTemplateVersion(prompt_template_id: uuid.UUID, prompt_template_version_id: uuid.UUID, prompt_template_name: str, version_name: Optional[str], version_description: Optional[str], metadata: server.api_routes.prompt_templates_api_v2.PromptTemplateMetadata, format_version: int, project_id: uuid.UUID)'
+      description: ''
+      summary: Get bound prompt template by name and environment
+      tags:
+      - Prompt Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                $ref: '#/components/schemas/JSONValue'
+              type: object
+      operationId: post_get_bound_by_name_and_environment
+components:
+  schemas:
+    MediaSlot:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+          - audio
+          - video
+          - image
+          - file
+          title: Type
+          type: string
+        placeholder_name:
+          title: Placeholder Name
+          type: string
+      required:
+      - type
+      - placeholder_name
+      title: MediaSlot
       type: object
+    ChatMessage:
       properties:
         role:
+          title: Role
           type: string
+        content:
+          title: Content
+          type: string
+      required:
+      - role
+      - content
+      title: ChatMessage
+      type: object
+    PromptTemplateInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        latest_template_version_id:
+          default: null
+          title: Latest Template Version Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - name
+      title: PromptTemplateInfo
+      type: object
+    ChatMessageWithMediaSlot:
+      properties:
+        role:
+          title: Role
+          type: string
+        content:
+          title: Content
+          type: string
+        media_slots:
+          items:
+            $ref: '#/components/schemas/MediaSlot'
+          title: Media Slots
+          type: array
+      required:
+      - role
+      - content
+      title: ChatMessageWithMediaSlot
+      type: object
+    PromptTemplateMetadata:
+      properties:
+        provider:
+          title: Provider
+          type:
+          - string
+          - 'null'
+        flavor:
+          title: Flavor
+          type:
+          - string
+          - 'null'
+        model:
+          title: Model
+          type:
+          - string
+          - 'null'
+        params:
+          title: Params
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+        provider_info:
+          title: Provider Info
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+      required:
+      - provider
+      - flavor
+      - model
+      - params
+      - provider_info
+      title: PromptTemplateMetadata
+      type: object
+    PromptTemplateMessageInfo:
+      properties:
+        role:
           enum:
           - system
           - user
           - assistant
-          - tool
+          title: Role
+          type: string
         content:
+          title: Content
           type: string
-    PromptTemplateVersion:
-      type: object
-      properties:
-        prompt_template_id:
-          type: string
-          format: uuid
-        prompt_template_version_id:
-          type: string
-          format: uuid
-        prompt_template_name:
-          type: string
-        environments:
-          type: array
+        media_slots:
+          default: null
+          title: Media Slots
           items:
-            type: string
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model:
-          type: string
-        model_parameters:
-          type: object
-          additionalProperties: true
-    GetPromptTemplateRequest:
-      type: object
-      properties:
-        environment:
-          type: string
-          description: Environment to resolve the deployed version from (e.g. latest, production).
-        variables:
-          type: object
-          additionalProperties: true
-          description: Variables used to format the template when requesting a formatted result.
-    PromptTemplate:
-      type: object
-      properties:
-        prompt_template_id:
-          type: string
-          format: uuid
-        prompt_template_name:
-          type: string
-        project_id:
-          type: string
-          format: uuid
-    CreatePromptTemplateRequest:
-      type: object
+            $ref: '#/components/schemas/MediaSlot'
+          type:
+          - array
+          - 'null'
       required:
-      - prompt_template_name
+      - role
+      - content
+      title: PromptTemplateMessageInfo
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    NormalizedToolSchema:
       properties:
-        prompt_template_name:
+        name:
+          title: Name
           type: string
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        model_parameters:
-          type: object
+        description:
+          title: Description
+          type: string
+        parameters:
           additionalProperties: true
+          title: Parameters
+          type: object
+      required:
+      - name
+      - description
+      - parameters
+      title: NormalizedToolSchema
+      type: object
+    PlainPromptTemplate:
+      properties:
+        prompt_template_id:
+          format: uuid
+          title: Prompt Template Id
+          type: string
+        prompt_template_version_id:
+          format: uuid
+          title: Prompt Template Version Id
+          type: string
+        prompt_template_name:
+          title: Prompt Template Name
+          type: string
+        version_name:
+          title: Version Name
+          type:
+          - string
+          - 'null'
+        version_description:
+          title: Version Description
+          type:
+          - string
+          - 'null'
+        metadata:
+          $ref: '#/components/schemas/PromptTemplateMetadata'
+        format_version:
+          title: Format Version
+          type: integer
+        project_id:
+          format: uuid
+          title: Project Id
+          type: string
+        content:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ChatMessageWithMediaSlot'
+            - $ref: '#/components/schemas/ChatMessage'
+            - $ref: '#/components/schemas/HistoryPlaceholder'
+          title: Content
+          type: array
+        tool_schema:
+          title: Tool Schema
+          items:
+            $ref: '#/components/schemas/NormalizedToolSchema'
+          type:
+          - array
+          - 'null'
+        output_schema:
+          title: Output Schema
+          additionalProperties: true
+          type:
+          - object
+          - 'null'
+      required:
+      - prompt_template_id
+      - prompt_template_version_id
+      - prompt_template_name
+      - version_name
+      - version_description
+      - metadata
+      - format_version
+      - project_id
+      - content
+      - tool_schema
+      - output_schema
+      title: PlainPromptTemplate
+      type: object
+    HistoryPlaceholder:
+      properties:
+        kind:
+          const: history
+          default: history
+          title: Kind
+          type: string
+      title: HistoryPlaceholder
+      type: object
+    HistoryPlaceholderInfo:
+      additionalProperties: false
+      properties:
+        kind:
+          const: history
+          default: history
+          title: Kind
+          type: string
+      title: HistoryPlaceholderInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
   securitySchemes:
-    bearerAuth:
+    BearerAuth:
       type: http
       scheme: bearer
-      description: Authenticate requests using your Freeplay API key as a Bearer token in the Authorization header. API keys are managed at https://app.freeplay.ai/settings/api-access.

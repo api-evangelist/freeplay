@@ -1,0 +1,793 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Agent Datasets API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Agent Datasets
+paths:
+  /api/v2/projects/{project_id}/agent-datasets/{dataset_id}/test-cases:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/AgentTestCaseResponse'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: AgentTestCasesListResponse
+                type: object
+          description: 'AgentTestCasesListResponse(data: list[server.api_routes.agent_datasets_api_v2.AgentTestCaseResponse], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all test cases (row-level values) in an agent dataset. Use to review dataset contents or export for analysis.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Agent Test Cases
+      tags:
+      - Agent Datasets
+      operationId: get_get_agent_dataset_test_cases
+  /api/v2/projects/{project_id}/agent-datasets/{dataset_id}/test-cases/bulk:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/AgentTestCaseResponse'
+                    title: Data
+                    type: array
+                required:
+                - data
+                title: BulkCreateAgentTestCasesResponse
+                type: object
+          description: 'BulkCreateAgentTestCasesResponse(data: list[server.api_routes.agent_datasets_api_v2.AgentTestCaseResponse])'
+      description: 'Add multiple test cases to an agent dataset in a single request. Use for batch imports from production traces.
+
+
+        Maximum 100 test cases per request.'
+      summary: Bulk Create Agent Test Cases
+      tags:
+      - Agent Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                data:
+                  items:
+                    $ref: '#/components/schemas/AgentTestCase'
+                  title: Data
+                  type: array
+              required:
+              - data
+              title: BulkCreateAgentTestCasesRequest
+              type: object
+      operationId: post_bulk_create_agent_dataset_test_cases
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: 'Remove multiple agent test cases in a single request. Use for batch cleanup operations.
+
+
+        Maximum 100 test cases per request.'
+      summary: Bulk Delete Agent Test Cases
+      tags:
+      - Agent Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                test_case_ids:
+                  items:
+                    format: uuid
+                    type: string
+                  title: Test Case Ids
+                  type: array
+              required:
+              - test_case_ids
+              title: BulkDeleteAgentTestCasesRequest
+              type: object
+      operationId: delete_bulk_delete_agent_dataset_test_cases
+  /api/v2/projects/{project_id}/agent-datasets/{dataset_id}/test-cases/{test_case_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  input:
+                    $ref: '#/components/schemas/JSONValue'
+                    default: null
+                  output:
+                    $ref: '#/components/schemas/JSONValue'
+                    default: null
+                  metadata:
+                    default: null
+                    title: Metadata
+                    additionalProperties:
+                      anyOf:
+                      - type: string
+                      - type: integer
+                      - type: number
+                      - type: boolean
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - id
+                title: AgentTestCaseResponse
+                type: object
+          description: 'AgentTestCaseResponse(trace_test_case: shared.sqlalchemy.models.TraceTestCase)'
+      description: Retrieve a specific agent test case by ID. Use to inspect test case details or debug test run results.
+      summary: Get Agent Test Case
+      tags:
+      - Agent Datasets
+      operationId: get_get_agent_dataset_test_case
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  input:
+                    $ref: '#/components/schemas/JSONValue'
+                    default: null
+                  output:
+                    $ref: '#/components/schemas/JSONValue'
+                    default: null
+                  metadata:
+                    default: null
+                    title: Metadata
+                    additionalProperties:
+                      anyOf:
+                      - type: string
+                      - type: integer
+                      - type: number
+                      - type: boolean
+                    type:
+                    - object
+                    - 'null'
+                required:
+                - id
+                title: AgentTestCaseResponse
+                type: object
+          description: 'AgentTestCaseResponse(trace_test_case: shared.sqlalchemy.models.TraceTestCase)'
+      description: Modify an existing agent test case's inputs, outputs, or metadata. Use to correct errors or update expected outputs.
+      summary: Update Agent Test Case
+      tags:
+      - Agent Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                inputs:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/JSONValue'
+                  - type: 'null'
+                outputs:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/JSONValue'
+                  - type: 'null'
+                metadata:
+                  default: null
+                  title: Metadata
+                  additionalProperties:
+                    anyOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                    - type: boolean
+                  type:
+                  - object
+                  - 'null'
+              title: AgentTestCase
+              type: object
+      operationId: patch_update_agent_dataset_test_case
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: test_case_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Remove a test case from an agent dataset. Use to clean up invalid or outdated test cases.
+      summary: Delete Agent Test Case
+      tags:
+      - Agent Datasets
+      operationId: delete_delete_agent_dataset_test_case
+  /api/v2/projects/{project_id}/agent-datasets:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  compatible_agent_ids:
+                    items:
+                      format: uuid
+                      type: string
+                    title: Compatible Agent Ids
+                    type: array
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - description
+                - compatible_agent_ids
+                title: AgentDatasetResponse
+                type: object
+          description: 'AgentDatasetResponse(id: uuid.UUID, name: str, description: Optional[str], compatible_agent_ids: list[uuid.UUID], tags: list[server.api_routes.agent_datasets_api_v2.TagResponse] = None)'
+      description: Create a new dataset for agent-level testing. Use to organize test cases for evaluating full agent workflows.
+      summary: Create Agent-Level Dataset
+      tags:
+      - Agent Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                compatible_agent_ids:
+                  default: null
+                  title: Compatible Agent Ids
+                  items:
+                    format: uuid
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                tags:
+                  default: null
+                  title: Tags
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              required:
+              - name
+              title: CreateAgentDatasetRequest
+              type: object
+      operationId: post_create_agent_dataset
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: id
+        in: query
+        schema:
+          default: null
+          title: Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      - name: name
+        in: query
+        schema:
+          default: null
+          title: Name
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/AgentDatasetResponse'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: AgentDatasetsListResponse
+                type: object
+          description: 'AgentDatasetsListResponse(data: list[server.api_routes.agent_datasets_api_v2.AgentDatasetResponse], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all agent-level datasets in a project. Use to discover available datasets for agent test runs.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Agent Datasets
+      tags:
+      - Agent Datasets
+      operationId: get_get_agent_datasets
+  /api/v2/projects/{project_id}/agent-datasets/{dataset_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  compatible_agent_ids:
+                    items:
+                      format: uuid
+                      type: string
+                    title: Compatible Agent Ids
+                    type: array
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - description
+                - compatible_agent_ids
+                title: AgentDatasetResponse
+                type: object
+          description: 'AgentDatasetResponse(id: uuid.UUID, name: str, description: Optional[str], compatible_agent_ids: list[uuid.UUID], tags: list[server.api_routes.agent_datasets_api_v2.TagResponse] = None)'
+      description: Retrieve an agent dataset's metadata by ID. Use to check dataset configuration or compatible agents.
+      summary: Get Agent Dataset
+      tags:
+      - Agent Datasets
+      operationId: get_get_agent_dataset
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  compatible_agent_ids:
+                    items:
+                      format: uuid
+                      type: string
+                    title: Compatible Agent Ids
+                    type: array
+                  tags:
+                    default: null
+                    items:
+                      $ref: '#/components/schemas/TagResponse'
+                    title: Tags
+                    type: array
+                required:
+                - id
+                - name
+                - description
+                - compatible_agent_ids
+                title: AgentDatasetResponse
+                type: object
+          description: 'AgentDatasetResponse(id: uuid.UUID, name: str, description: Optional[str], compatible_agent_ids: list[uuid.UUID], tags: list[server.api_routes.agent_datasets_api_v2.TagResponse] = None)'
+      description: Modify an agent dataset's name, description, or compatible agents. Use to evolve datasets as agent requirements change.
+      summary: Update Agent Dataset
+      tags:
+      - Agent Datasets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  default: null
+                  title: Name
+                  type:
+                  - string
+                  - 'null'
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                compatible_agent_ids:
+                  default: null
+                  title: Compatible Agent Ids
+                  items:
+                    format: uuid
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                tags:
+                  default: null
+                  title: Tags
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              title: UpdateAgentDatasetRequest
+              type: object
+      operationId: patch_update_agent_dataset
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: dataset_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Archive an agent dataset and its test cases. Use when retiring datasets no longer needed.
+      summary: Delete Agent Dataset
+      tags:
+      - Agent Datasets
+      operationId: delete_delete_agent_dataset
+components:
+  schemas:
+    AgentDatasetResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type:
+          - string
+          - 'null'
+        compatible_agent_ids:
+          items:
+            format: uuid
+            type: string
+          title: Compatible Agent Ids
+          type: array
+        tags:
+          default: null
+          items:
+            $ref: '#/components/schemas/TagResponse'
+          title: Tags
+          type: array
+      required:
+      - id
+      - name
+      - description
+      - compatible_agent_ids
+      title: AgentDatasetResponse
+      type: object
+    TagResponse:
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        color:
+          title: Color
+          type: string
+        association_count:
+          default: 0
+          title: Association Count
+          type: integer
+      required:
+      - id
+      - name
+      - color
+      title: TagResponse
+      type: object
+    AgentTestCase:
+      properties:
+        inputs:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        outputs:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/JSONValue'
+          - type: 'null'
+        metadata:
+          default: null
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          type:
+          - object
+          - 'null'
+      title: AgentTestCase
+      type: object
+    JSONValue:
+      anyOf:
+      - type: boolean
+      - type: integer
+      - type: number
+      - type: string
+      - additionalProperties:
+          $ref: '#/components/schemas/JSONValue'
+        type: object
+      - items:
+          $ref: '#/components/schemas/JSONValue'
+        type: array
+      - type: 'null'
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    AgentTestCaseResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        input:
+          $ref: '#/components/schemas/JSONValue'
+          default: null
+        output:
+          $ref: '#/components/schemas/JSONValue'
+          default: null
+        metadata:
+          default: null
+          title: Metadata
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: integer
+            - type: number
+            - type: boolean
+          type:
+          - object
+          - 'null'
+      required:
+      - id
+      title: AgentTestCaseResponse
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -1,0 +1,2211 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Evaluation Criteria API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Evaluation Criteria
+paths:
+  /api/v2/projects/{project_id}/evaluation-criteria:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                required:
+                - id
+                title: CreateEvaluationCriteriaResponse
+                type: object
+          description: 'CreateEvaluationCriteriaResponse(id: uuid.UUID)'
+      description: Create a new evaluation criteria in a project. Use to set up criteria for evaluating LLM outputs in test runs or online evaluations.
+      summary: Create Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                target_type:
+                  $ref: '#/components/schemas/TargetType'
+                target_id:
+                  format: uuid
+                  title: Target Id
+                  type: string
+                type:
+                  $ref: '#/components/schemas/AutoEvalCriteriaType'
+                llm_eval_enabled:
+                  title: Llm Eval Enabled
+                  type: boolean
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              - target_type
+              - target_id
+              - type
+              - llm_eval_enabled
+              title: CreateEvaluationCriteriaRequest
+              type: object
+      operationId: post_create_evaluation_criteria
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/EvaluationCriteriaInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: EvaluationCriteriaListResponse
+                type: object
+          description: 'EvaluationCriteriaListResponse(data: list[server.api_routes.evaluation_criteria_api_v2.EvaluationCriteriaInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all evaluation criteria in a project. Use to discover available criteria or build criteria management UIs.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: get_list_evaluation_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/code:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      - name: target_type
+        in: query
+        schema:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/TargetType'
+          - type: 'null'
+      - name: target_id
+        in: query
+        schema:
+          default: null
+          title: Target Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/CodeEvalCriteriaInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: CodeEvalListResponse
+                type: object
+          description: 'CodeEvalListResponse(data: list[server.api_routes.code_eval_criteria_api_v2.CodeEvalCriteriaInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all code evaluation criteria in a project. Optionally filter by target type and ID.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: get_list_code_eval_criteria
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  target_type:
+                    $ref: '#/components/schemas/TargetType'
+                  target_id:
+                    format: uuid
+                    title: Target Id
+                    type: string
+                  criteria_type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  sample_rate:
+                    title: Sample Rate
+                    type:
+                    - number
+                    - 'null'
+                  is_enabled:
+                    title: Is Enabled
+                    type: boolean
+                  generate_insights:
+                    title: Generate Insights
+                    type: boolean
+                  deployed_version:
+                    $ref: '#/components/schemas/CodeEvalVersionSummary'
+                  latest_version:
+                    $ref: '#/components/schemas/CodeEvalVersionSummary'
+                required:
+                - id
+                - name
+                - description
+                - target_type
+                - target_id
+                - criteria_type
+                - sample_rate
+                - is_enabled
+                - generate_insights
+                - deployed_version
+                - latest_version
+                title: CreateCodeEvalResponse
+                type: object
+          description: 'CreateCodeEvalResponse(id: uuid.UUID, name: str, description: Optional[str], target_type: shared.common.TargetType, target_id: uuid.UUID, criteria_type: shared.sqlalchemy.models.AutoEvalCriteriaType, sample_rate: Optional[float], is_enabled: bool, generate_insights: bool, deployed_version: server.api_routes.code_eval_criteria_api_v2.CodeEvalVersionSummary, latest_version: server.api_routes.code_eval_criteria_api_v2.CodeEvalVersionSummary)'
+      description: Create a new code evaluation criteria with an initial auto-deployed version.
+      summary: Create Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                description:
+                  title: Description
+                  type: string
+                target_type:
+                  $ref: '#/components/schemas/TargetType'
+                target_id:
+                  format: uuid
+                  title: Target Id
+                  type: string
+                eval_code:
+                  title: Eval Code
+                  type: string
+                criteria_type:
+                  $ref: '#/components/schemas/AutoEvalCriteriaType'
+                sample_rate:
+                  default: 0.0
+                  title: Sample Rate
+                  type: number
+                generate_insights:
+                  default: true
+                  title: Generate Insights
+                  type: boolean
+                language:
+                  $ref: '#/components/schemas/CodeEvalLanguage'
+                  default: python
+              required:
+              - name
+              - description
+              - target_type
+              - target_id
+              - eval_code
+              - criteria_type
+              title: CreateCodeEvalRequest
+              type: object
+      operationId: post_create_code_eval_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_id:
+                    format: uuid
+                    title: Version Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: integer
+                  sample_rate:
+                    title: Sample Rate
+                    type:
+                    - number
+                    - 'null'
+                  target:
+                    $ref: '#/components/schemas/EvaluationCriteriaTarget'
+                  created_by_user:
+                    oneOf:
+                    - $ref: '#/components/schemas/UserInfo'
+                    - type: 'null'
+                  position:
+                    title: Position
+                    type:
+                    - number
+                    - 'null'
+                  is_enabled:
+                    title: Is Enabled
+                    type: boolean
+                  generate_insights:
+                    title: Generate Insights
+                    type: boolean
+                  criteria_description:
+                    title: Criteria Description
+                    type:
+                    - string
+                    - 'null'
+                  eval_code:
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  language:
+                    oneOf:
+                    - $ref: '#/components/schemas/CodeEvalLanguage'
+                    - type: 'null'
+                required:
+                - id
+                - version_id
+                - name
+                - type
+                - version_number
+                - is_deployed
+                - created_at
+                - sample_rate
+                - target
+                - created_by_user
+                - position
+                - is_enabled
+                - generate_insights
+                - criteria_description
+                - eval_code
+                - language
+                title: CodeEvalCriteriaVersionInfo
+                type: object
+          description: 'CodeEvalCriteriaVersionInfo(info: server.evaluations.evaluations.EvaluationCriteriaVersionInfo)'
+      description: Retrieve a code evaluation criteria and its latest version, including eval code.
+      summary: Get Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: get_get_code_eval_criteria
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  description:
+                    title: Description
+                    type:
+                    - string
+                    - 'null'
+                  target_type:
+                    $ref: '#/components/schemas/TargetType'
+                  target_id:
+                    format: uuid
+                    title: Target Id
+                    type: string
+                  criteria_type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  sample_rate:
+                    title: Sample Rate
+                    type:
+                    - number
+                    - 'null'
+                  is_enabled:
+                    title: Is Enabled
+                    type: boolean
+                  generate_insights:
+                    title: Generate Insights
+                    type: boolean
+                  deployed_version:
+                    $ref: '#/components/schemas/CodeEvalVersionSummary'
+                  latest_version:
+                    $ref: '#/components/schemas/CodeEvalVersionSummary'
+                required:
+                - id
+                - name
+                - description
+                - target_type
+                - target_id
+                - criteria_type
+                - sample_rate
+                - is_enabled
+                - generate_insights
+                - deployed_version
+                - latest_version
+                title: CreateCodeEvalResponse
+                type: object
+          description: 'CreateCodeEvalResponse(id: uuid.UUID, name: str, description: Optional[str], target_type: shared.common.TargetType, target_id: uuid.UUID, criteria_type: shared.sqlalchemy.models.AutoEvalCriteriaType, sample_rate: Optional[float], is_enabled: bool, generate_insights: bool, deployed_version: server.api_routes.code_eval_criteria_api_v2.CodeEvalVersionSummary, latest_version: server.api_routes.code_eval_criteria_api_v2.CodeEvalVersionSummary)'
+      description: Update criteria-level metadata. Does not create a new version.
+      summary: Update Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  default: null
+                  title: Name
+                  type:
+                  - string
+                  - 'null'
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                sample_rate:
+                  default: null
+                  title: Sample Rate
+                  type:
+                  - number
+                  - 'null'
+                generate_insights:
+                  default: null
+                  title: Generate Insights
+                  type:
+                  - boolean
+                  - 'null'
+              title: PatchCodeEvalRequest
+              type: object
+      operationId: patch_patch_code_eval_criteria
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Permanently delete a code evaluation criteria and all its versions.
+      summary: Delete Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: delete_delete_code_eval_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}/disable:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Deactivate a code evaluation criteria without deleting it.
+      summary: Disable Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: patch_disable_code_eval_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}/enable:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Activate a code evaluation criteria for use in evaluations.
+      summary: Enable Code Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: patch_enable_code_eval_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}/versions:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/CreateCodeEvalVersionResponse'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: CodeEvalVersionListResponse
+                type: object
+          description: 'CodeEvalVersionListResponse(data: list[server.api_routes.code_eval_criteria_api_v2.CreateCodeEvalVersionResponse], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: Retrieve all versions of a code evaluation criteria. `page_size` defaults to 30, maximum 100.
+      summary: List Code Evaluation Criteria Versions
+      tags:
+      - Evaluation Criteria
+      operationId: get_list_code_eval_versions
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  eval_code:
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  criteria_type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - version_number
+                - eval_code
+                - criteria_type
+                - is_deployed
+                - created_at
+                title: CreateCodeEvalVersionResponse
+                type: object
+          description: 'CreateCodeEvalVersionResponse(id: uuid.UUID, version_number: int, eval_code: Optional[str], criteria_type: shared.sqlalchemy.models.AutoEvalCriteriaType, is_deployed: bool, created_at: str)'
+      description: Create a new version of an existing code evaluation criteria. The version is not deployed until published.
+      summary: Create Code Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                eval_code:
+                  title: Eval Code
+                  type: string
+              required:
+              - eval_code
+              title: CreateCodeEvalVersionRequest
+              type: object
+      operationId: post_create_code_eval_version
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}/versions/{version_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  eval_code:
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  criteria_type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - version_number
+                - eval_code
+                - criteria_type
+                - is_deployed
+                - created_at
+                title: CreateCodeEvalVersionResponse
+                type: object
+          description: 'CreateCodeEvalVersionResponse(id: uuid.UUID, version_number: int, eval_code: Optional[str], criteria_type: shared.sqlalchemy.models.AutoEvalCriteriaType, is_deployed: bool, created_at: str)'
+      description: Retrieve a specific version of a code evaluation criteria.
+      summary: Get Code Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      operationId: get_get_code_eval_version
+  /api/v2/projects/{project_id}/evaluation-criteria/code/{criteria_id}/versions/{version_id}/publish:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  eval_code:
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  criteria_type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - version_number
+                - eval_code
+                - criteria_type
+                - is_deployed
+                - created_at
+                title: CreateCodeEvalVersionResponse
+                type: object
+          description: 'CreateCodeEvalVersionResponse(id: uuid.UUID, version_number: int, eval_code: Optional[str], criteria_type: shared.sqlalchemy.models.AutoEvalCriteriaType, is_deployed: bool, created_at: str)'
+      description: Deploy a version, undeploying the currently deployed version.
+      summary: Publish Code Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      operationId: post_publish_code_eval_version
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  type:
+                    title: Type
+                    type: string
+                  target_type:
+                    $ref: '#/components/schemas/TargetType'
+                  target_id:
+                    format: uuid
+                    title: Target Id
+                    type: string
+                  latest_version_id:
+                    title: Latest Version Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  is_enabled:
+                    title: Is Enabled
+                    type: boolean
+                  llm_eval_enabled:
+                    title: Llm Eval Enabled
+                    type: boolean
+                required:
+                - id
+                - name
+                - type
+                - target_type
+                - target_id
+                - latest_version_id
+                - is_enabled
+                - llm_eval_enabled
+                title: EvaluationCriteriaInfo
+                type: object
+          description: 'EvaluationCriteriaInfo(id: uuid.UUID, name: str, type: str, target_type: shared.common.TargetType, target_id: uuid.UUID, latest_version_id: Optional[uuid.UUID], is_enabled: bool, llm_eval_enabled: bool)'
+      description: Retrieve an evaluation criteria's configuration by ID. Use to inspect criteria settings or get the latest version ID.
+      summary: Get Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: get_get_evaluation_criteria
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Permanently delete an evaluation criteria and all its versions. Use when retiring criteria no longer needed.
+      summary: Delete Evaluation Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: delete_delete_evaluation_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/disable:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Deactivate an evaluation criteria without deleting it. Use to temporarily pause the use of a given criteria in evaluations.
+      summary: Disable Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: patch_disable_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/enable:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Activate an evaluation criteria for use in test runs and online evaluations.
+      summary: Enable Criteria
+      tags:
+      - Evaluation Criteria
+      operationId: patch_enable_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/reorder:
+    patch:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Change the display order of evaluation criteria in the Freeplay UI. Use to organize criteria in a logical sequence for human review workflows.
+      summary: Reorder Criteria
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                move_before_id:
+                  default: null
+                  title: Move Before Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+              title: ReorderCriteriaRequest
+              type: object
+      operationId: patch_reorder_criteria
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/versions:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_id:
+                    format: uuid
+                    title: Version Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  question:
+                    title: Question
+                    type: string
+                  llm_question:
+                    title: Llm Question
+                    type:
+                    - string
+                    - 'null'
+                  llm_eval_enabled:
+                    title: Llm Eval Enabled
+                    type: boolean
+                  type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  rubric:
+                    additionalProperties:
+                      type: string
+                    title: Rubric
+                    type: object
+                  multi_select_labels:
+                    items:
+                      type: string
+                    title: Multi Select Labels
+                    type: array
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: integer
+                  sample_rate:
+                    title: Sample Rate
+                    type:
+                    - number
+                    - 'null'
+                  target:
+                    $ref: '#/components/schemas/EvaluationCriteriaTarget'
+                  created_by_user:
+                    oneOf:
+                    - $ref: '#/components/schemas/UserInfo'
+                    - type: 'null'
+                  alignment_score:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/AlignmentScore'
+                    - type: 'null'
+                  options:
+                    anyOf:
+                    - items:
+                        type: string
+                      type: array
+                    - items:
+                        type: integer
+                      type: array
+                    - type: 'null'
+                    default: null
+                    title: Options
+                  model_id:
+                    default: null
+                    title: Model Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  model_name:
+                    default: null
+                    title: Model Name
+                    type:
+                    - string
+                    - 'null'
+                  position:
+                    default: null
+                    title: Position
+                    type:
+                    - number
+                    - 'null'
+                  is_enabled:
+                    default: true
+                    title: Is Enabled
+                    type: boolean
+                  generate_insights:
+                    default: true
+                    title: Generate Insights
+                    type: boolean
+                  criteria_description:
+                    default: null
+                    title: Criteria Description
+                    type:
+                    - string
+                    - 'null'
+                  references:
+                    default: null
+                    title: References
+                    items:
+                      type: string
+                    type:
+                    - array
+                    - 'null'
+                  allow_multiple_categories:
+                    default: false
+                    title: Allow Multiple Categories
+                    type: boolean
+                  categories:
+                    default: null
+                    title: Categories
+                    items:
+                      $ref: '#/components/schemas/AutoCategorizationCategoryInfo'
+                    type:
+                    - array
+                    - 'null'
+                  eval_code:
+                    default: null
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  language:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/CodeEvalLanguage'
+                    - type: 'null'
+                  pass_score:
+                    anyOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                    - type: boolean
+                    - type: 'null'
+                    default: null
+                    title: Pass Score
+                required:
+                - id
+                - version_id
+                - name
+                - question
+                - llm_question
+                - llm_eval_enabled
+                - type
+                - rubric
+                - multi_select_labels
+                - version_number
+                - is_deployed
+                - created_at
+                - sample_rate
+                - target
+                - created_by_user
+                title: CriteriaVersionApiInfo
+                type: object
+          description: Frozen copy of the old flat EvaluationCriteriaVersionInfo shape for backward-compatible public API.
+      description: Create a new version of an evaluation criteria. Use to iterate on evaluation criteria configuration while preserving the version history.
+      summary: Create Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                target_type:
+                  $ref: '#/components/schemas/TargetType'
+                target_id:
+                  format: uuid
+                  title: Target Id
+                  type: string
+                llm_eval_enabled:
+                  title: Llm Eval Enabled
+                  type: boolean
+                sample_rate:
+                  default: null
+                  title: Sample Rate
+                  type:
+                  - number
+                  - 'null'
+                model_id:
+                  default: null
+                  title: Model Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                model:
+                  default: null
+                  title: Model
+                  type:
+                  - string
+                  - 'null'
+                provider:
+                  default: null
+                  title: Provider
+                  type:
+                  - string
+                  - 'null'
+                type:
+                  default: null
+                  oneOf:
+                  - $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  - type: 'null'
+                question:
+                  default: null
+                  title: Question
+                  type:
+                  - string
+                  - 'null'
+                llm_question:
+                  default: null
+                  title: Llm Question
+                  type:
+                  - string
+                  - 'null'
+                rubric:
+                  default: null
+                  title: Rubric
+                  additionalProperties:
+                    type: string
+                  type:
+                  - object
+                  - 'null'
+                multi_select_labels:
+                  default: null
+                  title: Multi Select Labels
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                description:
+                  default: null
+                  title: Description
+                  type:
+                  - string
+                  - 'null'
+                categories:
+                  default: null
+                  title: Categories
+                  items:
+                    $ref: '#/components/schemas/AutoCategorizationCategoryInfo'
+                  type:
+                  - array
+                  - 'null'
+                auto_categorization_references:
+                  default: null
+                  title: Auto Categorization References
+                  items:
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+                auto_categorization_allow_multiple_categories:
+                  default: false
+                  title: Auto Categorization Allow Multiple Categories
+                  type: boolean
+                create_criteria_if_missing:
+                  default: false
+                  title: Create Criteria If Missing
+                  type: boolean
+                criteria_id:
+                  default: null
+                  title: Criteria Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                overwrite_latest_version:
+                  default: false
+                  title: Overwrite Latest Version
+                  type: boolean
+                generate_insights:
+                  default: true
+                  title: Generate Insights
+                  type: boolean
+              required:
+              - name
+              - target_type
+              - target_id
+              - llm_eval_enabled
+              title: CreateCriteriaVersionRequest
+              type: object
+      operationId: post_create_criteria_version
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/CriteriaVersionApiInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: EvaluationCriteriaVersionListResponse
+                type: object
+          description: 'EvaluationCriteriaVersionListResponse(data: list[server.api_routes.evaluation_criteria_versions_api_v2.CriteriaVersionApiInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve all versions of an evaluation criteria. Use to view version history or compare changes over time.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Evaluation Criteria Versions
+      tags:
+      - Evaluation Criteria
+      operationId: get_list_criteria_versions
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/versions/{version_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  version_id:
+                    format: uuid
+                    title: Version Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  question:
+                    title: Question
+                    type: string
+                  llm_question:
+                    title: Llm Question
+                    type:
+                    - string
+                    - 'null'
+                  llm_eval_enabled:
+                    title: Llm Eval Enabled
+                    type: boolean
+                  type:
+                    $ref: '#/components/schemas/AutoEvalCriteriaType'
+                  rubric:
+                    additionalProperties:
+                      type: string
+                    title: Rubric
+                    type: object
+                  multi_select_labels:
+                    items:
+                      type: string
+                    title: Multi Select Labels
+                    type: array
+                  version_number:
+                    title: Version Number
+                    type: integer
+                  is_deployed:
+                    title: Is Deployed
+                    type: boolean
+                  created_at:
+                    title: Created At
+                    type: integer
+                  sample_rate:
+                    title: Sample Rate
+                    type:
+                    - number
+                    - 'null'
+                  target:
+                    $ref: '#/components/schemas/EvaluationCriteriaTarget'
+                  created_by_user:
+                    oneOf:
+                    - $ref: '#/components/schemas/UserInfo'
+                    - type: 'null'
+                  alignment_score:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/AlignmentScore'
+                    - type: 'null'
+                  options:
+                    anyOf:
+                    - items:
+                        type: string
+                      type: array
+                    - items:
+                        type: integer
+                      type: array
+                    - type: 'null'
+                    default: null
+                    title: Options
+                  model_id:
+                    default: null
+                    title: Model Id
+                    format: uuid
+                    type:
+                    - string
+                    - 'null'
+                  model_name:
+                    default: null
+                    title: Model Name
+                    type:
+                    - string
+                    - 'null'
+                  position:
+                    default: null
+                    title: Position
+                    type:
+                    - number
+                    - 'null'
+                  is_enabled:
+                    default: true
+                    title: Is Enabled
+                    type: boolean
+                  generate_insights:
+                    default: true
+                    title: Generate Insights
+                    type: boolean
+                  criteria_description:
+                    default: null
+                    title: Criteria Description
+                    type:
+                    - string
+                    - 'null'
+                  references:
+                    default: null
+                    title: References
+                    items:
+                      type: string
+                    type:
+                    - array
+                    - 'null'
+                  allow_multiple_categories:
+                    default: false
+                    title: Allow Multiple Categories
+                    type: boolean
+                  categories:
+                    default: null
+                    title: Categories
+                    items:
+                      $ref: '#/components/schemas/AutoCategorizationCategoryInfo'
+                    type:
+                    - array
+                    - 'null'
+                  eval_code:
+                    default: null
+                    title: Eval Code
+                    type:
+                    - string
+                    - 'null'
+                  language:
+                    default: null
+                    oneOf:
+                    - $ref: '#/components/schemas/CodeEvalLanguage'
+                    - type: 'null'
+                  pass_score:
+                    anyOf:
+                    - type: string
+                    - type: integer
+                    - type: number
+                    - type: boolean
+                    - type: 'null'
+                    default: null
+                    title: Pass Score
+                required:
+                - id
+                - version_id
+                - name
+                - question
+                - llm_question
+                - llm_eval_enabled
+                - type
+                - rubric
+                - multi_select_labels
+                - version_number
+                - is_deployed
+                - created_at
+                - sample_rate
+                - target
+                - created_by_user
+                title: CriteriaVersionApiInfo
+                type: object
+          description: Frozen copy of the old flat EvaluationCriteriaVersionInfo shape for backward-compatible public API.
+      description: Retrieve a specific evaluation criteria version. Use to inspect version configuration or compare with other versions.
+      summary: Get Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      operationId: get_get_criteria_version
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Permanently delete an evaluation criteria version. Use to clean up draft or unused versions.
+      summary: Delete Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      operationId: delete_delete_criteria_version
+  /api/v2/projects/{project_id}/evaluation-criteria/id/{criteria_id}/versions/{version_id}/deploy:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: criteria_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Activate an evaluation criteria version for use in evaluations. Use to promote a tested version to production.
+      summary: Deploy Evaluation Criteria Version
+      tags:
+      - Evaluation Criteria
+      operationId: post_deploy_criteria_version
+  /api/v2/projects/{project_id}/sessions/{session_id}/completions/{completion_id}/evaluations:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: completion_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: 'Queue evaluations to run against a specific completion. Evaluations are executed asynchronously.
+
+
+        Use the `eval_types` field to control which evaluations run:
+
+        - `all` (default): Run both LLM-as-judge and code evaluations
+
+        - `llm-as-judge`: Run only LLM-based evaluations
+
+        - `code`: Run only code-based evaluations
+
+
+        Optionally pass `criteria_ids` to run specific evaluation criteria. When provided, those
+
+        criteria are executed regardless of whether they have already been evaluated. When omitted,
+
+        only criteria that have not yet been evaluated for this completion will run.'
+      summary: Execute Evals for Completion
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                eval_types:
+                  $ref: '#/components/schemas/EvalTypeFilter'
+                  default: all
+                criteria_ids:
+                  default: null
+                  title: Criteria Ids
+                  items:
+                    format: uuid
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              title: ExecuteEvalsRequest
+              type: object
+      operationId: post_execute_completion_evals
+  /api/v2/projects/{project_id}/sessions/{session_id}/traces/{trace_id}/evaluations:
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: 'Queue evaluations to run against a specific trace. Evaluations are executed asynchronously.
+
+
+        Use the `eval_types` field to control which evaluations run:
+
+        - `all` (default): Run both LLM-as-judge and code evaluations
+
+        - `llm-as-judge`: Run only LLM-based evaluations
+
+        - `code`: Run only code-based evaluations
+
+
+        Optionally pass `criteria_ids` to run specific evaluation criteria. When provided, those
+
+        criteria are executed regardless of whether they have already been evaluated. When omitted,
+
+        only criteria that have not yet been evaluated for this trace will run.'
+      summary: Execute Evals for Trace
+      tags:
+      - Evaluation Criteria
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                eval_types:
+                  $ref: '#/components/schemas/EvalTypeFilter'
+                  default: all
+                criteria_ids:
+                  default: null
+                  title: Criteria Ids
+                  items:
+                    format: uuid
+                    type: string
+                  type:
+                  - array
+                  - 'null'
+              title: ExecuteEvalsRequest
+              type: object
+      operationId: post_execute_trace_evals
+components:
+  schemas:
+    CodeEvalCriteriaInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        type:
+          title: Type
+          type: string
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        target_id:
+          format: uuid
+          title: Target Id
+          type: string
+        latest_version_id:
+          title: Latest Version Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        is_enabled:
+          title: Is Enabled
+          type: boolean
+        generate_insights:
+          title: Generate Insights
+          type: boolean
+        sample_rate:
+          title: Sample Rate
+          type:
+          - number
+          - 'null'
+        description:
+          title: Description
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - name
+      - type
+      - target_type
+      - target_id
+      - latest_version_id
+      - is_enabled
+      - generate_insights
+      - sample_rate
+      - description
+      title: CodeEvalCriteriaInfo
+      type: object
+    AutoCategorizationCategoryInfo:
+      properties:
+        name:
+          title: Name
+          type: string
+        description:
+          title: Description
+          type: string
+      required:
+      - name
+      - description
+      title: AutoCategorizationCategoryInfo
+      type: object
+    EvaluationCriteriaTarget:
+      properties:
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+      required:
+      - target_type
+      - id
+      - name
+      title: EvaluationCriteriaTarget
+      type: object
+    CodeEvalLanguage:
+      enum:
+      - python
+      - typescript
+      title: CodeEvalLanguage
+      type: string
+    TargetType:
+      enum:
+      - prompt
+      - agent
+      title: TargetType
+      type: string
+    AutoEvalCriteriaType:
+      enum:
+      - 1-5
+      - 1-3
+      - 1-100
+      - yes-no
+      - multi-select
+      - text
+      - auto-categorization
+      - code-bool
+      - code-float
+      title: AutoEvalCriteriaType
+      type: string
+    CriteriaVersionApiInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        version_id:
+          format: uuid
+          title: Version Id
+          type: string
+        name:
+          title: Name
+          type: string
+        question:
+          title: Question
+          type: string
+        llm_question:
+          title: Llm Question
+          type:
+          - string
+          - 'null'
+        llm_eval_enabled:
+          title: Llm Eval Enabled
+          type: boolean
+        type:
+          $ref: '#/components/schemas/AutoEvalCriteriaType'
+        rubric:
+          additionalProperties:
+            type: string
+          title: Rubric
+          type: object
+        multi_select_labels:
+          items:
+            type: string
+          title: Multi Select Labels
+          type: array
+        version_number:
+          title: Version Number
+          type: integer
+        is_deployed:
+          title: Is Deployed
+          type: boolean
+        created_at:
+          title: Created At
+          type: integer
+        sample_rate:
+          title: Sample Rate
+          type:
+          - number
+          - 'null'
+        target:
+          $ref: '#/components/schemas/EvaluationCriteriaTarget'
+        created_by_user:
+          oneOf:
+          - $ref: '#/components/schemas/UserInfo'
+          - type: 'null'
+        alignment_score:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/AlignmentScore'
+          - type: 'null'
+        options:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - items:
+              type: integer
+            type: array
+          - type: 'null'
+          default: null
+          title: Options
+        model_id:
+          default: null
+          title: Model Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        model_name:
+          default: null
+          title: Model Name
+          type:
+          - string
+          - 'null'
+        position:
+          default: null
+          title: Position
+          type:
+          - number
+          - 'null'
+        is_enabled:
+          default: true
+          title: Is Enabled
+          type: boolean
+        generate_insights:
+          default: true
+          title: Generate Insights
+          type: boolean
+        criteria_description:
+          default: null
+          title: Criteria Description
+          type:
+          - string
+          - 'null'
+        references:
+          default: null
+          title: References
+          items:
+            type: string
+          type:
+          - array
+          - 'null'
+        allow_multiple_categories:
+          default: false
+          title: Allow Multiple Categories
+          type: boolean
+        categories:
+          default: null
+          title: Categories
+          items:
+            $ref: '#/components/schemas/AutoCategorizationCategoryInfo'
+          type:
+          - array
+          - 'null'
+        eval_code:
+          default: null
+          title: Eval Code
+          type:
+          - string
+          - 'null'
+        language:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/CodeEvalLanguage'
+          - type: 'null'
+        pass_score:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: number
+          - type: boolean
+          - type: 'null'
+          default: null
+          title: Pass Score
+      required:
+      - id
+      - version_id
+      - name
+      - question
+      - llm_question
+      - llm_eval_enabled
+      - type
+      - rubric
+      - multi_select_labels
+      - version_number
+      - is_deployed
+      - created_at
+      - sample_rate
+      - target
+      - created_by_user
+      title: CriteriaVersionApiInfo
+      type: object
+    AlignmentScore:
+      properties:
+        number_correct:
+          title: Number Correct
+          type: integer
+        number_incorrect:
+          title: Number Incorrect
+          type: integer
+        ratio:
+          title: Ratio
+          type: number
+        average_cost:
+          title: Average Cost
+          type: number
+      required:
+      - number_correct
+      - number_incorrect
+      - ratio
+      - average_cost
+      title: AlignmentScore
+      type: object
+    CreateCodeEvalVersionResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        version_number:
+          title: Version Number
+          type: integer
+        eval_code:
+          title: Eval Code
+          type:
+          - string
+          - 'null'
+        criteria_type:
+          $ref: '#/components/schemas/AutoEvalCriteriaType'
+        is_deployed:
+          title: Is Deployed
+          type: boolean
+        created_at:
+          title: Created At
+          type: string
+      required:
+      - id
+      - version_number
+      - eval_code
+      - criteria_type
+      - is_deployed
+      - created_at
+      title: CreateCodeEvalVersionResponse
+      type: object
+    UserInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        email_address:
+          title: Email Address
+          type: string
+        roles:
+          items:
+            type: string
+          title: Roles
+          type: array
+        first_name:
+          title: First Name
+          type: string
+        last_name:
+          title: Last Name
+          type: string
+        signup_source:
+          title: Signup Source
+          type: string
+        profile_picture:
+          default: null
+          title: Profile Picture
+          type:
+          - string
+          - 'null'
+        profile_color:
+          default: null
+          title: Profile Color
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - email_address
+      - roles
+      - first_name
+      - last_name
+      - signup_source
+      title: UserInfo
+      type: object
+    CodeEvalVersionSummary:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        version_number:
+          title: Version Number
+          type: integer
+        eval_code:
+          title: Eval Code
+          type:
+          - string
+          - 'null'
+        is_deployed:
+          title: Is Deployed
+          type: boolean
+        created_at:
+          title: Created At
+          type: string
+      required:
+      - id
+      - version_number
+      - eval_code
+      - is_deployed
+      - created_at
+      title: CodeEvalVersionSummary
+      type: object
+    EvaluationCriteriaInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        type:
+          title: Type
+          type: string
+        target_type:
+          $ref: '#/components/schemas/TargetType'
+        target_id:
+          format: uuid
+          title: Target Id
+          type: string
+        latest_version_id:
+          title: Latest Version Id
+          format: uuid
+          type:
+          - string
+          - 'null'
+        is_enabled:
+          title: Is Enabled
+          type: boolean
+        llm_eval_enabled:
+          title: Llm Eval Enabled
+          type: boolean
+      required:
+      - id
+      - name
+      - type
+      - target_type
+      - target_id
+      - latest_version_id
+      - is_enabled
+      - llm_eval_enabled
+      title: EvaluationCriteriaInfo
+      type: object
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    EvalTypeFilter:
+      enum:
+      - all
+      - llm-as-judge
+      - code
+      title: EvalTypeFilter
+      type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

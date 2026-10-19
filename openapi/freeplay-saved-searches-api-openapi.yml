@@ -1,0 +1,478 @@
+openapi: 3.2.0
+info:
+  title: Freeplay Saved Searches API
+  version: 0.1.0
+security:
+- BearerAuth: []
+tags:
+- name: Saved Searches
+paths:
+  /api/v2/projects/{project_id}/session-filters:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        schema:
+          default: 1
+          title: Page
+          type: integer
+      - name: page_size
+        in: query
+        schema:
+          default: 30
+          title: Page Size
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/SessionFilterReplicationInfo'
+                    title: Data
+                    type: array
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+                required:
+                - data
+                - pagination
+                title: SessionFilterReplicationListResponse
+                type: object
+          description: 'SessionFilterReplicationListResponse(data: list[server.api_routes.session_filters_api_v2.SessionFilterReplicationInfo], pagination: server.api_routes.api_v2_common.PaginationInfo)'
+      description: 'Retrieve a paginated list of saved searches for the project.
+
+
+        `page_size` defaults to 30, maximum 100.'
+      summary: List Saved Searches
+      tags:
+      - Saved Searches
+      operationId: get_list_filters
+    post:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  filter_model:
+                    additionalProperties:
+                      $ref: '#/components/schemas/WebApiFilter'
+                    title: Filter Model
+                    type: object
+                  is_team_filter:
+                    title: Is Team Filter
+                    type: boolean
+                  created_by:
+                    format: uuid
+                    title: Created By
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - filter_model
+                - is_team_filter
+                - created_by
+                - created_at
+                title: SessionFilterReplicationInfo
+                type: object
+          description: 'SessionFilterReplicationInfo(id: uuid.UUID, name: str, filter_model: dict[str, shared.common.WebApiFilter], is_team_filter: bool, created_by: uuid.UUID, created_at: datetime.datetime)'
+      description: Create or upsert a saved search for the project.
+      summary: Create Saved Search
+      tags:
+      - Saved Searches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                created_by:
+                  format: uuid
+                  title: Created By
+                  type: string
+                id:
+                  default: null
+                  title: Id
+                  format: uuid
+                  type:
+                  - string
+                  - 'null'
+                filter_model:
+                  default: null
+                  title: Filter Model
+                  additionalProperties:
+                    $ref: '#/components/schemas/WebApiFilter'
+                  type:
+                  - object
+                  - 'null'
+                is_team_filter:
+                  default: false
+                  title: Is Team Filter
+                  type: boolean
+                created_at:
+                  default: null
+                  title: Created At
+                  format: date-time
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              - created_by
+              title: ReplicateSessionFilterRequest
+              type: object
+      operationId: post_replicate_filter
+  /api/v2/projects/{project_id}/session-filters/{filter_id}:
+    get:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  filter_model:
+                    additionalProperties:
+                      $ref: '#/components/schemas/WebApiFilter'
+                    title: Filter Model
+                    type: object
+                  is_team_filter:
+                    title: Is Team Filter
+                    type: boolean
+                  created_by:
+                    format: uuid
+                    title: Created By
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - filter_model
+                - is_team_filter
+                - created_by
+                - created_at
+                title: SessionFilterReplicationInfo
+                type: object
+          description: 'SessionFilterReplicationInfo(id: uuid.UUID, name: str, filter_model: dict[str, shared.common.WebApiFilter], is_team_filter: bool, created_by: uuid.UUID, created_at: datetime.datetime)'
+      description: Retrieve details for a specific saved search by ID.
+      summary: Get Saved Search
+      tags:
+      - Saved Searches
+      operationId: get_get_filter
+    put:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    format: uuid
+                    title: Id
+                    type: string
+                  name:
+                    title: Name
+                    type: string
+                  filter_model:
+                    additionalProperties:
+                      $ref: '#/components/schemas/WebApiFilter'
+                    title: Filter Model
+                    type: object
+                  is_team_filter:
+                    title: Is Team Filter
+                    type: boolean
+                  created_by:
+                    format: uuid
+                    title: Created By
+                    type: string
+                  created_at:
+                    format: date-time
+                    title: Created At
+                    type: string
+                required:
+                - id
+                - name
+                - filter_model
+                - is_team_filter
+                - created_by
+                - created_at
+                title: SessionFilterReplicationInfo
+                type: object
+          description: 'SessionFilterReplicationInfo(id: uuid.UUID, name: str, filter_model: dict[str, shared.common.WebApiFilter], is_team_filter: bool, created_by: uuid.UUID, created_at: datetime.datetime)'
+      description: Update an existing saved search.
+      summary: Update Saved Search
+      tags:
+      - Saved Searches
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  title: Name
+                  type: string
+                filter_model:
+                  default: null
+                  title: Filter Model
+                  additionalProperties:
+                    $ref: '#/components/schemas/WebApiFilter'
+                  type:
+                  - object
+                  - 'null'
+                is_team_filter:
+                  default: false
+                  title: Is Team Filter
+                  type: boolean
+                created_at:
+                  default: null
+                  title: Created At
+                  format: date-time
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              title: UpdateSessionFilterReplicationRequest
+              type: object
+      operationId: put_update_filter
+    delete:
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties: {}
+                title: EmptyResponse
+                type: object
+          description: EmptyResponse()
+      description: Delete a saved search from the project.
+      summary: Delete Saved Search
+      tags:
+      - Saved Searches
+      operationId: delete_delete_filter
+components:
+  schemas:
+    MultiFilterConditions:
+      properties:
+        type:
+          title: Type
+          type: string
+        filter:
+          title: Filter
+          type: string
+      required:
+      - type
+      - filter
+      title: MultiFilterConditions
+      type: object
+    FilterTypes:
+      enum:
+      - equals
+      - notEqual
+      - lessThan
+      - lessThanOrEqual
+      - greaterThan
+      - greaterThanOrEqual
+      - inRange
+      - includes
+      - contains
+      - notContains
+      - blank
+      - notBlank
+      title: FilterTypes
+      type: string
+    PaginationInfo:
+      properties:
+        page:
+          title: Page
+          type: integer
+        page_size:
+          title: Page Size
+          type: integer
+        has_next:
+          title: Has Next
+          type: boolean
+      required:
+      - page
+      - page_size
+      - has_next
+      title: PaginationInfo
+      type: object
+    WebApiFilter:
+      properties:
+        filterType:
+          enum:
+          - set
+          - text
+          - number
+          - date
+          title: Filtertype
+          type: string
+        type:
+          default: null
+          oneOf:
+          - $ref: '#/components/schemas/FilterTypes'
+          - type: 'null'
+        filter:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: number
+          - type: 'null'
+          default: null
+          title: Filter
+        dateFrom:
+          default: null
+          title: Datefrom
+          type:
+          - string
+          - 'null'
+        dateTo:
+          default: null
+          title: Dateto
+          type:
+          - string
+          - 'null'
+        values:
+          default: null
+          title: Values
+          items:
+            type: string
+          type:
+          - array
+          - 'null'
+        filterTo:
+          anyOf:
+          - type: string
+          - type: integer
+          - type: number
+          - type: 'null'
+          default: null
+          title: Filterto
+        conditions:
+          default: null
+          title: Conditions
+          items:
+            $ref: '#/components/schemas/MultiFilterConditions'
+          type:
+          - array
+          - 'null'
+        operator:
+          default: null
+          title: Operator
+          enum:
+          - AND
+          - OR
+          type:
+          - string
+          - 'null'
+      required:
+      - filterType
+      title: WebApiFilter
+      type: object
+    SessionFilterReplicationInfo:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        name:
+          title: Name
+          type: string
+        filter_model:
+          additionalProperties:
+            $ref: '#/components/schemas/WebApiFilter'
+          title: Filter Model
+          type: object
+        is_team_filter:
+          title: Is Team Filter
+          type: boolean
+        created_by:
+          format: uuid
+          title: Created By
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+      required:
+      - id
+      - name
+      - filter_model
+      - is_team_filter
+      - created_by
+      - created_at
+      title: SessionFilterReplicationInfo
+      type: object
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
