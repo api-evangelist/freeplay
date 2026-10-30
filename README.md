@@ -1,4 +1,4 @@
-# Freeplay (freeplay)
+# Freeplay
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,120 +66,140 @@
 
 Freeplay is an LLM product experimentation, evaluation, and observability platform for cross-functional teams. Its HTTP API and SDKs make Freeplay the source of truth for prompt templates, record completions and sessions/traces from production, curate test datasets, run batch test runs and LLM-judge evaluations, and capture human and customer feedback.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/freeplay/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/freeplay/refs/heads/main/apis.yml)
+**Areas:** Artificial Intelligence · LLM · Evaluation · Observability · Prompt Management · Experimentation
 
-## Tags
+## Freeplay on APIs.io
 
-- AI
-- LLM
-- Evaluation
-- Observability
-- Prompt Management
-- Experimentation
+Everything profiled for Freeplay is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/freeplay/](https://apis.io/providers/freeplay/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (10)
 
-- **Created:** 2026-06-20
-- **Modified:** 2026-06-20
+- [Freeplay Agents API](https://apis.io/apis/freeplay/freeplay-agents-api/) — List agents within a project.
+- [Freeplay Completions API](https://apis.io/apis/freeplay/freeplay-completions-api/) — Record completions and aggregate completion statistics.
+- [Freeplay Datasets API](https://apis.io/apis/freeplay/freeplay-datasets-api/) — Curate datasets and their test cases.
+- [Freeplay Feedback API](https://apis.io/apis/freeplay/freeplay-feedback-api/) — Record completion-level and trace-level feedback.
+- [Freeplay Projects API](https://apis.io/apis/freeplay/freeplay-projects-api/) — List workspace projects.
+- [Freeplay Prompt Templates API](https://apis.io/apis/freeplay/freeplay-prompt-templates-api/) — Create, version, retrieve, and deploy prompt templates.
+- [Freeplay Search API](https://apis.io/apis/freeplay/freeplay-search-api/) — API-only search over sessions, traces, and completions.
+- [Freeplay Sessions API](https://apis.io/apis/freeplay/freeplay-sessions-api/) — List, search, and delete sessions.
+- [Freeplay Test Runs API](https://apis.io/apis/freeplay/freeplay-test-runs-api/) — Create, list, and retrieve batch test runs.
+- [Freeplay Traces API](https://apis.io/apis/freeplay/freeplay-traces-api/) — Record traces that group related completions.
 
-## APIs
+### Published properties
 
-### Freeplay Prompt Templates API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Manage versioned prompt templates as the source of truth for an application, including creating templates and versions, retrieving formatted or raw templates by name or ID, deploying versions to environments, and listing all templates in an environment.
+#### MCP servers (1)
 
-- **Human URL:** [https://docs.freeplay.ai/developer-resources/api-reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- **Base URL:** `https://app.freeplay.ai/api/v2`
+Model Context Protocol servers that expose the API to agents.
 
-#### Tags
+- [freeplay](https://apis.io/servers/freeplay/freeplay/)
 
-- Prompt Management
-- Templates
-- Versioning
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Documentation](https://docs.freeplay.ai/docs/freeplay-sdk)
-- [API Reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- [OpenAPI](openapi/freeplay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/freeplay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/freeplay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Freeplay Agentic Access](https://apis.io/agentic-access/freeplay/freeplay-agentic-access/)
 
-### Freeplay Recordings & Sessions API
+#### Collections (11)
 
-Record LLM completions back to Freeplay along with the sessions and traces that group related calls for agent workflows, then list, search, and delete sessions and aggregate completion statistics for production observability.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://docs.freeplay.ai/developer-resources/api-reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- **Base URL:** `https://app.freeplay.ai/api/v2`
+- [Freeplay HTTP API](https://apis.io/collections/freeplay/open-freeplay/)
+- [Freeplay HTTP Agents API](https://apis.io/collections/freeplay/open-freeplay-agents-api/)
+- [Freeplay HTTP Agents Completions API](https://apis.io/collections/freeplay/open-freeplay-completions-api/)
+- [Freeplay HTTP Agents Datasets API](https://apis.io/collections/freeplay/open-freeplay-datasets-api/)
+- [Freeplay HTTP Agents Feedback API](https://apis.io/collections/freeplay/open-freeplay-feedback-api/)
+- [Freeplay HTTP Agents Projects API](https://apis.io/collections/freeplay/open-freeplay-projects-api/)
+- [Freeplay HTTP Agents Prompt Templates API](https://apis.io/collections/freeplay/open-freeplay-prompt-templates-api/)
+- [Freeplay HTTP Agents Search API](https://apis.io/collections/freeplay/open-freeplay-search-api/)
+- [Freeplay HTTP Agents Sessions API](https://apis.io/collections/freeplay/open-freeplay-sessions-api/)
+- [Freeplay HTTP Agents Test Runs API](https://apis.io/collections/freeplay/open-freeplay-test-runs-api/)
+- [Freeplay HTTP Agents Traces API](https://apis.io/collections/freeplay/open-freeplay-traces-api/)
 
-#### Tags
+#### Security (3)
 
-- Recordings
-- Sessions
-- Traces
-- Observability
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Properties
+- [Freeplay Authentication](https://apis.io/security/freeplay/freeplay-authentication/)
+- [Freeplay Domain Security](https://apis.io/security/freeplay/freeplay-domain-security/)
+- [Freeplay Trust Center](https://apis.io/security/freeplay/freeplay-trust-center/)
 
-- [Documentation](https://docs.freeplay.ai/getting-started/integrate)
-- [API Reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- [OpenAPI](openapi/freeplay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/freeplay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/freeplay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Plans and pricing (1)
 
-### Freeplay Test Cases & Datasets API
+Published plans, tiers and prices.
 
-Curate evaluation datasets and their test cases, retrieving dataset metadata and test cases by name or ID and uploading new test cases for use in batch test runs and experiments.
+- [Freeplay Plans Pricing](https://apis.io/plans/freeplay/freeplay-plans-pricing/)
 
-- **Human URL:** [https://docs.freeplay.ai/developer-resources/api-reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- **Base URL:** `https://app.freeplay.ai/api/v2`
+#### Rate limits (1)
 
-#### Tags
+Published request limits.
 
-- Datasets
-- Test Cases
-- Curation
+- [Freeplay Rate Limits](https://apis.io/rate-limits/freeplay/freeplay-rate-limits/)
 
-#### Properties
+#### FinOps (1)
 
-- [Documentation](https://docs.freeplay.ai/docs/quick-start)
-- [API Reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- [OpenAPI](openapi/freeplay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/freeplay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/freeplay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+What the API costs to run, by operation.
 
-### Freeplay Test Runs & Evaluations API
+- [Freeplay Finops](https://apis.io/finops/freeplay/freeplay-finops/)
 
-Run batch evaluations against datasets, create and list test runs and retrieve their results, and record completion-level and trace-level customer and human feedback to close the evaluation feedback loop.
+## Where to find this API
 
-- **Human URL:** [https://docs.freeplay.ai/developer-resources/api-reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- **Base URL:** `https://app.freeplay.ai/api/v2`
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Tags
-
-- Evaluations
-- Test Runs
-- Feedback
-
-#### Properties
-
-- [Documentation](https://freeplay.ai/blog/llm-evaluation)
-- [API Reference](https://docs.freeplay.ai/developer-resources/api-reference)
-- [OpenAPI](openapi/freeplay-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/freeplay.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/freeplay.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/freeplayai)
-- [LinkedIn](https://www.linkedin.com/company/freeplay-ai)
 - [Website](https://freeplay.ai/)
 - [Documentation](https://docs.freeplay.ai/)
-- [Plans](plans/freeplay-plans-pricing.yml)
-- [Rate Limits](rate-limits/freeplay-rate-limits.yml)
-- [Fin Ops](finops/freeplay-finops.yml)
+- [GitHub](https://github.com/freeplayai)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 27.8** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 68.3 |
+| Contract quality | 44.6 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 29.8 |
+| Access clarity | 15.8 |
+
+**Agent readiness 20.1** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 15.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/freeplay/](https://apis.io/providers/freeplay/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Freeplay: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/freeplay/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
